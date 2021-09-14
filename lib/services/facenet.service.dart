@@ -1,11 +1,11 @@
 import 'dart:convert';
+import 'dart:io' show Platform;
 import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:camera/camera.dart';
 import 'package:efs_new/Database/operations/employee_operations.dart';
 import 'package:efs_new/widgets/globals.dart';
-
 import 'package:google_ml_vision/google_ml_vision.dart';
 import 'package:image/image.dart' as imglib;
 import 'package:tflite_flutter/tflite_flutter.dart' as tflite;
@@ -36,19 +36,32 @@ class FaceNetService {
 
   Future loadModel() async {
     try {
-      final gpuDelegateV2 = tflite.GpuDelegateV2(
-          options: tflite.GpuDelegateOptionsV2(
-              false,
-              tflite.TfLiteGpuInferenceUsage.fastSingleAnswer,
-              tflite.TfLiteGpuInferencePriority.minLatency,
-              tflite.TfLiteGpuInferencePriority.auto,
-              tflite.TfLiteGpuInferencePriority.auto));
+      if (Platform.isAndroid) {
+        final gpuDelegateV2 = tflite.GpuDelegateV2(
+            options: tflite.GpuDelegateOptionsV2(
+                false,
+                tflite.TfLiteGpuInferenceUsage.fastSingleAnswer,
+                tflite.TfLiteGpuInferencePriority.minLatency,
+                tflite.TfLiteGpuInferencePriority.auto,
+                tflite.TfLiteGpuInferencePriority.auto));
 
-      var interpreterOptions = tflite.InterpreterOptions()
-        ..addDelegate(gpuDelegateV2);
-      this._interpreter = await tflite.Interpreter.fromAsset(
-          'mobilefacenet.tflite',
-          options: interpreterOptions);
+        var interpreterOptions = tflite.InterpreterOptions()
+          ..addDelegate(gpuDelegateV2);
+        this._interpreter = await tflite.Interpreter.fromAsset(
+            'mobilefacenet.tflite',
+            options: interpreterOptions);
+      } else if (Platform.isIOS) {
+        final gpuDelegate = tflite.GpuDelegate(
+          options: tflite.GpuDelegateOptions(
+              true, tflite.TFLGpuDelegateWaitType.active),
+        );
+        var interpreterOptions1 = tflite.InterpreterOptions()
+          ..addDelegate(gpuDelegate);
+        this._interpreter = await tflite.Interpreter.fromAsset(
+            'your_model.tflite',
+            options: interpreterOptions1);
+      }
+
       print('model loaded successfully');
     } catch (e) {
       print('Failed to load model.');
