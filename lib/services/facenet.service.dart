@@ -58,7 +58,7 @@ class FaceNetService {
         var interpreterOptions1 = tflite.InterpreterOptions()
           ..addDelegate(gpuDelegate);
         this._interpreter = await tflite.Interpreter.fromAsset(
-            'your_model.tflite',
+            'mobilefacenet.tflite',
             options: interpreterOptions1);
       }
 
