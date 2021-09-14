@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "578081324418",
+    "project_id": "efs-app-b3e2b",
+    "storage_bucket": "efs-app-b3e2b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:578081324418:android:d48cf80c0630d3d3b1e39b",
+        "android_client_info": {
+          "package_name": "com.efs.efs_attend.efs_new"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "578081324418-4il0os026lka6q0agflhv2kv3f8pt3v4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCtJe757W_IDuY30xRvsQ42ziIIzq6tsBo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "578081324418-4il0os026lka6q0agflhv2kv3f8pt3v4.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "578081324418-vhei6dc4kj7s6ibiqmgq7etikg73dm5c.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.mtech.efsApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
