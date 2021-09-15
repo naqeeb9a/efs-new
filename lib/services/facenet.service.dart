@@ -40,12 +40,12 @@ class FaceNetService {
       if (Platform.isAndroid) {
         delegate = GpuDelegateV2(
             options: GpuDelegateOptionsV2(
-              false,
-              TfLiteGpuInferenceUsage.fastSingleAnswer,
-              TfLiteGpuInferencePriority.minLatency,
-              TfLiteGpuInferencePriority.auto,
-              TfLiteGpuInferencePriority.auto,
-            ));
+          false,
+          TfLiteGpuInferenceUsage.fastSingleAnswer,
+          TfLiteGpuInferencePriority.minLatency,
+          TfLiteGpuInferencePriority.auto,
+          TfLiteGpuInferencePriority.auto,
+        ));
       } else if (Platform.isIOS) {
         delegate = GpuDelegate(
           options: GpuDelegateOptions(true, TFLGpuDelegateWaitType.active),
@@ -64,8 +64,9 @@ class FaceNetService {
   }
 
   setCurrentPrediction(CameraImage cameraImage, Face face) {
-    print("\n\n\n\n\n in = " + cameraImage.width.toString() + face.trackingId.toString());
-
+    print("\n\n\n\n\n in = " +
+        cameraImage.width.toString() +
+        face.trackingId.toString());
 
     /// crops the face from the image and transforms it to an array of data
     var input = _preProcess(cameraImage, face);
@@ -108,7 +109,7 @@ class FaceNetService {
   /// crops the face from the image 💇
   /// [cameraImage]: current image
   /// [face]: face detected
-  _cropFace(CameraImage image, Face faceDetected) {
+  imglib.Image _cropFace(CameraImage image, Face faceDetected) {
     imglib.Image convertedImage = _convertCameraImage(image);
     double x = faceDetected.boundingBox.left - 10.0;
     double y = faceDetected.boundingBox.top - 10.0;
@@ -121,6 +122,37 @@ class FaceNetService {
   /// converts ___CameraImage___ type to ___Image___ type
   /// [image]: image to be converted
   imglib.Image _convertCameraImage(CameraImage image) {
+    var img = convertToImage(image);
+    var img1 = imglib.copyRotate(img, -90);
+    return img1;
+  }
+
+  imglib.Image convertToImage(CameraImage image) {
+    try {
+      imglib.Image img;
+      if (image.format.group == ImageFormatGroup.yuv420) {
+        img = _convertYUV420(image);
+      } else if (image.format.group == ImageFormatGroup.bgra8888) {
+        img = _convertBGRA8888(image);
+      }
+
+      return img;
+    } catch (e) {
+      print(">>>>>>>>>>>> ERROR:" + e.toString());
+    }
+    return null;
+  }
+
+  imglib.Image _convertBGRA8888(CameraImage image) {
+    return imglib.Image.fromBytes(
+      image.width,
+      image.height,
+      image.planes[0].bytes,
+      format: imglib.Format.bgra,
+    );
+  }
+
+  imglib.Image _convertYUV420(CameraImage image) {
     int width = image.width;
     int height = image.height;
     var img = imglib.Image(width, height);
@@ -143,8 +175,8 @@ class FaceNetService {
         img.data[index] = hexFF | (b << 16) | (g << 8) | r;
       }
     }
-    var img1 = imglib.copyRotate(img, -90);
-    return img1;
+
+    return img;
   }
 
   Float32List imageToByteListFloat32(imglib.Image image) {
