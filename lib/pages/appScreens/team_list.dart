@@ -313,7 +313,7 @@ Widget cardContainer(
           children: [
             Container(
               width: MediaQuery.of(context).size.width * .24,
-              height: MediaQuery.of(context).size.height * .208,
+              height: MediaQuery.of(context).size.height * .206,
               decoration: BoxDecoration(
                 color: Color(0xff022b5e),
                 borderRadius: BorderRadius.circular(12.0),
