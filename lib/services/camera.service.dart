@@ -34,6 +34,7 @@ class CameraService {
       this._cameraDescription,
       ResolutionPreset.high,
       enableAudio: false,
+      imageFormatGroup: ImageFormatGroup.bgra8888,
     );
 
     // sets the rotation of the image

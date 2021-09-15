@@ -53,7 +53,9 @@ class FaceNetService {
       } else if (Platform.isIOS) {
         final gpuDelegate = tflite.GpuDelegate(
           options: tflite.GpuDelegateOptions(
-              true, tflite.TFLGpuDelegateWaitType.active),
+            true,
+            tflite.TFLGpuDelegateWaitType.active,
+          ),
         );
         var interpreterOptions1 = tflite.InterpreterOptions()
           ..addDelegate(gpuDelegate);
@@ -70,8 +72,13 @@ class FaceNetService {
   }
 
   setCurrentPrediction(CameraImage cameraImage, Face face) {
+    print("\n\n\n\n\n in = " + cameraImage.width.toString() + face.trackingId.toString());
+
+
     /// crops the face from the image and transforms it to an array of data
-    List input = _preProcess(cameraImage, face);
+    var input = _preProcess(cameraImage, face);
+
+    print("\n\n\n\n\n input = " + input.toString());
 
     /// then reshapes input and ouput to model format 🧑‍🔧
     input = input.reshape([1, 112, 112, 3]);
@@ -80,6 +87,8 @@ class FaceNetService {
     /// runs and transforms the data 🤖
     this._interpreter.run(input, output);
     output = output.reshape([192]);
+
+    print("\n\n\n\n\n output = " + output.toString());
 
     this._predictedData = List.from(output);
   }
