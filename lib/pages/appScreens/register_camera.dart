@@ -150,6 +150,9 @@ class RegisterCameraState extends State<RegisterCamera> {
           List<Face> faces = await _mlVisionService.getFacesFromImage(image);
 
           if (faces.length > 0) {
+
+            print("\n\n\n\n\n in faces = " + faces.length.toString());
+
             setState(() {
               faceDetected = faces[0];
             });
@@ -158,7 +161,7 @@ class RegisterCameraState extends State<RegisterCamera> {
 
             if (_saving) {
 
-              print("\n\n\n\n\n in saving = " + image.width.toString() + faceDetected.smilingProbability.toString());
+              print("\n\n\n\n\n in saving = " + image.width.toString() + faceDetected.toString());
               _faceNetService.setCurrentPrediction(image, faceDetected);
               setState(() {
                 _saving = false;
