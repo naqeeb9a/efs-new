@@ -8,7 +8,7 @@ import 'package:efs_new/Database/operations/employee_operations.dart';
 import 'package:efs_new/widgets/globals.dart';
 import 'package:google_ml_vision/google_ml_vision.dart';
 import 'package:image/image.dart' as imglib;
-import 'package:tflite_flutter/tflite_flutter.dart' as tflite;
+import 'package:tflite_flutter/tflite_flutter.dart';
 
 class FaceNetService {
   // singleton boilerplate
@@ -23,7 +23,7 @@ class FaceNetService {
 
   EmployeeOperations employeeOperations = EmployeeOperations();
 
-  tflite.Interpreter _interpreter;
+  Interpreter _interpreter;
 
   double threshold = 1.0;
 
@@ -35,34 +35,26 @@ class FaceNetService {
   dynamic data = {};
 
   Future loadModel() async {
+    Delegate delegate;
     try {
       if (Platform.isAndroid) {
-        final gpuDelegateV2 = tflite.GpuDelegateV2(
-            options: tflite.GpuDelegateOptionsV2(
-                false,
-                tflite.TfLiteGpuInferenceUsage.fastSingleAnswer,
-                tflite.TfLiteGpuInferencePriority.minLatency,
-                tflite.TfLiteGpuInferencePriority.auto,
-                tflite.TfLiteGpuInferencePriority.auto));
-
-        var interpreterOptions = tflite.InterpreterOptions()
-          ..addDelegate(gpuDelegateV2);
-        this._interpreter = await tflite.Interpreter.fromAsset(
-            'mobilefacenet.tflite',
-            options: interpreterOptions);
+        delegate = GpuDelegateV2(
+            options: GpuDelegateOptionsV2(
+              false,
+              TfLiteGpuInferenceUsage.fastSingleAnswer,
+              TfLiteGpuInferencePriority.minLatency,
+              TfLiteGpuInferencePriority.auto,
+              TfLiteGpuInferencePriority.auto,
+            ));
       } else if (Platform.isIOS) {
-        final gpuDelegate = tflite.GpuDelegate(
-          options: tflite.GpuDelegateOptions(
-            true,
-            tflite.TFLGpuDelegateWaitType.active,
-          ),
+        delegate = GpuDelegate(
+          options: GpuDelegateOptions(true, TFLGpuDelegateWaitType.active),
         );
-        var interpreterOptions1 = tflite.InterpreterOptions()
-          ..addDelegate(gpuDelegate);
-        this._interpreter = await tflite.Interpreter.fromAsset(
-            'mobilefacenet.tflite',
-            options: interpreterOptions1);
       }
+      var interpreterOptions = InterpreterOptions()..addDelegate(delegate);
+
+      this._interpreter = await Interpreter.fromAsset('mobilefacenet.tflite',
+          options: interpreterOptions);
 
       print('model loaded successfully');
     } catch (e) {
