@@ -117,7 +117,6 @@ class RegisterCameraState extends State<RegisterCamera> {
 
       return false;
     } else {
-      print("\n\n\n\nobject\n\n\n\n");
       _saving = true;
       await Future.delayed(Duration(milliseconds: 500));
       await _cameraService.cameraController.stopImageStream();
@@ -151,17 +150,14 @@ class RegisterCameraState extends State<RegisterCamera> {
 
           if (faces.length > 0) {
 
-            print("\n\n\n\n\n in faces = " + faces.length.toString());
 
             setState(() {
               faceDetected = faces[0];
             });
 
-            print("\n\n\n\n$_saving\n\n\n\n");
 
             if (_saving) {
 
-              print("\n\n\n\n\n in saving = " + image.width.toString() + faceDetected.toString());
               _faceNetService.setCurrentPrediction(image, faceDetected);
               setState(() {
                 _saving = false;

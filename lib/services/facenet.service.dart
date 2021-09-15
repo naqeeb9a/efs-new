@@ -64,14 +64,10 @@ class FaceNetService {
   }
 
   setCurrentPrediction(CameraImage cameraImage, Face face) {
-    print("\n\n\n\n\n in = " +
-        cameraImage.width.toString() +
-        face.trackingId.toString());
 
     /// crops the face from the image and transforms it to an array of data
     var input = _preProcess(cameraImage, face);
 
-    print("\n\n\n\n\n input = " + input.toString());
 
     /// then reshapes input and ouput to model format 🧑‍🔧
     input = input.reshape([1, 112, 112, 3]);
@@ -81,7 +77,6 @@ class FaceNetService {
     this._interpreter.run(input, output);
     output = output.reshape([192]);
 
-    print("\n\n\n\n\n output = " + output.toString());
 
     this._predictedData = List.from(output);
   }

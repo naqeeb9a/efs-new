@@ -56,7 +56,6 @@ class MLVisionService {
     /// proces the image and makes inference 🤖
     List<Face> faces = await this._faceDetector.processImage(googleVisionImage);
 
-    print("\n\n\n\n face" + faces.length.toString());
     return faces;
   }
 }
