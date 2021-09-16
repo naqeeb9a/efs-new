@@ -64,10 +64,8 @@ class FaceNetService {
   }
 
   setCurrentPrediction(CameraImage cameraImage, Face face) {
-
     /// crops the face from the image and transforms it to an array of data
     var input = _preProcess(cameraImage, face);
-
 
     /// then reshapes input and ouput to model format 🧑‍🔧
     input = input.reshape([1, 112, 112, 3]);
@@ -76,7 +74,6 @@ class FaceNetService {
     /// runs and transforms the data 🤖
     this._interpreter.run(input, output);
     output = output.reshape([192]);
-
 
     this._predictedData = List.from(output);
   }

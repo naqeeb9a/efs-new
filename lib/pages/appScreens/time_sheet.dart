@@ -4,7 +4,6 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:efs_new/Database/models/attendance_model.dart';
 import 'package:efs_new/Database/operations/attendance_operations.dart';
 import 'package:efs_new/widgets/dialog_widget.dart';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;

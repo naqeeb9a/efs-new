@@ -9,7 +9,6 @@ import 'package:efs_new/Database/operations/team_operations.dart';
 import 'package:efs_new/pages/API/api.dart';
 import 'package:efs_new/widgets/dialog_widget.dart';
 import 'package:efs_new/widgets/globals.dart';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -282,13 +281,11 @@ class _DeviceIdState extends State<DeviceId> {
         if (deviceId.text == "") {
           errorDialog(context, "Enter Device Id!!");
         } else if (prefDeviceId.getString("deviceid") == deviceId.text) {
-
           getDevice(context, deviceId.text);
           setState(() {
             isLoading = true;
           });
         } else if (prefDeviceId.getString("deviceid") != deviceId.text) {
-
           await syncData();
           await syncAllEmployees();
           await pref.clear();
@@ -300,7 +297,6 @@ class _DeviceIdState extends State<DeviceId> {
             isLoading = true;
           });
         } else {
-
           getDevice(context, deviceId.text);
           setState(() {
             isLoading = true;

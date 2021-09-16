@@ -3,7 +3,6 @@ import 'package:camera/camera.dart';
 import 'package:efs_new/pages/appScreens/register_camera.dart';
 import 'package:efs_new/services/facenet.service.dart';
 import 'package:efs_new/services/ml_vision_service.dart';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

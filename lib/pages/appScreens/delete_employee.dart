@@ -5,7 +5,6 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:efs_new/Database/operations/employee_operations.dart';
 import 'package:efs_new/pages/appScreens/team_list.dart';
 import 'package:efs_new/widgets/dialog_widget.dart';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -38,8 +37,7 @@ class _DeleteEmployeeState extends State<DeleteEmployee> {
                   });
               var responseBody = jsonDecode(response.body);
 
-              if (responseBody['message'].toString() ==
-                  "Member Deleted Successfully" ||
+              if (responseBody['message'].toString() == "Member Deleted Successfully" ||
                   responseBody['message'].toString() ==
                       "Employee ID does not exists" ||
                   responseBody['message'].toString() ==
@@ -91,14 +89,8 @@ class _DeleteEmployeeState extends State<DeleteEmployee> {
 
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery
-        .of(context)
-        .size
-        .width;
-    final height = MediaQuery
-        .of(context)
-        .size
-        .height;
+    final width = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: Color(0xfff2f2f2),
       appBar: AppBar(
@@ -127,14 +119,8 @@ class _DeleteEmployeeState extends State<DeleteEmployee> {
               children: [
                 Padding(
                   padding: EdgeInsets.only(
-                    top: MediaQuery
-                        .of(context)
-                        .size
-                        .height * .01,
-                    bottom: MediaQuery
-                        .of(context)
-                        .size
-                        .height * .04,
+                    top: MediaQuery.of(context).size.height * .01,
+                    bottom: MediaQuery.of(context).size.height * .04,
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -152,10 +138,7 @@ class _DeleteEmployeeState extends State<DeleteEmployee> {
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(
-                    vertical: MediaQuery
-                        .of(context)
-                        .size
-                        .height * .02,
+                    vertical: MediaQuery.of(context).size.height * .02,
                   ),
                   child: Row(
                     children: [
@@ -167,10 +150,7 @@ class _DeleteEmployeeState extends State<DeleteEmployee> {
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(
-                    vertical: MediaQuery
-                        .of(context)
-                        .size
-                        .height * .02,
+                    vertical: MediaQuery.of(context).size.height * .02,
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -195,14 +175,8 @@ class _DeleteEmployeeState extends State<DeleteEmployee> {
         }
       },
       child: Container(
-        width: MediaQuery
-            .of(context)
-            .size
-            .width * .5,
-        height: MediaQuery
-            .of(context)
-            .size
-            .height * .07,
+        width: MediaQuery.of(context).size.width * .5,
+        height: MediaQuery.of(context).size.height * .07,
         decoration: BoxDecoration(
           color: Colors.red,
           borderRadius: BorderRadius.circular(10.0),
@@ -213,10 +187,7 @@ class _DeleteEmployeeState extends State<DeleteEmployee> {
             style: TextStyle(
               fontWeight: FontWeight.bold,
               color: Colors.white,
-              fontSize: MediaQuery
-                  .of(context)
-                  .size
-                  .width * .05,
+              fontSize: MediaQuery.of(context).size.width * .05,
             ),
           ),
         ),
@@ -226,13 +197,10 @@ class _DeleteEmployeeState extends State<DeleteEmployee> {
 }
 
 //textField widget
-Widget textField(BuildContext context, TextEditingController controller,
-    String labelText) {
+Widget textField(
+    BuildContext context, TextEditingController controller, String labelText) {
   return Container(
-    width: MediaQuery
-        .of(context)
-        .size
-        .width * 1,
+    width: MediaQuery.of(context).size.width * 1,
     decoration: BoxDecoration(
       color: Colors.white60,
       borderRadius: BorderRadius.circular(9),

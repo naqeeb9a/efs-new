@@ -10,7 +10,6 @@ import 'package:efs_new/widgets/FacePainter.dart';
 import 'package:efs_new/widgets/camera_header.dart';
 import 'package:efs_new/widgets/dialog_widget.dart';
 import 'package:efs_new/widgets/globals.dart';
-
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_ml_vision/google_ml_vision.dart';

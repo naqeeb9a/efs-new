@@ -1,5 +1,3 @@
-
-
 import 'package:efs_new/Database/models/attendance_model.dart';
 
 import '../db.dart';
