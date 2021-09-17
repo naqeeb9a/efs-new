@@ -179,7 +179,7 @@ class _LoginState extends State<Login> {
                     ),
                     Padding(
                       padding: EdgeInsets.only(
-                        top: height * .06,
+                        top: height * .05,
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,

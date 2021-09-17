@@ -37,7 +37,11 @@ class _MapsState extends State<Maps> {
                     LatLng(double.parse(widget.lat), double.parse(widget.lng)),
                 zoom: 14.5),
             onMapCreated: (GoogleMapController controller) {
-              _controller.complete(controller);
+              // _controller.complete(controller);
+
+              if (!_controller.isCompleted) {
+                _controller.complete(controller);
+              } else {}
 
               setState(() {
                 _markers.add(
