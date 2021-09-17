@@ -1,4 +1,6 @@
+import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:efs_new/Database/models/attendance_model.dart';
@@ -246,12 +248,13 @@ Widget cardContainer(
   String employeeId,
   timeIn,
   timeOut,
-  imageData,
+  image,
   longitudeIn,
   latitudeIn,
   longitudeOut,
   latitudeOut,
 ) {
+  Uint8List bytes = Base64Codec().decode(image);
   return Container(
     width: MediaQuery.of(context).size.width * .94,
     height: MediaQuery.of(context).size.height * .23,
@@ -284,8 +287,8 @@ Widget cardContainer(
                 color: Color(0xff022b5e),
                 borderRadius: BorderRadius.circular(12.0),
                 image: DecorationImage(
-                  image: FileImage(
-                    File(imageData),
+                  image: MemoryImage(
+                    bytes,
                   ),
                   fit: BoxFit.cover,
                 ),

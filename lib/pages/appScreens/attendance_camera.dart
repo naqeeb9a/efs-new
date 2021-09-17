@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
+import 'dart:io' as Io;
 import 'dart:math' as math;
 
 import 'package:camera/camera.dart';
@@ -92,7 +94,11 @@ class AttendanceCameraState extends State<AttendanceCamera> {
       await Future.delayed(Duration(milliseconds: 200));
       file = await _cameraService.takePicture();
 
-      imagePath = file.path;
+      final bytes = Io.File(file.path).readAsBytesSync();
+
+      String img64 = base64Encode(bytes);
+
+      imagePath = img64;
       Globals.setAttendanceImage(imagePath);
 
       setState(() {
