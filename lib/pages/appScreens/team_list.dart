@@ -1,4 +1,5 @@
-import 'dart:io';
+import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:efs_new/Database/models/employee_model.dart';
@@ -286,6 +287,7 @@ Widget cardContainer(
     status,
     isSync,
     imageData) {
+  Uint8List bytes = Base64Codec().decode(image);
   return Container(
     width: MediaQuery.of(context).size.width * .94,
     height: MediaQuery.of(context).size.height * .24,
@@ -318,8 +320,8 @@ Widget cardContainer(
                 color: Color(0xff022b5e),
                 borderRadius: BorderRadius.circular(12.0),
                 image: DecorationImage(
-                  image: FileImage(
-                    File(image),
+                  image: MemoryImage(
+                    bytes,
                   ),
                   fit: BoxFit.cover,
                 ),
