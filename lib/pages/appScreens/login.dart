@@ -89,7 +89,7 @@ class _LoginState extends State<Login> {
                 employeeName: item['employee_name'],
                 department: item['department'],
                 designation: item['designation'],
-                image: item['image'],
+                image: item['image'] == "1.jpg" ? "" : item['image'],
                 teamId: item['team_id'],
                 status: item['status'],
                 isTeamLead: item['is_teamlead'].toString(),

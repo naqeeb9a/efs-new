@@ -313,20 +313,29 @@ Widget cardContainer(
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Container(
-              width: MediaQuery.of(context).size.width * .24,
-              height: MediaQuery.of(context).size.height * .206,
-              decoration: BoxDecoration(
-                color: Color(0xff022b5e),
-                borderRadius: BorderRadius.circular(12.0),
-                image: DecorationImage(
-                  image: MemoryImage(
-                    bytes,
+            bytes == null
+                ? Container(
+                    width: MediaQuery.of(context).size.width * .24,
+                    height: MediaQuery.of(context).size.height * .194,
+                    decoration: BoxDecoration(
+                      color: Color(0xff022b5e),
+                      borderRadius: BorderRadius.circular(12.0),
+                    ),
+                  )
+                : Container(
+                    width: MediaQuery.of(context).size.width * .24,
+                    height: MediaQuery.of(context).size.height * .194,
+                    decoration: BoxDecoration(
+                      color: Color(0xff022b5e),
+                      borderRadius: BorderRadius.circular(12.0),
+                      image: DecorationImage(
+                        image: MemoryImage(
+                          bytes,
+                        ),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
                   ),
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
           ],
         ),
         Padding(

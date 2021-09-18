@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 import 'dart:io' as Io;
 import 'dart:math' as math;
+import 'dart:typed_data';
 
 import 'package:camera/camera.dart';
 import 'package:efs_new/services/camera.service.dart';
@@ -167,6 +167,7 @@ class AttendanceCameraState extends State<AttendanceCamera> {
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.done) {
                   if (pictureTaked) {
+                    Uint8List bytes = Base64Codec().decode(imagePath);
                     return Container(
                       width: width,
                       height: height,
@@ -174,7 +175,7 @@ class AttendanceCameraState extends State<AttendanceCamera> {
                           alignment: Alignment.center,
                           child: FittedBox(
                             fit: BoxFit.cover,
-                            child: Image.file(File(imagePath)),
+                            child: Image.memory(bytes),
                           ),
                           transform: Matrix4.rotationY(mirror)),
                     );
