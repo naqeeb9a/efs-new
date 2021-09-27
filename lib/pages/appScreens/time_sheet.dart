@@ -214,9 +214,6 @@ class _TimeSheetState extends State<TimeSheet> {
                                 context,
                                 (snapshot.data as List)[i]['employeeId']
                                     .toString(),
-                                // format
-                                //     .parse((snapshot.data as List)[i]['timeIn'].toString().substring(14,))
-                                //     .toString(),
                                 (snapshot.data as List)[i]['timeIn'].toString(),
                                 (snapshot.data as List)[i]['timeOut']
                                     .toString(),
@@ -276,8 +273,7 @@ convertTime(time) {
       "-" +
       time.toString().substring(7, 9);
 
-  timeDate = timeDate + " " + time.toString().substring(15, 20);
-  print(timeDate);
+  timeDate = timeDate + " 0" + time.toString().substring(15, 19);
   return timeDate;
 }
 
@@ -294,14 +290,13 @@ Widget cardContainer(
 ) {
   Uint8List bytes = Base64Codec().decode(image);
 
-  var completeDate = DateTime.now().toString().substring(0, 16);
-  var oldDate = convertTime(timeIn);
+  var completeDate = DateTime.now().toString().substring(0, DateTime.now().toString().length-10);
   print(completeDate);
-  print(oldDate);
+  var oldDate = convertTime(timeIn);
   var one = DateTime.parse(completeDate);
   var two = DateTime.parse(oldDate);
   var pTime = one.difference(two).toString();
-  print(pTime.substring(0, pTime.length - 10));
+  // pTime.substring(0, pTime.length - 10)
 
   return Container(
     width: MediaQuery.of(context).size.width * .94,

@@ -145,6 +145,7 @@ class _TeamListState extends State<TeamList> {
       future: employeeData,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
+          print((snapshot.data as List)[0]['imageData'].length);
           return Scaffold(
             backgroundColor: Color(0xfff2f2f2),
             appBar: AppBar(

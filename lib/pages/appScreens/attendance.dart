@@ -402,7 +402,7 @@ class _AttendanceState extends State<Attendance> {
         for (int i = 0; i < result.length; i++) {
           if (result.length > 0 &&
               result[i]['employeeId'].toString() == id.toString() &&
-              result[i]['date'].toString() == date.toString() &&
+              // result[i]['date'].toString() == date.toString() &&
               result[i]['timeIn'].toString() != "" &&
               result[i]['timeOut'].toString() == "") {
             attendanceData2 = AttendanceData(
@@ -428,13 +428,15 @@ class _AttendanceState extends State<Attendance> {
               result[i]['timeIn'].toString() == "" &&
               result[i]['timeOut'].toString() == "") {
             timeOutCheck = "no1";
-          } else if (result.length > 0 &&
-              result[i]['employeeId'].toString() == id.toString() &&
-              result[i]['date'].toString() != date.toString() &&
-              result[i]['timeIn'].toString() != "" &&
-              result[i]['timeOut'].toString() == "") {
-            timeOutCheck = "no1";
-          } else if (result.length > 0 &&
+          }
+          // else if (result.length > 0 &&
+          //     result[i]['employeeId'].toString() == id.toString() &&
+          //     result[i]['date'].toString() != date.toString() &&
+          //     result[i]['timeIn'].toString() != "" &&
+          //     result[i]['timeOut'].toString() == "") {
+          //   timeOutCheck = "no1";
+          // }
+          else if (result.length > 0 &&
               result[i]['employeeId'].toString() == id.toString() &&
               result[i]['date'].toString() == date.toString() &&
               result[i]['timeIn'].toString() != "" &&
