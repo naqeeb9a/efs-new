@@ -308,14 +308,17 @@ Widget cardContainer(
   var completeDate = DateTime.now()
       .toString()
       .substring(0, DateTime.now().toString().length - 10);
-  print(completeDate);
   var oldDate = convertTime(timeIn);
   print(oldDate);
+
   var one = DateTime.parse(completeDate);
   var two = DateTime.parse(oldDate);
   var pTime = one.difference(two).toString();
+  bool timeDifference = false;
 
-  print(pTime.substring(0, pTime.length - 10));
+  if (timeOut == "" && int.parse(pTime.substring(0, pTime.length - 13)) >= 20) {
+    timeDifference = true;
+  }
 
   return Container(
     width: MediaQuery.of(context).size.width * .94,
@@ -485,9 +488,14 @@ Widget cardContainer(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             AutoSizeText(
-                              timeOut,
+                              // timeOut,
+                              timeDifference == false
+                                  ? timeOut
+                                  : "Time-Out Undetected. Please Contact Admin.",
                               style: TextStyle(
-                                color: Colors.black,
+                                color: timeDifference == false
+                                    ? Colors.black
+                                    : Colors.red,
                                 fontSize:
                                     MediaQuery.of(context).size.width * .034,
                               ),
