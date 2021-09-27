@@ -6,7 +6,6 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:efs_new/Database/models/attendance_model.dart';
 import 'package:efs_new/Database/operations/attendance_operations.dart';
 import 'package:efs_new/widgets/dialog_widget.dart';
-import 'package:efs_new/widgets/text_field.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -16,8 +15,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'maps.dart';
 
 var format = DateFormat("HH:mm");
-final employeeId = TextEditingController();
-final _formKey = GlobalKey<FormState>();
 
 class TimeSheet extends StatefulWidget {
   const TimeSheet({Key key}) : super(key: key);
@@ -183,18 +180,26 @@ class _TimeSheetState extends State<TimeSheet> {
             height: height * .86,
             child: Column(
               children: [
-                Padding(
-                  padding:
-                      EdgeInsets.only(top: height * .016, bottom: height * .01),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Flexible(
-                        child: textField(context, employeeId, "Enter Employee ID to search"),
-                      ),
-                    ],
-                  ),
-                ),
+                // Padding(
+                //   padding:
+                //       EdgeInsets.only(top: height * .016, bottom: height * .01),
+                //   child: Row(
+                //     mainAxisAlignment: MainAxisAlignment.center,
+                //     children: [
+                //       Material(
+                //         color: Color(0xff022b5e),
+                //         borderRadius: BorderRadius.circular(10.0),
+                //         child: InkWell(
+                //           onTap: () {
+                //             syncData();
+                //           },
+                //           splashColor: Colors.white,
+                //           child: syncButton(context),
+                //         ),
+                //       ),
+                //     ],
+                //   ),
+                // ),
                 FutureBuilder(
                   future: attendancesDataByOrder,
                   builder: (context, snapshot) {
@@ -258,6 +263,24 @@ Widget syncButton(BuildContext context) {
   );
 }
 
+convertTime(time) {
+  var parsedTime = "";
+  if (time.toString().substring(4, 6).contains(" ")) {
+    parsedTime = "0" + time.toString().substring(5, 6);
+  } else {
+    parsedTime = time.toString().substring(4, 6);
+  }
+  var timeDate = time.toString().substring(10, 14) +
+      "-" +
+      parsedTime +
+      "-" +
+      time.toString().substring(7, 9);
+
+  timeDate = timeDate + " " + time.toString().substring(15, 20);
+  print(timeDate);
+  return timeDate;
+}
+
 Widget cardContainer(
   BuildContext context,
   String employeeId,
@@ -271,15 +294,14 @@ Widget cardContainer(
 ) {
   Uint8List bytes = Base64Codec().decode(image);
 
-  String completeDate = DateFormat.yMEd().add_jms().format(DateTime.now());
-
+  var completeDate = DateTime.now().toString().substring(0, 16);
+  var oldDate = convertTime(timeIn);
   print(completeDate);
-  print(timeIn);
-
-  DateTime now = DateTime.now();
-  String formattedDate = DateFormat('yyyy-MM-dd kk:mm').format(now);
-
-  print(formattedDate);
+  print(oldDate);
+  var one = DateTime.parse(completeDate);
+  var two = DateTime.parse(oldDate);
+  var pTime = one.difference(two).toString();
+  print(pTime.substring(0, pTime.length - 10));
 
   return Container(
     width: MediaQuery.of(context).size.width * .94,
