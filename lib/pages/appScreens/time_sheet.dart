@@ -6,6 +6,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:efs_new/Database/models/attendance_model.dart';
 import 'package:efs_new/Database/operations/attendance_operations.dart';
 import 'package:efs_new/widgets/dialog_widget.dart';
+import 'package:efs_new/widgets/text_field.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -15,6 +16,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'maps.dart';
 
 var format = DateFormat("HH:mm");
+final employeeId = TextEditingController();
+final _formKey = GlobalKey<FormState>();
 
 class TimeSheet extends StatefulWidget {
   const TimeSheet({Key key}) : super(key: key);
@@ -180,26 +183,18 @@ class _TimeSheetState extends State<TimeSheet> {
             height: height * .86,
             child: Column(
               children: [
-                // Padding(
-                //   padding:
-                //       EdgeInsets.only(top: height * .016, bottom: height * .01),
-                //   child: Row(
-                //     mainAxisAlignment: MainAxisAlignment.center,
-                //     children: [
-                //       Material(
-                //         color: Color(0xff022b5e),
-                //         borderRadius: BorderRadius.circular(10.0),
-                //         child: InkWell(
-                //           onTap: () {
-                //             syncData();
-                //           },
-                //           splashColor: Colors.white,
-                //           child: syncButton(context),
-                //         ),
-                //       ),
-                //     ],
-                //   ),
-                // ),
+                Padding(
+                  padding:
+                      EdgeInsets.only(top: height * .016, bottom: height * .01),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Flexible(
+                        child: textField(context, employeeId, "Enter Employee ID to search"),
+                      ),
+                    ],
+                  ),
+                ),
                 FutureBuilder(
                   future: attendancesDataByOrder,
                   builder: (context, snapshot) {
