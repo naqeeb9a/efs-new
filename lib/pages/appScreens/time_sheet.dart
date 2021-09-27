@@ -272,8 +272,23 @@ convertTime(time) {
       parsedTime +
       "-" +
       time.toString().substring(7, 9);
-
-  timeDate = timeDate + " 0" + time.toString().substring(15, 19);
+  if (":".allMatches(time.toString().substring(15, 20)).length == 2) {
+    if (time.toString().contains("PM")) {
+      var check = int.parse(time.toString().substring(15, 16)) + 12;
+      timeDate =
+          timeDate + " " + check.toString() + time.toString().substring(16, 19);
+    } else {
+      timeDate = timeDate + " 0" + time.toString().substring(15, 19);
+    }
+  } else {
+    if (time.toString().contains("PM")) {
+      var check = int.parse(time.toString().substring(15, 17)) + 12;
+      timeDate =
+          timeDate + " " + check.toString() + time.toString().substring(17, 20);
+    } else {
+      timeDate = timeDate + " " + time.toString().substring(15, 20);
+    }
+  }
   return timeDate;
 }
 
@@ -290,13 +305,17 @@ Widget cardContainer(
 ) {
   Uint8List bytes = Base64Codec().decode(image);
 
-  var completeDate = DateTime.now().toString().substring(0, DateTime.now().toString().length-10);
+  var completeDate = DateTime.now()
+      .toString()
+      .substring(0, DateTime.now().toString().length - 10);
   print(completeDate);
   var oldDate = convertTime(timeIn);
+  print(oldDate);
   var one = DateTime.parse(completeDate);
   var two = DateTime.parse(oldDate);
   var pTime = one.difference(two).toString();
-  // pTime.substring(0, pTime.length - 10)
+
+  print(pTime.substring(0, pTime.length - 10));
 
   return Container(
     width: MediaQuery.of(context).size.width * .94,
