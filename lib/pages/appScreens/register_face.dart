@@ -248,30 +248,35 @@ class _RegisterFaceState extends State<RegisterFace> {
                         padding: EdgeInsets.symmetric(
                           vertical: height * .02,
                         ),
-                        child: InkWell(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (BuildContext context) =>
-                                    RegisterCamera(
-                                  cameraDescription: cameraDescription,
-                                  employeeId: widget.employeeId,
-                                  employeeName: widget.employeeName,
-                                  designation: widget.designation,
-                                  department: widget.department,
-                                  isTeamLead: widget.isTeamLead,
-                                  username: widget.username,
-                                  password: widget.password,
-                                  image: widget.image,
-                                  status: widget.status,
-                                  isSync: widget.isSync,
-                                  imageData: widget.imageData,
+                        child: Material(
+                          color: Color(0xff022b5e),
+                          borderRadius: BorderRadius.circular(10.0),
+                          child: InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      RegisterCamera(
+                                    cameraDescription: cameraDescription,
+                                    employeeId: widget.employeeId,
+                                    employeeName: widget.employeeName,
+                                    designation: widget.designation,
+                                    department: widget.department,
+                                    isTeamLead: widget.isTeamLead,
+                                    username: widget.username,
+                                    password: widget.password,
+                                    image: widget.image,
+                                    status: widget.status,
+                                    isSync: widget.isSync,
+                                    imageData: widget.imageData,
+                                  ),
                                 ),
-                              ),
-                            );
-                          },
-                          child: cameraButton(context),
+                              );
+                            },
+                            splashColor: Colors.white,
+                            child: cameraButton(context),
+                          ),
                         ),
                       ),
                     ],
@@ -287,10 +292,6 @@ Widget cameraButton(BuildContext context) {
   return Container(
     width: MediaQuery.of(context).size.width * .6,
     height: MediaQuery.of(context).size.height * .07,
-    decoration: BoxDecoration(
-      color: Color(0xff022b5e),
-      borderRadius: BorderRadius.circular(10.0),
-    ),
     child: Center(
       child: Icon(
         Icons.camera_alt_outlined,

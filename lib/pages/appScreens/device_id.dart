@@ -9,6 +9,7 @@ import 'package:efs_new/Database/operations/team_operations.dart';
 import 'package:efs_new/pages/API/api.dart';
 import 'package:efs_new/widgets/dialog_widget.dart';
 import 'package:efs_new/widgets/globals.dart';
+import 'package:efs_new/widgets/text_field.dart' as field;
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -250,7 +251,8 @@ class _DeviceIdState extends State<DeviceId> {
                     child: Row(
                       children: [
                         Flexible(
-                          child: textField(context, deviceId, "Device Id"),
+                          child:
+                              field.textField(context, deviceId, "Device Id"),
                         ),
                       ],
                     ),
@@ -276,108 +278,57 @@ class _DeviceIdState extends State<DeviceId> {
   }
 
   Widget continueButton(BuildContext context) {
-    return GestureDetector(
-      onTap: () async {
-        if (deviceId.text == "") {
-          errorDialog(context, "Enter Device Id!!");
-        } else if (prefDeviceId.getString("deviceid") == deviceId.text) {
-          getDevice(context, deviceId.text);
-          setState(() {
-            isLoading = true;
-          });
-        } else if (prefDeviceId.getString("deviceid") != deviceId.text) {
-          await syncData();
-          await syncAllEmployees();
-          await pref.clear();
-          await EmployeeOperations().clearEmployeeDb();
-          await TeamOperations().clearTeamDb();
-          await AttendanceOperations().clearAttendanceDb();
-          getDevice(context, deviceId.text);
-          setState(() {
-            isLoading = true;
-          });
-        } else {
-          getDevice(context, deviceId.text);
-          setState(() {
-            isLoading = true;
-          });
-        }
-      },
-      child: isLoading == false
-          ? Container(
-              width: MediaQuery.of(context).size.width * .5,
-              height: MediaQuery.of(context).size.height * .07,
-              decoration: BoxDecoration(
-                color: Colors.green,
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-              child: Center(
-                child: Text(
-                  "Continue",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                    fontSize: MediaQuery.of(context).size.width * .05,
+    return isLoading == false
+        ? Material(
+            color: Colors.green,
+            borderRadius: BorderRadius.circular(10.0),
+            child: InkWell(
+                onTap: () async {
+                  if (deviceId.text == "") {
+                    errorDialog(context, "Enter Device Id!!");
+                  } else if (prefDeviceId.getString("deviceid") ==
+                      deviceId.text) {
+                    getDevice(context, deviceId.text);
+                    setState(() {
+                      isLoading = true;
+                    });
+                  } else if (prefDeviceId.getString("deviceid") !=
+                      deviceId.text) {
+                    await syncData();
+                    await syncAllEmployees();
+                    await pref.clear();
+                    await EmployeeOperations().clearEmployeeDb();
+                    await TeamOperations().clearTeamDb();
+                    await AttendanceOperations().clearAttendanceDb();
+                    getDevice(context, deviceId.text);
+                    setState(() {
+                      isLoading = true;
+                    });
+                  } else {
+                    getDevice(context, deviceId.text);
+                    setState(() {
+                      isLoading = true;
+                    });
+                  }
+                },
+                splashColor: Colors.white,
+                child: Container(
+                  width: MediaQuery.of(context).size.width * .5,
+                  height: MediaQuery.of(context).size.height * .07,
+                  child: Center(
+                    child: Text(
+                      "Continue",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        fontSize: MediaQuery.of(context).size.width * .05,
+                      ),
+                    ),
                   ),
-                ),
-              ),
-            )
-          : Center(child: CircularProgressIndicator()),
-    );
+                )),
+          )
+        : Center(
+            child: CircularProgressIndicator(),
+          );
   }
-}
-
-//textField widget
-Widget textField(
-    BuildContext context, TextEditingController controller, String labelText) {
-  return Container(
-    width: MediaQuery.of(context).size.width * 1,
-    decoration: BoxDecoration(
-      color: Colors.grey.shade100,
-      borderRadius: BorderRadius.circular(9),
-    ),
-    child: TextFormField(
-      initialValue: null,
-      autocorrect: true,
-      controller: controller,
-      validator: (query) {
-        if (query.isEmpty) {
-          return 'Error';
-        } else {
-          return null;
-        }
-      },
-      keyboardAppearance: Brightness.dark,
-      keyboardType: TextInputType.number,
-      style: TextStyle(
-        color: Colors.black,
-        fontSize: 15.0,
-        decoration: TextDecoration.none,
-      ),
-      textInputAction: TextInputAction.next,
-      cursorColor: Colors.black,
-      cursorWidth: 2.0,
-      cursorHeight: 26.0,
-      decoration: InputDecoration(
-        contentPadding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 14.0),
-        errorStyle: TextStyle(
-          fontSize: 15.0,
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.black, width: 1.0),
-          borderRadius: BorderRadius.circular(9.0),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.grey.shade700, width: 1.0),
-          borderRadius: BorderRadius.circular(9.0),
-        ),
-        border: InputBorder.none,
-        labelText: labelText,
-        labelStyle: TextStyle(
-          color: Colors.black,
-          fontSize: 16.0,
-        ),
-      ),
-    ),
-  );
 }

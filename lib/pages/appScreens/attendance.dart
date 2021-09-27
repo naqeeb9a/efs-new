@@ -6,7 +6,6 @@ import 'package:efs_new/services/facenet.service.dart';
 import 'package:efs_new/services/ml_vision_service.dart';
 import 'package:efs_new/widgets/dialog_widget.dart';
 import 'package:efs_new/widgets/globals.dart';
-
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
@@ -142,19 +141,24 @@ class _AttendanceState extends State<Attendance> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            InkWell(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (BuildContext context) =>
-                                        AttendanceCamera(
-                                      cameraDescription: cameraDescription,
+                            Material(
+                              color: Colors.black,
+                              borderRadius: BorderRadius.circular(10.0),
+                              child: InkWell(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (BuildContext context) =>
+                                          AttendanceCamera(
+                                        cameraDescription: cameraDescription,
+                                      ),
                                     ),
-                                  ),
-                                );
-                              },
-                              child: cameraButton(context),
+                                  );
+                                },
+                                splashColor: Colors.white,
+                                child: cameraButton(context),
+                              ),
                             ),
                           ],
                         ),
@@ -208,28 +212,38 @@ class _AttendanceState extends State<Attendance> {
                           children: [
                             Column(
                               children: [
-                                InkWell(
-                                  onTap: () {
-                                    timeInAttendance(Globals.attendanceId);
-                                  },
-                                  child: bottomButtons(
-                                    context,
-                                    "Time In",
-                                    0xff66bb6a,
+                                Material(
+                                  color: Color(0xff66bb6a),
+                                  borderRadius: BorderRadius.circular(8.0),
+                                  child: InkWell(
+                                    onTap: () {
+                                      timeInAttendance(Globals.attendanceId);
+                                    },
+                                    splashColor: Colors.white,
+                                    child: bottomButtons(
+                                      context,
+                                      "Time In",
+                                      0xff66bb6a,
+                                    ),
                                   ),
                                 ),
                               ],
                             ),
                             Column(
                               children: [
-                                InkWell(
-                                  onTap: () {
-                                    timeOutAttendance(Globals.attendanceId);
-                                  },
-                                  child: bottomButtons(
-                                    context,
-                                    "Time Out",
-                                    0xff022b5e,
+                                Material(
+                                  color: Color(0xff022b5e),
+                                  borderRadius: BorderRadius.circular(8.0),
+                                  child: InkWell(
+                                    onTap: () {
+                                      timeOutAttendance(Globals.attendanceId);
+                                    },
+                                    splashColor: Colors.white,
+                                    child: bottomButtons(
+                                      context,
+                                      "Time Out",
+                                      0xff022b5e,
+                                    ),
                                   ),
                                 ),
                               ],
@@ -459,10 +473,6 @@ Widget cameraButton(BuildContext context) {
   return Container(
     width: MediaQuery.of(context).size.width * .6,
     height: MediaQuery.of(context).size.height * .07,
-    decoration: BoxDecoration(
-      color: Colors.black,
-      borderRadius: BorderRadius.circular(10.0),
-    ),
     child: Center(
       child: Icon(
         Icons.camera_alt_outlined,
@@ -477,10 +487,6 @@ Widget bottomButtons(BuildContext context, String title, int color) {
   return Container(
     width: MediaQuery.of(context).size.width * .4,
     height: MediaQuery.of(context).size.height * .07,
-    decoration: BoxDecoration(
-      color: Color(color),
-      borderRadius: BorderRadius.circular(8.0),
-    ),
     child: Center(
       child: Text(
         title,

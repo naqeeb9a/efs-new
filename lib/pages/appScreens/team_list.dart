@@ -168,6 +168,7 @@ class _TeamListState extends State<TeamList> {
                     onTap: () {
                       syncAllEmployees();
                     },
+                    splashColor: Color(0xff022b5e),
                     child: Icon(
                       Icons.sync,
                     ),
@@ -448,7 +449,7 @@ Widget cardContainer(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           AutoSizeText(
-                            designation,
+                            designation.toString().toUpperCase(),
                             style: TextStyle(
                               color: Colors.black,
                               fontSize:
@@ -527,27 +528,28 @@ Widget cardContainer(
 }
 
 Widget bottomButtons(BuildContext context, String title, dynamic page) {
-  return GestureDetector(
-    onTap: () {
-      Navigator.of(context).push(
-        MaterialPageRoute(builder: (context) => page),
-      );
-    },
-    child: Container(
-      width: MediaQuery.of(context).size.width * .4,
-      height: MediaQuery.of(context).size.height * .07,
-      decoration: BoxDecoration(
-        color: Colors.black,
-        borderRadius: BorderRadius.circular(8.0),
-      ),
-      child: Center(
-        child: Text(
-          title,
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: MediaQuery.of(context).size.width * .044,
+  return Material(
+    color: Colors.black,
+    borderRadius: BorderRadius.circular(8.0),
+    child: InkWell(
+      onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => page),
+        );
+      },
+      splashColor: Colors.white,
+      child: Container(
+        width: MediaQuery.of(context).size.width * .4,
+        height: MediaQuery.of(context).size.height * .07,
+        child: Center(
+          child: Text(
+            title,
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: MediaQuery.of(context).size.width * .044,
+            ),
+            maxLines: 1,
           ),
-          maxLines: 1,
         ),
       ),
     ),
@@ -568,40 +570,41 @@ Widget registerButton(
   isSync,
   imageData,
 ) {
-  return GestureDetector(
-    onTap: () {
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (context) => RegisterFace(
-            employeeId: employeeId,
-            employeeName: employeeName,
-            designation: designation,
-            department: department,
-            isTeamLead: isTeamLead,
-            username: username,
-            password: password,
-            image: image,
-            status: status,
-            isSync: isSync,
-            imageData: imageData,
+  return Material(
+    color: Color(0xff022b5e),
+    borderRadius: BorderRadius.circular(10.0),
+    child: InkWell(
+      onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => RegisterFace(
+              employeeId: employeeId,
+              employeeName: employeeName,
+              designation: designation,
+              department: department,
+              isTeamLead: isTeamLead,
+              username: username,
+              password: password,
+              image: image,
+              status: status,
+              isSync: isSync,
+              imageData: imageData,
+            ),
           ),
-        ),
-      );
-    },
-    child: Container(
-      width: MediaQuery.of(context).size.width * .4,
-      height: MediaQuery.of(context).size.height * .06,
-      decoration: BoxDecoration(
-        color: Color(0xff022b5e),
-        borderRadius: BorderRadius.circular(10.0),
-      ),
-      child: Center(
-        child: Text(
-          "Register",
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-            fontSize: MediaQuery.of(context).size.width * .05,
+        );
+      },
+      splashColor: Colors.white,
+      child: Container(
+        width: MediaQuery.of(context).size.width * .4,
+        height: MediaQuery.of(context).size.height * .06,
+        child: Center(
+          child: Text(
+            "Register",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+              fontSize: MediaQuery.of(context).size.width * .05,
+            ),
           ),
         ),
       ),

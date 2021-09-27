@@ -257,67 +257,70 @@ class RegisterCameraState extends State<RegisterCamera> {
   }
 
   Widget captureButton() {
-    return InkWell(
-      onTap: () async {
-        Fluttertoast.showToast(
-          msg: "Please wait and hold still!!",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.TOP,
-          timeInSecForIosWeb: 2,
-          backgroundColor: Color(0xff022b5e),
-          textColor: Colors.white,
-          fontSize: 16.0,
-        );
-        setState(() {
-          cameraLoader = true;
-        });
-        try {
-          // Ensure that the camera is initialized.
-          await _initializeControllerFuture;
-          // onShot event (takes the image and predict output)
-          bool faceDetected = await onShot();
+    return Material(
+      borderRadius: BorderRadius.circular(10),
+      color: Color(0xff022b5e),
+      child: InkWell(
+        onTap: () async {
+          Fluttertoast.showToast(
+            msg: "Please wait and hold still!!",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.TOP,
+            timeInSecForIosWeb: 2,
+            backgroundColor: Color(0xff022b5e),
+            textColor: Colors.white,
+            fontSize: 16.0,
+          );
+          setState(() {
+            cameraLoader = true;
+          });
+          try {
+            // Ensure that the camera is initialized.
+            await _initializeControllerFuture;
+            // onShot event (takes the image and predict output)
+            bool faceDetected = await onShot();
 
-          if (faceDetected) {
-            await registerEmployee(context);
+            if (faceDetected) {
+              await registerEmployee(context);
+            }
+          } catch (e) {
+            print(e);
           }
-        } catch (e) {
-          print(e);
-        }
-      },
-      child: cameraLoader == false
-          ? Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Color(0xff022b5e),
-                boxShadow: <BoxShadow>[
-                  BoxShadow(
-                    color: Colors.blue.withOpacity(0.1),
-                    blurRadius: 1,
-                    offset: Offset(0, 2),
-                  ),
-                ],
+        },
+        splashColor: Colors.white,
+        child: cameraLoader == false
+            ? Container(
+                decoration: BoxDecoration(
+                  boxShadow: <BoxShadow>[
+                    BoxShadow(
+                      color: Colors.blue.withOpacity(0.1),
+                      blurRadius: 1,
+                      offset: Offset(0, 2),
+                    ),
+                  ],
+                ),
+                alignment: Alignment.center,
+                padding: EdgeInsets.symmetric(vertical: 14, horizontal: 16),
+                width: MediaQuery.of(context).size.width * 0.8,
+                height: 60,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'CAPTURE',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Icon(Icons.camera_alt, color: Colors.white)
+                  ],
+                ),
+              )
+            : CircularProgressIndicator(
+                color: Colors.white,
               ),
-              alignment: Alignment.center,
-              padding: EdgeInsets.symmetric(vertical: 14, horizontal: 16),
-              width: MediaQuery.of(context).size.width * 0.8,
-              height: 60,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'CAPTURE',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Icon(Icons.camera_alt, color: Colors.white)
-                ],
-              ),
-            )
-          : CircularProgressIndicator(
-              color: Colors.white,
-            ),
+      ),
     );
   }
 

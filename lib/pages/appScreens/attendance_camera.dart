@@ -228,84 +228,87 @@ class AttendanceCameraState extends State<AttendanceCamera> {
   }
 
   Widget captureButton() {
-    return InkWell(
-      onTap: () async {
-        Fluttertoast.showToast(
-          msg: "Please wait and hold still!!",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.TOP,
-          timeInSecForIosWeb: 2,
-          backgroundColor: Color(0xff022b5e),
-          textColor: Colors.white,
-          fontSize: 16.0,
-        );
-        setState(() {
-          cameraLoader = true;
-        });
-        try {
-          // Ensure that the camera is initialized.
-          await _initializeControllerFuture;
-          // onShot event (takes the image and predict output)
-          bool faceDetected = await onShot();
+    return Material(
+      borderRadius: BorderRadius.circular(10),
+      color: Color(0xff022b5e),
+      child: InkWell(
+        onTap: () async {
+          Fluttertoast.showToast(
+            msg: "Please wait and hold still!!",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.TOP,
+            timeInSecForIosWeb: 2,
+            backgroundColor: Color(0xff022b5e),
+            textColor: Colors.white,
+            fontSize: 16.0,
+          );
+          setState(() {
+            cameraLoader = true;
+          });
+          try {
+            // Ensure that the camera is initialized.
+            await _initializeControllerFuture;
+            // onShot event (takes the image and predict output)
+            bool faceDetected = await onShot();
 
-          if (faceDetected) {
-            _faceNetService.predict();
-            Future.delayed(Duration(milliseconds: 400), () {
-              if (Globals.attendanceId != "null") {
-                successDialogOnly(
-                    context, "Face Recognised as : " + Globals.attendanceId);
-                Future.delayed(Duration(milliseconds: 1500), () {
-                  int count = 0;
-                  Navigator.of(context).popUntil((_) => count++ >= 2);
-                });
-              } else {
-                errorDialogOnly(context,
-                    "1 - Face Recognition Error!\n2 - Register your Face First\nTry Again!!");
-                Future.delayed(Duration(milliseconds: 1500), () {
-                  int count = 0;
-                  Navigator.of(context).popUntil((_) => count++ >= 2);
-                });
-              }
-            });
+            if (faceDetected) {
+              _faceNetService.predict();
+              Future.delayed(Duration(milliseconds: 400), () {
+                if (Globals.attendanceId != "null") {
+                  successDialogOnly(
+                      context, "Face Recognised as : " + Globals.attendanceId);
+                  Future.delayed(Duration(milliseconds: 1500), () {
+                    int count = 0;
+                    Navigator.of(context).popUntil((_) => count++ >= 2);
+                  });
+                } else {
+                  errorDialogOnly(context,
+                      "1 - Face Recognition Error!\n2 - Register your Face First\nTry Again!!");
+                  Future.delayed(Duration(milliseconds: 1500), () {
+                    int count = 0;
+                    Navigator.of(context).popUntil((_) => count++ >= 2);
+                  });
+                }
+              });
+            }
+          } catch (e) {
+            print(e);
           }
-        } catch (e) {
-          print(e);
-        }
-      },
-      child: cameraLoader == false
-          ? Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Color(0xff022b5e),
-                boxShadow: <BoxShadow>[
-                  BoxShadow(
-                    color: Colors.blue.withOpacity(0.1),
-                    blurRadius: 1,
-                    offset: Offset(0, 2),
-                  ),
-                ],
+        },
+        splashColor: Colors.white,
+        child: cameraLoader == false
+            ? Container(
+                decoration: BoxDecoration(
+                  boxShadow: <BoxShadow>[
+                    BoxShadow(
+                      color: Colors.blue.withOpacity(0.1),
+                      blurRadius: 1,
+                      offset: Offset(0, 2),
+                    ),
+                  ],
+                ),
+                alignment: Alignment.center,
+                padding: EdgeInsets.symmetric(vertical: 14, horizontal: 16),
+                width: MediaQuery.of(context).size.width * 0.8,
+                height: 60,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'CAPTURE',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Icon(Icons.camera_alt, color: Colors.white)
+                  ],
+                ),
+              )
+            : CircularProgressIndicator(
+                color: Colors.white,
               ),
-              alignment: Alignment.center,
-              padding: EdgeInsets.symmetric(vertical: 14, horizontal: 16),
-              width: MediaQuery.of(context).size.width * 0.8,
-              height: 60,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'CAPTURE',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Icon(Icons.camera_alt, color: Colors.white)
-                ],
-              ),
-            )
-          : CircularProgressIndicator(
-              color: Colors.white,
-            ),
+      ),
     );
   }
 

@@ -3,6 +3,7 @@ import 'package:efs_new/Database/models/team_model.dart';
 import 'package:efs_new/Database/operations/employee_operations.dart';
 import 'package:efs_new/Database/operations/team_operations.dart';
 import 'package:efs_new/pages/API/api.dart';
+import 'package:efs_new/pages/appScreens/change_password.dart';
 import 'package:efs_new/widgets/dialog_widget.dart';
 import 'package:efs_new/widgets/globals.dart';
 import 'package:flutter/cupertino.dart';
@@ -127,29 +128,16 @@ class _LoginState extends State<Login> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Image.asset("assets/logo.jpeg"),
+                        Image.asset(
+                          "assets/logo.jpeg",
+                          scale: 1,
+                        ),
                       ],
                     ),
                     Padding(
-                      padding: EdgeInsets.symmetric(
-                        vertical: height * .06,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "EFS Attendance Application",
-                            style: TextStyle(
-                              fontSize: width * .048,
-                              color: Colors.grey[600],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                        vertical: height * .01,
+                      padding: EdgeInsets.only(
+                        top: height * .14,
+                        bottom: height * .01,
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -240,17 +228,46 @@ class _LoginState extends State<Login> {
                       ),
                     ),
                     Padding(
+                      padding: EdgeInsets.symmetric(
+                        vertical: height * .02,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => ChangePassword(
+                                    name: "Forgot Password",
+                                  ),
+                                ),
+                              );
+                            },
+                            splashColor: Color(0xff022b5e),
+                            child: Text(
+                              "Forgot Password?",
+                              style: TextStyle(
+                                fontSize: width * .04,
+                                color: Color(0xff022b5e),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
                       padding: EdgeInsets.only(
-                        top: height * .04,
+                        top: height * .02,
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Container(
-                            width: width * .7,
-                            height: height * .07,
-                            child: OutlinedButton(
-                              onPressed: () {
+                          Material(
+                            color: Color(0xff022b5e),
+                            borderRadius: BorderRadius.circular(8.0),
+                            child: InkWell(
+                              onTap: () {
                                 for (int i = 0; i < employees.length; i++) {
                                   if (employees[i]['is_teamlead'] == 1 &&
                                       employees[i]['username'] ==
@@ -282,24 +299,20 @@ class _LoginState extends State<Login> {
                                       "Username or Password Not Matched!!");
                                 }
                               },
-                              child: Text(
-                                "Sign In",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: width * .054,
-                                ),
-                                maxLines: 1,
-                              ),
-                              style: OutlinedButton.styleFrom(
-                                side: BorderSide(
-                                  color: Color(0xff022b5e),
-                                ),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(8.0),
+                              splashColor: Colors.white,
+                              child: Container(
+                                width: width * .7,
+                                height: height * .07,
+                                child: Center(
+                                  child: Text(
+                                    "Sign In",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: width * .054,
+                                    ),
+                                    maxLines: 1,
                                   ),
                                 ),
-                                backgroundColor: Color(0xff022b5e),
                               ),
                             ),
                           ),
@@ -324,7 +337,6 @@ Widget textField(BuildContext context, TextEditingController controller,
     width: MediaQuery.of(context).size.width * 1,
     decoration: BoxDecoration(
       color: Colors.white,
-      borderRadius: BorderRadius.circular(9),
     ),
     child: TextFormField(
       initialValue: null,

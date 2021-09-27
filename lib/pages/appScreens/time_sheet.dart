@@ -14,6 +14,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'maps.dart';
 
+var format = DateFormat("HH:mm");
+
 class TimeSheet extends StatefulWidget {
   const TimeSheet({Key key}) : super(key: key);
 
@@ -156,6 +158,20 @@ class _TimeSheetState extends State<TimeSheet> {
         backgroundColor: Color(0xfff2f2f2),
         elevation: 4.0,
         centerTitle: true,
+        actions: <Widget>[
+          Padding(
+            padding: EdgeInsets.only(right: 16.0),
+            child: InkWell(
+              onTap: () {
+                syncButton(context);
+              },
+              splashColor: Color(0xff022b5e),
+              child: Icon(
+                Icons.sync,
+              ),
+            ),
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Center(
@@ -164,21 +180,26 @@ class _TimeSheetState extends State<TimeSheet> {
             height: height * .86,
             child: Column(
               children: [
-                Padding(
-                  padding:
-                      EdgeInsets.only(top: height * .016, bottom: height * .01),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          syncData();
-                        },
-                        child: syncButton(context),
-                      ),
-                    ],
-                  ),
-                ),
+                // Padding(
+                //   padding:
+                //       EdgeInsets.only(top: height * .016, bottom: height * .01),
+                //   child: Row(
+                //     mainAxisAlignment: MainAxisAlignment.center,
+                //     children: [
+                //       Material(
+                //         color: Color(0xff022b5e),
+                //         borderRadius: BorderRadius.circular(10.0),
+                //         child: InkWell(
+                //           onTap: () {
+                //             syncData();
+                //           },
+                //           splashColor: Colors.white,
+                //           child: syncButton(context),
+                //         ),
+                //       ),
+                //     ],
+                //   ),
+                // ),
                 FutureBuilder(
                   future: attendancesDataByOrder,
                   builder: (context, snapshot) {
@@ -193,6 +214,9 @@ class _TimeSheetState extends State<TimeSheet> {
                                 context,
                                 (snapshot.data as List)[i]['employeeId']
                                     .toString(),
+                                // format
+                                //     .parse((snapshot.data as List)[i]['timeIn'].toString().substring(14,))
+                                //     .toString(),
                                 (snapshot.data as List)[i]['timeIn'].toString(),
                                 (snapshot.data as List)[i]['timeOut']
                                     .toString(),
@@ -226,10 +250,6 @@ Widget syncButton(BuildContext context) {
   return Container(
     width: MediaQuery.of(context).size.width * .7,
     height: MediaQuery.of(context).size.height * .07,
-    decoration: BoxDecoration(
-      color: Color(0xff022b5e),
-      borderRadius: BorderRadius.circular(10.0),
-    ),
     child: Center(
       child: Text(
         "Sync All Data",
@@ -255,6 +275,17 @@ Widget cardContainer(
   latitudeOut,
 ) {
   Uint8List bytes = Base64Codec().decode(image);
+
+  String completeDate = DateFormat.yMEd().add_jms().format(DateTime.now());
+
+  print(completeDate);
+  print(timeIn);
+
+  DateTime now = DateTime.now();
+  String formattedDate = DateFormat('yyyy-MM-dd kk:mm').format(now);
+
+  print(formattedDate);
+
   return Container(
     width: MediaQuery.of(context).size.width * .94,
     height: MediaQuery.of(context).size.height * .23,
@@ -318,7 +349,7 @@ Widget cardContainer(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     SizedBox(
-                      width: MediaQuery.of(context).size.width * .21,
+                      width: MediaQuery.of(context).size.width * .22,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -335,7 +366,7 @@ Widget cardContainer(
                       ),
                     ),
                     SizedBox(
-                      width: MediaQuery.of(context).size.width * .33,
+                      width: MediaQuery.of(context).size.width * .32,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -442,49 +473,59 @@ Widget cardContainer(
                   children: [
                     Column(
                       children: [
-                        InkWell(
-                          onTap: () {
-                            if (latitudeIn == "" && longitudeIn == "") {
-                              errorDialog(context,
-                                  "No Check-in Location Recorded Yet!");
-                            } else {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => Maps(
-                                    latitudeIn,
-                                    longitudeIn,
-                                    "Check-in Location",
+                        Material(
+                          color: Colors.black,
+                          borderRadius: BorderRadius.circular(8.0),
+                          child: InkWell(
+                            onTap: () {
+                              if (latitudeIn == "" && longitudeIn == "") {
+                                errorDialog(context,
+                                    "No Check-in Location Recorded Yet!");
+                              } else {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => Maps(
+                                      latitudeIn,
+                                      longitudeIn,
+                                      "Check-in Location",
+                                    ),
                                   ),
-                                ),
-                              );
-                            }
-                          },
-                          child: locationButton(context, "Check-In"),
+                                );
+                              }
+                            },
+                            splashColor: Colors.white,
+                            child: locationButton(context, "Check-In"),
+                          ),
                         ),
                       ],
                     ),
                     Column(
                       children: [
-                        InkWell(
-                          onTap: () {
-                            if (latitudeOut == "" && longitudeOut == "") {
-                              errorDialog(context,
-                                  "No Check-Out Location Recorded Yet!");
-                            } else {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => Maps(
-                                    latitudeOut,
-                                    longitudeOut,
-                                    "Check-Out Location",
+                        Material(
+                          color: Colors.black,
+                          borderRadius: BorderRadius.circular(8.0),
+                          child: InkWell(
+                            onTap: () {
+                              if (latitudeOut == "" && longitudeOut == "") {
+                                errorDialog(context,
+                                    "No Check-Out Location Recorded Yet!");
+                              } else {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => Maps(
+                                      latitudeOut,
+                                      longitudeOut,
+                                      "Check-Out Location",
+                                    ),
                                   ),
-                                ),
-                              );
-                            }
-                          },
-                          child: locationButton(context, "Check-Out"),
+                                );
+                              }
+                            },
+                            splashColor: Colors.white,
+                            child: locationButton(context, "Check-Out"),
+                          ),
                         ),
                       ],
                     ),
@@ -503,11 +544,6 @@ Widget locationButton(BuildContext context, String text) {
   return Container(
     width: MediaQuery.of(context).size.width * .254,
     height: MediaQuery.of(context).size.height * .05,
-    decoration: BoxDecoration(
-      // color: Color(0xff022b5e),
-      color: Colors.black,
-      borderRadius: BorderRadius.circular(8.0),
-    ),
     child: Center(
       child: RichText(
         text: TextSpan(
