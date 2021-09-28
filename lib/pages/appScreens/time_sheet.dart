@@ -260,37 +260,216 @@ Widget syncButton(BuildContext context) {
   );
 }
 
-convertTime(time) {
-  var parsedTime = "";
-  if (time.toString().substring(4, 6).contains(" ")) {
-    parsedTime = "0" + time.toString().substring(5, 6);
-  } else {
-    parsedTime = time.toString().substring(4, 6);
-  }
-  var timeDate = time.toString().substring(10, 14) +
-      "-" +
-      parsedTime +
-      "-" +
-      time.toString().substring(7, 9);
-  if (":".allMatches(time.toString().substring(15, 20)).length == 2) {
-    if (time.toString().contains("PM")) {
-      var check = int.parse(time.toString().substring(15, 16)) + 12;
-      timeDate =
-          timeDate + " " + check.toString() + time.toString().substring(16, 19);
-    } else {
-      timeDate = timeDate + " 0" + time.toString().substring(15, 19);
+convertTime(time, context) {
+  print(time);
+  print((" ".allMatches(time.toString().substring(14))).length);
+  print(time.length);
+  print(time.toString().substring(14));
+  print(time.toString().substring(14).length);
+  if (time.toString().substring(14).contains("AM") ||
+      (time.toString().substring(14).contains("12") &&
+          time.toString().substring(14).contains("PM"))) {
+    if (time.length == 24 && time.toString().substring(14).length == 10) {
+      time = time.toString().substring(9, 13) +
+          "-0" +
+          time.toString().substring(5, 6) +
+          "-0" +
+          time.toString().substring(7, 8) +
+          " 0" +
+          time.toString().substring(15, 19);
+    } else if (time.length == 25 &&
+        time.toString().substring(14).length == 11 &&
+        (" ".allMatches(time.toString().substring(14))).length == 2) {
+      if ((time.toString().substring(10, 14) +
+              "-0" +
+              time.toString().substring(5, 6) +
+              "-" +
+              time.toString().substring(7, 9))
+          .contains("/")) {
+        time = time.toString().substring(10, 14) +
+            "-" +
+            time.toString().substring(5, 7) +
+            "-0" +
+            time.toString().substring(8, 9) +
+            " 0" +
+            time.toString().substring(15, 19);
+      } else {
+        time = time.toString().substring(10, 14) +
+            "-0" +
+            time.toString().substring(5, 6) +
+            "-" +
+            time.toString().substring(7, 9) +
+            " 0" +
+            time.toString().substring(15, 19);
+      }
+    } else if (time.length == 25 &&
+        time.toString().substring(14).length == 11) {
+      time = time.toString().substring(9, 13) +
+          "-0" +
+          time.toString().substring(5, 6) +
+          "-0" +
+          time.toString().substring(7, 8) +
+          " " +
+          time.toString().substring(14, 19);
+    } else if (time.length == 26 &&
+        time.toString().substring(14).length == 12 &&
+        (" ".allMatches(time.toString().substring(14))).length == 2 &&
+        time.toString().substring(14)[0] == "1") {
+      time = time.toString().substring(11, 15) +
+          "-" +
+          time.toString().substring(5, 7) +
+          "-" +
+          time.toString().substring(8, 10) +
+          " 0" +
+          time.toString().substring(16, 20);
+    } else if (time.length == 26 &&
+        time.toString().substring(14).length == 12) {
+      if ((time.toString().substring(10, 14) +
+              "-0" +
+              time.toString().substring(5, 6) +
+              "-" +
+              time.toString().substring(7, 9))
+          .contains("/")) {
+        time = time.toString().substring(10, 14) +
+            "-" +
+            time.toString().substring(5, 7) +
+            "-0" +
+            time.toString().substring(8, 9) +
+            time.toString().substring(14, 20);
+      } else {
+        time = time.toString().substring(10, 14) +
+            "-0" +
+            time.toString().substring(5, 6) +
+            "-" +
+            time.toString().substring(7, 9) +
+            time.toString().substring(14, 20);
+      }
+    } else if (time.length == 27 &&
+        time.toString().substring(14).length == 13) {
+      time = time.toString().substring(11, 15) +
+          "-" +
+          time.toString().substring(5, 7) +
+          "-" +
+          time.toString().substring(8, 10) +
+          time.toString().substring(15, 21);
+    }
+  } else if (time.toString().substring(14).contains("PM") ||
+      (time.toString().substring(14).contains("12") &&
+          time.toString().substring(14).contains("AM"))) {
+    if (time.length == 24 && time.toString().substring(14).length == 10) {
+      time = time.toString().substring(9, 13) +
+          "-0" +
+          time.toString().substring(5, 6) +
+          "-0" +
+          time.toString().substring(7, 8) +
+          " " +
+          (int.parse(time.toString().substring(15, 16)) + 12).toString() +
+          time.toString().substring(16, 19);
+    } else if (time.length == 25 &&
+        time.toString().substring(14).length == 11 &&
+        (" ".allMatches(time.toString().substring(14))).length == 2) {
+      if ((time.toString().substring(10, 14) +
+              "-0" +
+              time.toString().substring(5, 6) +
+              "-" +
+              time.toString().substring(7, 9))
+          .contains("/")) {
+        time = time.toString().substring(10, 14) +
+            "-" +
+            time.toString().substring(5, 7) +
+            "-0" +
+            time.toString().substring(8, 9) +
+            " " +
+            (int.parse(time.toString().substring(15, 16)) + 12).toString() +
+            time.toString().substring(16, 19);
+      } else {
+        time = time.toString().substring(10, 14) +
+            "-0" +
+            time.toString().substring(5, 6) +
+            "-" +
+            time.toString().substring(7, 9) +
+            " " +
+            (int.parse(time.toString().substring(15, 16)) + 12).toString() +
+            time.toString().substring(16, 19);
+      }
+    } else if (time.length == 25 &&
+        time.toString().substring(14).length == 11) {
+      time = time.toString().substring(9, 13) +
+          "-0" +
+          time.toString().substring(5, 6) +
+          "-0" +
+          time.toString().substring(7, 8) +
+          " " +
+          (int.parse(time.toString().substring(14, 16)) + 12).toString() +
+          time.toString().substring(16, 19);
+    } else if (time.length == 26 &&
+        time.toString().substring(14).length == 12 &&
+        (" ".allMatches(time.toString().substring(14))).length == 2 &&
+        time.toString().substring(14)[0] == "1") {
+      time = time.toString().substring(11, 15) +
+          "-" +
+          time.toString().substring(5, 7) +
+          "-" +
+          time.toString().substring(8, 10) +
+          " " +
+          (int.parse(time.toString().substring(16, 17)) + 12).toString() +
+          time.toString().substring(17, 20);
+    } else if (time.length == 26 &&
+        time.toString().substring(14).length == 12) {
+      if ((time.toString().substring(10, 14) +
+              "-0" +
+              time.toString().substring(5, 6) +
+              "-" +
+              time.toString().substring(7, 9))
+          .contains("/")) {
+        time = time.toString().substring(10, 14) +
+            "-" +
+            time.toString().substring(5, 7) +
+            "-0" +
+            time.toString().substring(8, 9) +
+            " " +
+            (int.parse(time.toString().substring(15, 16)) + 12).toString() +
+            time.toString().substring(16, 20);
+      } else {
+        time = time.toString().substring(10, 14) +
+            "-0" +
+            time.toString().substring(5, 6) +
+            "-" +
+            time.toString().substring(7, 9) +
+            (int.parse(time.toString().substring(15, 16)) + 12).toString() +
+            time.toString().substring(16, 20);
+      }
+    } else if (time.length == 27 &&
+        time.toString().substring(14).length == 13) {
+      time = time.toString().substring(11, 15) +
+          "-" +
+          time.toString().substring(5, 7) +
+          "-" +
+          time.toString().substring(8, 10) +
+          " " +
+          (int.parse(time.toString().substring(16, 18)) + 12).toString() +
+          time.toString().substring(18, 21);
     }
   } else {
-    if (time.toString().contains("PM")) {
-      var check = int.parse(time.toString().substring(15, 17)) + 12;
-      timeDate =
-          timeDate + " " + check.toString() + time.toString().substring(17, 20);
-    } else {
-      timeDate = timeDate + " " + time.toString().substring(15, 20);
-    }
+    errorDialog(context, "Error");
   }
-  return timeDate;
+  return time;
 }
+// convertTime(time) {
+//   var parsedTime = "";
+//   if (time.toString().substring(4, 6).contains(" ")) {
+//     parsedTime = "0" + time.toString().substring(5, 6);
+//   } else {
+//     parsedTime = time.toString().substring(4, 6);
+//   }
+//   var timeDate = time.toString().substring(10, 14) +
+//       "-" +
+//       parsedTime +
+//       "-" +
+//       time.toString().substring(7, 9);
+
+//   return timeDate;
+// }
 
 Widget cardContainer(
   BuildContext context,
@@ -308,7 +487,7 @@ Widget cardContainer(
   var completeDate = DateTime.now()
       .toString()
       .substring(0, DateTime.now().toString().length - 10);
-  var oldDate = convertTime(timeIn);
+  var oldDate = convertTime(timeIn, context);
   print(oldDate);
 
   var one = DateTime.parse(completeDate);
