@@ -490,12 +490,10 @@ Widget cardContainer(
   var completeDate = DateTime.now()
       .toString()
       .substring(0, DateTime.now().toString().length - 10);
-  var oldDate = convertTime(timeIn, context);
-  print(oldDate);
 
   var one = DateTime.parse(completeDate);
-  var two = DateTime.parse(oldDate);
-  var pTime = one.difference(two).toString();
+  var pTime = one.difference(DateTime.parse(differenceTime)).toString();
+  print(pTime);
   bool timeDifference = false;
 
   if (timeOut == "" && int.parse(pTime.substring(0, pTime.length - 13)) >= 20) {
