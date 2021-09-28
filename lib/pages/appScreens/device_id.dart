@@ -118,6 +118,8 @@ class _DeviceIdState extends State<DeviceId> {
               "team_id": allEmployeeData[i]["teamId"].toString(),
               "designation": allEmployeeData[i]["designation"].toString(),
               "status": allEmployeeData[i]["status"].toString(),
+              "image": allEmployeeData[i]["image"].toString(),
+              "image_data": allEmployeeData[i]["imageData"].toString(),
               "updated_at": "",
               "created_at": "",
             });

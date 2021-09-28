@@ -99,7 +99,7 @@ class _LoginState extends State<Login> {
                 password: item['password'],
                 teamName: item['team_name'],
                 isSync: "1",
-                imageData: "",
+                imageData: item['image_data'],
               );
               employeeOperations.createEmployee(employee);
             }
