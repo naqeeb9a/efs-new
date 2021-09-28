@@ -227,6 +227,8 @@ class _TimeSheetState extends State<TimeSheet> {
                                     .toString(),
                                 (snapshot.data as List)[i]['latitudeOut']
                                     .toString(),
+                                (snapshot.data as List)[i]['differenceTime']
+                                    .toString(),
                               );
                             }),
                       );
@@ -481,6 +483,7 @@ Widget cardContainer(
   latitudeIn,
   longitudeOut,
   latitudeOut,
+  differenceTime,
 ) {
   Uint8List bytes = Base64Codec().decode(image);
 
