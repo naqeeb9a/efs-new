@@ -338,12 +338,12 @@ class RegisterCameraState extends State<RegisterCamera> {
       designation: widget.designation.toString(),
       image: imagePath,
       teamId: Globals.teamId.toString(),
-      status: "0",
+      status: widget.status.toString(),
       isTeamLead: widget.isTeamLead.toString(),
       username: widget.username.toString(),
       password: widget.password.toString(),
       teamName: Globals.teamName.toString(),
-      isSync: widget.isSync,
+      isSync: "0",
       imageData: jsonEncode(predictedData),
     );
 
