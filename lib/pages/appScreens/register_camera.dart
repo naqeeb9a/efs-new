@@ -338,7 +338,7 @@ class RegisterCameraState extends State<RegisterCamera> {
       designation: widget.designation.toString(),
       image: imagePath,
       teamId: Globals.teamId.toString(),
-      status: widget.status.toString(),
+      status: "0",
       isTeamLead: widget.isTeamLead.toString(),
       username: widget.username.toString(),
       password: widget.password.toString(),

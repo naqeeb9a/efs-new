@@ -70,5 +70,6 @@ dependencies {
     implementation 'com.google.android.gms:play-services-mlkit-face-detection:16.2.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation('org.tensorflow:tensorflow-lite:0.0.0-nightly') { changing = true }
-    implementation 'org.tensorflow:tensorflow-lite-gpu:2.2.0'
+    implementation('org.tensorflow:tensorflow-lite-gpu:0.0.0-nightly') { changing = true }
+//    implementation 'org.tensorflow:tensorflow-lite-gpu:2.2.0'
 }

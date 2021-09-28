@@ -57,7 +57,7 @@ class _TeamListState extends State<TeamList> {
                 password: item['password'],
                 teamName: item['team_name'],
                 isSync: "1",
-                imageData: "",
+                imageData: item['image_data'],
               );
               EmployeeOperations().createEmployee(employee);
             }
@@ -90,6 +90,8 @@ class _TeamListState extends State<TeamList> {
               "team_id": allEmployeeData[i]["teamId"].toString(),
               "designation": allEmployeeData[i]["designation"].toString(),
               "status": allEmployeeData[i]["status"].toString(),
+              "image": allEmployeeData[i]["image"].toString(),
+              "image_data": allEmployeeData[i]["imageData"].toString(),
               "updated_at": "",
               "created_at": "",
             });
@@ -145,7 +147,6 @@ class _TeamListState extends State<TeamList> {
       future: employeeData,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          print((snapshot.data as List)[0]['imageData'].length);
           return Scaffold(
             backgroundColor: Color(0xfff2f2f2),
             appBar: AppBar(
