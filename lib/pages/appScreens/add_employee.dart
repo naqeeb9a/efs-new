@@ -80,7 +80,8 @@ class _AddEmployeeState extends State<AddEmployee> {
                     child: Row(
                       children: [
                         Flexible(
-                          child: textField(context, employeeId, "Employee Id"),
+                          child: textField(
+                              context, employeeId, "Employee Id", false),
                         ),
                       ],
                     ),
@@ -92,8 +93,8 @@ class _AddEmployeeState extends State<AddEmployee> {
                     child: Row(
                       children: [
                         Flexible(
-                          child:
-                              textField(context, employeeName, "Employee Name"),
+                          child: textField(
+                              context, employeeName, "Employee Name", false),
                         ),
                       ],
                     ),
@@ -105,7 +106,8 @@ class _AddEmployeeState extends State<AddEmployee> {
                     child: Row(
                       children: [
                         Flexible(
-                          child: textField(context, designation, "Designation"),
+                          child: textField(
+                              context, designation, "Designation", false),
                         ),
                       ],
                     ),
@@ -117,7 +119,8 @@ class _AddEmployeeState extends State<AddEmployee> {
                     child: Row(
                       children: [
                         Flexible(
-                          child: textField(context, department, "Department"),
+                          child: textField(
+                              context, department, "Department", false),
                         ),
                       ],
                     ),

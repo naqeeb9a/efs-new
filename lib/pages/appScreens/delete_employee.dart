@@ -144,7 +144,8 @@ class _DeleteEmployeeState extends State<DeleteEmployee> {
                   child: Row(
                     children: [
                       Flexible(
-                        child: textField(context, employeeId, "Employee Id"),
+                        child: textField(
+                            context, employeeId, "Employee Id", false),
                       ),
                     ],
                   ),

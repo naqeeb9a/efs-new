@@ -76,7 +76,8 @@ class DBHelper {
                 latitudeOut STRING NULL,
                 attendanceImage STRING NULL,
                 syncStatus STRING NULL,
-                updateTime STRING NULL
+                updateTime STRING NULL,
+                differenceTime STRING NULL
           )
     ''');
   }

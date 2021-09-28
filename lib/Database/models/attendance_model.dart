@@ -12,6 +12,7 @@ class AttendanceData {
   String attendanceImage;
   String syncStatus;
   String updateTime;
+  String differenceTime;
 
   AttendanceData({
     this.id,
@@ -27,6 +28,7 @@ class AttendanceData {
     this.attendanceImage,
     this.syncStatus,
     this.updateTime,
+    this.differenceTime,
   });
 
   AttendanceData.fromMap(Map<String, dynamic> map) {
@@ -42,7 +44,8 @@ class AttendanceData {
     this.latitudeOut = map['latitudeOut'] as String;
     this.attendanceImage = map['attendanceImage'] as String;
     this.syncStatus = map['syncStatus'] as String;
-    this.syncStatus = map['updateTime'] as String;
+    this.updateTime = map['updateTime'] as String;
+    this.differenceTime = map['differenceTime'] as String;
   }
 
   Map<String, dynamic> toMap() {
@@ -59,6 +62,7 @@ class AttendanceData {
       'attendanceImage': attendanceImage,
       'syncStatus': syncStatus,
       'updateTime': updateTime,
+      'differenceTime': differenceTime,
     };
 
     return map;

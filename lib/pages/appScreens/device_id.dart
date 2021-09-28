@@ -251,8 +251,8 @@ class _DeviceIdState extends State<DeviceId> {
                     child: Row(
                       children: [
                         Flexible(
-                          child:
-                              field.textField(context, deviceId, "Device Id"),
+                          child: field.textField(
+                              context, deviceId, "Device Id", false),
                         ),
                       ],
                     ),

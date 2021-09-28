@@ -64,7 +64,8 @@ class _LoginState extends State<Login> {
                 teamLocation: item['team_location'],
                 teamLeadId: item['team_lead_id'],
                 deviceId: item['device_id'],
-                groupId: item['group_id'] == null ? "" : item['group_id'],
+                groupId:
+                    item['group_id'] == null ? "" : item['group_id'].toString(),
                 groupName: item['group_name'] == null ? "" : item['group_name'],
                 status: item['status'],
               );
@@ -269,6 +270,7 @@ class _LoginState extends State<Login> {
                             child: InkWell(
                               onTap: () {
                                 for (int i = 0; i < employees.length; i++) {
+                                  print(employees[i]['password']);
                                   if (employees[i]['is_teamlead'] == 1 &&
                                       employees[i]['username'] ==
                                           username.text &&

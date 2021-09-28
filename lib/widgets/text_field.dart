@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-Widget textField(
-    BuildContext context, TextEditingController controller, String labelText) {
+Widget textField(BuildContext context, TextEditingController controller,
+    String labelText, bool obscureText) {
   return Container(
     width: MediaQuery.of(context).size.width * 1,
     decoration: BoxDecoration(
@@ -19,6 +19,7 @@ Widget textField(
           return null;
         }
       },
+      obscureText: obscureText,
       keyboardAppearance: Brightness.dark,
       keyboardType: TextInputType.name,
       style: TextStyle(
