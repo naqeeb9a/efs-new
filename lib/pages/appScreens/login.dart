@@ -270,7 +270,6 @@ class _LoginState extends State<Login> {
                             child: InkWell(
                               onTap: () {
                                 for (int i = 0; i < employees.length; i++) {
-                                  print(employees[i]['password']);
                                   if (employees[i]['is_teamlead'] == 1 &&
                                       employees[i]['username'] ==
                                           username.text &&

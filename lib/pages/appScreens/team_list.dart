@@ -95,6 +95,7 @@ class _TeamListState extends State<TeamList> {
               "updated_at": "",
               "created_at": "",
             });
+
         if (response.statusCode == 200) {
           final employee = Employee(
             id: 0,
@@ -147,8 +148,7 @@ class _TeamListState extends State<TeamList> {
       future: employeeData,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          print((snapshot.data as List)[0]['isSync']
-              .toString(),);
+          print((snapshot.data as List)[0]['imageData'].toString());
           return Scaffold(
             backgroundColor: Color(0xfff2f2f2),
             appBar: AppBar(

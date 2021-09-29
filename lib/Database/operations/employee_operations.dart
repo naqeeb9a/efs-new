@@ -29,8 +29,9 @@ class EmployeeOperations {
     WHERE employeeId = ?
     ''', [password, id]);
 
-    print(updateCount);
   }
+
+  // await db.rawQuery('SELECT * FROM my_table WHERE name=?', ['Mary']);
 
   deleteEmployee(String id) async {
     final db = await dbProvider.database;
@@ -49,6 +50,21 @@ class EmployeeOperations {
   Future<List> getAllEmployees() async {
     final db = await dbProvider.database;
     List<Map<String, dynamic>> maps = await db.query(tableName);
+    List employees = [];
+
+    if (maps.length > 0) {
+      for (int i = 0; i < maps.length; i++) {
+        employees.add(maps[i]);
+      }
+    }
+    if (employees.isEmpty) {}
+    return employees;
+  }
+
+  Future<List> getSpecificEmployee(String employeeId) async {
+    final db = await dbProvider.database;
+    List<Map<String, dynamic>> maps = await db
+        .rawQuery('SELECT * FROM $tableName WHERE employeeId=?', [employeeId]);
     List employees = [];
 
     if (maps.length > 0) {
