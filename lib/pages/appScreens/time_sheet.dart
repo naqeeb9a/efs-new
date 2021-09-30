@@ -74,6 +74,8 @@ class _TimeSheetState extends State<TimeSheet> {
     checkRemainingDays();
     attendancesData = attendanceOperations.getAttendance();
     attendancesDataByOrder = attendanceOperations.getAttendanceByOrder();
+    employeeId.clear();
+    selectedDate = null;
   }
 
   Future<void> syncData() async {
@@ -149,7 +151,6 @@ class _TimeSheetState extends State<TimeSheet> {
     if (picked != null && picked != selectedDate)
       setState(() {
         selectedDate = picked;
-        // print(DateFormat('yyyy-MM-dd').format(picked));
       });
   }
 
@@ -243,7 +244,22 @@ class _TimeSheetState extends State<TimeSheet> {
                               child: Center(
                                 child: InkWell(
                                   onTap: () {
-                                    // datePicker(context);
+                                    if (employeeId.text.toString().isNotEmpty &&
+                                        selectedDate.toString().isNotEmpty) {
+                                      setState(() {
+                                        attendancesDataByOrder =
+                                            attendanceOperations
+                                                .getSpecificAttendance(
+                                          employeeId.text.toString(),
+                                          DateFormat('yyyy-MM-dd')
+                                              .format(selectedDate)
+                                              .toString(),
+                                        );
+                                      });
+                                    } else {
+                                      errorDialog(context,
+                                          "Please enter Employee Id & select Date!!");
+                                    }
                                   },
                                   splashColor: Colors.white,
                                   child: Icon(
@@ -341,11 +357,8 @@ Widget cardContainer(
       .substring(0, DateTime.now().toString().length - 10);
 
   var one = DateTime.parse(completeDate);
-  print("1" + one.toString());
-  print("2" + differenceTime);
 
   var pTime = one.difference(DateTime.parse(differenceTime)).toString();
-  print(pTime);
 
   bool timeDifference = false;
 

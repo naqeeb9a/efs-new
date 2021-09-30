@@ -30,6 +30,25 @@ class AttendanceOperations {
     return attendance;
   }
 
+  Future<List> getSpecificAttendance(String employeeId, String date) async {
+    final db = await dbProvider.database;
+    List<Map<String, dynamic>> maps = await db.query(
+      '$tableName',
+      where: "employeeId=? and date=?",
+      whereArgs: [employeeId, date],
+      orderBy: "updateTime DESC",
+    );
+
+    List attendance = [];
+
+    if (maps.length > 0) {
+      for (int i = 0; i < maps.length; i++) {
+        attendance.add(maps[i]);
+      }
+    }
+    return attendance;
+  }
+
   Future<List> getAttendanceByOrder() async {
     final db = await dbProvider.database;
     List<Map<String, dynamic>> maps = await db.query(

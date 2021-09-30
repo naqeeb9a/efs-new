@@ -23,15 +23,12 @@ class EmployeeOperations {
 
   updatePassword(String id, String password) async {
     final db = await dbProvider.database;
-    int updateCount = await db.rawUpdate('''
+    await db.rawUpdate('''
     UPDATE $tableName 
     SET password = ?
     WHERE employeeId = ?
     ''', [password, id]);
-
   }
-
-  // await db.rawQuery('SELECT * FROM my_table WHERE name=?', ['Mary']);
 
   deleteEmployee(String id) async {
     final db = await dbProvider.database;

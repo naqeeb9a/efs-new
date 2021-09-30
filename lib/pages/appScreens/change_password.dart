@@ -180,20 +180,16 @@ class _ChangePasswordState extends State<ChangePassword> {
                             );
                         if (oldPassword.text.toString() ==
                             tempPassword.toString()) {
-
                           if (int.parse(password.text
                                   .toString()
                                   .compareTo(confirmPassword.text.toString())
                                   .toString()) ==
                               0) {
-
                             try {
-
                               final net =
                                   await InternetAddress.lookup('example.com');
                               if (net.isNotEmpty &&
                                   net[0].rawAddress.isNotEmpty) {
-
                                 var response = await http.post(
                                     Uri.parse(
                                         "https://attendanceapp.genxmtech.com/api/changePassword"),
@@ -202,15 +198,17 @@ class _ChangePasswordState extends State<ChangePassword> {
                                       "password": password.text.toString(),
                                     });
                                 if (response.statusCode == 200) {
-                                  employeeOperations.updatePassword(employeeId.text.toString(), password.text.toString());
+                                  employeeOperations.updatePassword(
+                                      employeeId.text.toString(),
+                                      password.text.toString());
 
                                   successDialogOnly(context,
                                       "Your Password Changed Successfully!!");
                                   Future.delayed(Duration(milliseconds: 1000),
                                       () {
-                                        int count = 0;
-                                        Navigator.of(context)
-                                            .popUntil((_) => count++ >= 2);
+                                    int count = 0;
+                                    Navigator.of(context)
+                                        .popUntil((_) => count++ >= 2);
                                     employeeId.clear();
                                     oldPassword.clear();
                                     password.clear();

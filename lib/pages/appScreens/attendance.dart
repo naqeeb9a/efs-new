@@ -265,130 +265,136 @@ class _AttendanceState extends State<Attendance> {
     return attendanceOperations.searchAttendance(id).then((result) {
       var now = new DateTime.now();
       var formatter = new DateFormat('yyyy-MM-dd');
-      var formatter2 = new DateFormat('yyyy-MM-dd HH:MM');
-      String differenceTime = formatter2.format(now);
+      String differenceTime =
+          now.toString().substring(0, now.toString().length - 10);
       String date = formatter.format(now);
       String completeDate = DateFormat.yMEd().add_jms().format(DateTime.now());
-
-      if (id == "null") {
-        errorDialog(context, "First Take Picture!!!");
-      } else {
-        if (result.length == 0) {
-          final attendanceData = AttendanceData(
-            id: 0,
-            employeeId: id,
-            teamId: Globals.teamId,
-            date: date,
-            timeIn: completeDate,
-            timeOut: "",
-            latitudeIn: latitude.toString(),
-            longitudeIn: longitude.toString(),
-            latitudeOut: "",
-            longitudeOut: "",
-            attendanceImage: Globals.attendanceImage,
-            syncStatus: "",
-            updateTime: completeDate,
-            differenceTime: differenceTime,
-          );
-          attendanceOperations.createAttendance(attendanceData);
-          successDialogOnly(context, "Check-In Attendance Marked!!");
-          Globals.setAttendanceId("null");
-          Future.delayed(Duration(milliseconds: 1000), () {
-            int count = 0;
-            Navigator.of(context).popUntil((_) => count++ >= 2);
-          });
+      if (latitude.toString().isNotEmpty && longitude.toString().isNotEmpty) {
+        if (id == "null") {
+          errorDialog(context, "First Take Picture!!!");
         } else {
-          for (int i = 0; i < result.length; i++) {
-            if (result.length > 0 &&
-                result[i]['employeeId'].toString() == id.toString() &&
-                result[i]['date'].toString() == date.toString() &&
-                result[i]['timeIn'].toString() != "" &&
-                result[i]['timeOut'].toString() != "") {
-              attendanceData2 = AttendanceData(
-                id: 0,
-                employeeId: id,
-                teamId: Globals.teamId,
-                date: date,
-                timeIn: completeDate,
-                timeOut: "",
-                latitudeIn: latitude.toString(),
-                longitudeIn: longitude.toString(),
-                latitudeOut: "",
-                longitudeOut: "",
-                attendanceImage: Globals.attendanceImage,
-                syncStatus: "0",
-                updateTime: completeDate,
-                differenceTime: differenceTime,
-              );
-              timeInCheck = "ok";
-            } else if (result.length > 0 &&
-                result[i]['employeeId'].toString() == id.toString() &&
-                result[i]['date'].toString() != date.toString() &&
-                result[i]['timeIn'].toString() != "" &&
-                result[i]['timeOut'].toString() != "") {
-              attendanceData2 = AttendanceData(
-                id: 0,
-                employeeId: id,
-                teamId: Globals.teamId,
-                date: date,
-                timeIn: completeDate,
-                timeOut: "",
-                latitudeIn: latitude.toString(),
-                longitudeIn: longitude.toString(),
-                latitudeOut: "",
-                longitudeOut: "",
-                attendanceImage: Globals.attendanceImage,
-                syncStatus: "0",
-                updateTime: completeDate,
-                differenceTime: differenceTime,
-              );
-              timeInCheck = "ok";
-            } else if (result.length > 0 &&
-                result[i]['employeeId'].toString() == id.toString() &&
-                result[i]['date'].toString() != date.toString() &&
-                result[i]['timeIn'].toString() != "" &&
-                result[i]['timeOut'].toString() == "") {
-              attendanceData2 = AttendanceData(
-                id: 0,
-                employeeId: id,
-                teamId: Globals.teamId,
-                date: date,
-                timeIn: completeDate,
-                timeOut: "",
-                latitudeIn: latitude.toString(),
-                longitudeIn: longitude.toString(),
-                latitudeOut: "",
-                longitudeOut: "",
-                attendanceImage: Globals.attendanceImage,
-                syncStatus: "0",
-                updateTime: completeDate,
-                differenceTime: differenceTime,
-              );
-              timeInCheck = "ok";
-            } else if (result.length > 0 &&
-                result[i]['employeeId'].toString() == id.toString() &&
-                result[i]['date'].toString() == date.toString() &&
-                result[i]['timeIn'].toString() != "" &&
-                result[i]['timeOut'].toString() == "") {
-              timeInCheck = "no";
-            }
-          }
-          if (timeInCheck == "ok") {
-            attendanceOperations.createAttendance(attendanceData2);
+          if (result.length == 0) {
+            final attendanceData = AttendanceData(
+              id: 0,
+              employeeId: id,
+              teamId: Globals.teamId,
+              date: date,
+              timeIn: completeDate,
+              timeOut: "",
+              latitudeIn: latitude.toString(),
+              longitudeIn: longitude.toString(),
+              latitudeOut: "",
+              longitudeOut: "",
+              attendanceImage: Globals.attendanceImage,
+              syncStatus: "",
+              updateTime: completeDate,
+              differenceTime: differenceTime,
+            );
+            attendanceOperations.createAttendance(attendanceData);
             successDialogOnly(context, "Check-In Attendance Marked!!");
             Globals.setAttendanceId("null");
             Future.delayed(Duration(milliseconds: 1000), () {
               int count = 0;
               Navigator.of(context).popUntil((_) => count++ >= 2);
             });
-          } else if (timeInCheck == "no") {
-            Globals.setAttendanceId("null");
-            errorDialog(
-              context,
-              "You have already Check-In!!\nCheck-Out first and then try again!!",
-            );
+          } else {
+            for (int i = 0; i < result.length; i++) {
+              if (result.length > 0 &&
+                  result[i]['employeeId'].toString() == id.toString() &&
+                  result[i]['date'].toString() == date.toString() &&
+                  result[i]['timeIn'].toString() != "" &&
+                  result[i]['timeOut'].toString() != "") {
+                attendanceData2 = AttendanceData(
+                  id: 0,
+                  employeeId: id,
+                  teamId: Globals.teamId,
+                  date: date,
+                  timeIn: completeDate,
+                  timeOut: "",
+                  latitudeIn: latitude.toString(),
+                  longitudeIn: longitude.toString(),
+                  latitudeOut: "",
+                  longitudeOut: "",
+                  attendanceImage: Globals.attendanceImage,
+                  syncStatus: "0",
+                  updateTime: completeDate,
+                  differenceTime: differenceTime,
+                );
+                timeInCheck = "ok";
+              } else if (result.length > 0 &&
+                  result[i]['employeeId'].toString() == id.toString() &&
+                  result[i]['date'].toString() != date.toString() &&
+                  result[i]['timeIn'].toString() != "" &&
+                  result[i]['timeOut'].toString() != "") {
+                attendanceData2 = AttendanceData(
+                  id: 0,
+                  employeeId: id,
+                  teamId: Globals.teamId,
+                  date: date,
+                  timeIn: completeDate,
+                  timeOut: "",
+                  latitudeIn: latitude.toString(),
+                  longitudeIn: longitude.toString(),
+                  latitudeOut: "",
+                  longitudeOut: "",
+                  attendanceImage: Globals.attendanceImage,
+                  syncStatus: "0",
+                  updateTime: completeDate,
+                  differenceTime: differenceTime,
+                );
+                timeInCheck = "ok";
+              } else if (result.length > 0 &&
+                  result[i]['employeeId'].toString() == id.toString() &&
+                  result[i]['date'].toString() != date.toString() &&
+                  result[i]['timeIn'].toString() != "" &&
+                  result[i]['timeOut'].toString() == "") {
+                attendanceData2 = AttendanceData(
+                  id: 0,
+                  employeeId: id,
+                  teamId: Globals.teamId,
+                  date: date,
+                  timeIn: completeDate,
+                  timeOut: "",
+                  latitudeIn: latitude.toString(),
+                  longitudeIn: longitude.toString(),
+                  latitudeOut: "",
+                  longitudeOut: "",
+                  attendanceImage: Globals.attendanceImage,
+                  syncStatus: "0",
+                  updateTime: completeDate,
+                  differenceTime: differenceTime,
+                );
+                timeInCheck = "ok";
+              } else if (result.length > 0 &&
+                  result[i]['employeeId'].toString() == id.toString() &&
+                  result[i]['date'].toString() == date.toString() &&
+                  result[i]['timeIn'].toString() != "" &&
+                  result[i]['timeOut'].toString() == "") {
+                timeInCheck = "no";
+              }
+            }
+            if (timeInCheck == "ok") {
+              attendanceOperations.createAttendance(attendanceData2);
+              successDialogOnly(context, "Check-In Attendance Marked!!");
+              Globals.setAttendanceId("null");
+              Future.delayed(Duration(milliseconds: 1000), () {
+                int count = 0;
+                Navigator.of(context).popUntil((_) => count++ >= 2);
+              });
+            } else if (timeInCheck == "no") {
+              Globals.setAttendanceId("null");
+              errorDialog(
+                context,
+                "You have already Check-In!!\nCheck-Out first and then try again!!",
+              );
+            }
           }
         }
+      } else {
+        errorDialog(
+          context,
+          "Location not Recorded.\nCheck your permissions and then tey again!!",
+        );
       }
     });
   }
@@ -402,90 +408,97 @@ class _AttendanceState extends State<Attendance> {
       var formatter = new DateFormat('yyyy-MM-dd');
       String date = formatter.format(now);
       String completeDate = DateFormat.yMEd().add_jms().format(DateTime.now());
-      if (id == "null") {
-        errorDialog(context, "First Take Picture!!!");
-      } else {
-        for (int i = 0; i < result.length; i++) {
-          var completeDate2 = DateTime.now()
-              .toString()
-              .substring(0, DateTime.now().toString().length - 10);
+      if (latitude.toString().isNotEmpty && longitude.toString().isNotEmpty) {
+        if (id == "null") {
+          errorDialog(context, "First Take Picture!!!");
+        } else {
+          for (int i = 0; i < result.length; i++) {
+            var completeDate2 = DateTime.now()
+                .toString()
+                .substring(0, DateTime.now().toString().length - 10);
 
-          var one = DateTime.parse(completeDate2);
-          var pTime = one
-              .difference(
-                  DateTime.parse(result[i]['differenceTime'].toString()))
-              .toString();
+            var one = DateTime.parse(completeDate2);
+            var pTime = one
+                .difference(
+                    DateTime.parse(result[i]['differenceTime'].toString()))
+                .toString();
 
-          if (result[i]['timeIn'].toString() == "" &&
-              int.parse(pTime.substring(0, pTime.length - 13)) <= 20) {
-            if (result.length > 0 &&
-                result[i]['employeeId'].toString() == id.toString() &&
-                result[i]['timeIn'].toString() != "" &&
-                result[i]['timeOut'].toString() == "") {
-              attendanceData2 = AttendanceData(
-                id: 0,
-                employeeId: id,
-                teamId: Globals.teamId,
-                date: date,
-                timeIn: result[i]['timeIn'],
-                timeOut: completeDate,
-                latitudeIn: result[i]['latitudeIn'].toString(),
-                longitudeIn: result[i]['longitudeIn'].toString(),
-                latitudeOut: latitude.toString(),
-                longitudeOut: longitude.toString(),
-                attendanceImage: Globals.attendanceImage,
-                syncStatus: "0",
-                updateTime: completeDate,
-                differenceTime: result[i]['differenceTime'].toString(),
-              );
-              timeOutCheck = "ok";
-              empid = result[i]['id'].toString();
-            } else if (result.length > 0 &&
-                result[i]['employeeId'].toString() == id.toString() &&
-                result[i]['date'].toString() == date.toString() &&
-                result[i]['timeIn'].toString() == "" &&
-                result[i]['timeOut'].toString() == "") {
-              timeOutCheck = "no1";
-            } else if (result.length > 0 &&
-                result[i]['employeeId'].toString() == id.toString() &&
-                result[i]['date'].toString() == date.toString() &&
-                result[i]['timeIn'].toString() != "" &&
-                result[i]['timeOut'].toString() != "") {
-              timeOutCheck = "no2";
+            if (result[i]['timeOut'].toString() == "" &&
+                int.parse(pTime.substring(0, pTime.length - 13)) <= 20) {
+              if (result.length > 0 &&
+                  result[i]['employeeId'].toString() == id.toString() &&
+                  result[i]['timeIn'].toString() != "" &&
+                  result[i]['timeOut'].toString() == "") {
+                attendanceData2 = AttendanceData(
+                  id: 0,
+                  employeeId: id,
+                  teamId: Globals.teamId,
+                  date: date,
+                  timeIn: result[i]['timeIn'],
+                  timeOut: completeDate,
+                  latitudeIn: result[i]['latitudeIn'].toString(),
+                  longitudeIn: result[i]['longitudeIn'].toString(),
+                  latitudeOut: latitude.toString(),
+                  longitudeOut: longitude.toString(),
+                  attendanceImage: Globals.attendanceImage,
+                  syncStatus: "0",
+                  updateTime: completeDate,
+                  differenceTime: result[i]['differenceTime'].toString(),
+                );
+                timeOutCheck = "ok";
+                empid = result[i]['id'].toString();
+              } else if (result.length > 0 &&
+                  result[i]['employeeId'].toString() == id.toString() &&
+                  result[i]['date'].toString() == date.toString() &&
+                  result[i]['timeIn'].toString() == "" &&
+                  result[i]['timeOut'].toString() == "") {
+                timeOutCheck = "no1";
+              } else if (result.length > 0 &&
+                  result[i]['employeeId'].toString() == id.toString() &&
+                  result[i]['date'].toString() == date.toString() &&
+                  result[i]['timeIn'].toString() != "" &&
+                  result[i]['timeOut'].toString() != "") {
+                timeOutCheck = "no2";
+              }
+            } else {
+              timeOutCheck = "timeError";
             }
-          } else {
-            timeOutCheck = "timeError";
+          }
+
+          if (timeOutCheck == "ok") {
+            attendanceOperations.updateAttendance(
+                int.parse(empid), attendanceData2);
+            successDialogOnly(context, "Check-Out Attendance Marked!!");
+            Globals.setAttendanceId("null");
+            Future.delayed(Duration(milliseconds: 1000), () {
+              int count = 0;
+              Navigator.of(context).popUntil((_) => count++ >= 2);
+            });
+          } else if (timeOutCheck == "no1") {
+            Globals.setAttendanceId("null");
+            errorDialog(
+              context,
+              "Check-In first and then try again!!",
+            );
+          } else if (timeOutCheck == "no2") {
+            Globals.setAttendanceId("null");
+            errorDialog(
+              context,
+              "You have already Check-Out!!\nCheck-In first and then try again!!",
+            );
+          } else if (timeOutCheck == "timeError") {
+            Globals.setAttendanceId("null");
+            errorDialog(
+              context,
+              "Time-Out Undetected.\nPlease Contact Admin.",
+            );
           }
         }
-
-        if (timeOutCheck == "ok") {
-          attendanceOperations.updateAttendance(
-              int.parse(empid), attendanceData2);
-          successDialogOnly(context, "Check-Out Attendance Marked!!");
-          Globals.setAttendanceId("null");
-          Future.delayed(Duration(milliseconds: 1000), () {
-            int count = 0;
-            Navigator.of(context).popUntil((_) => count++ >= 2);
-          });
-        } else if (timeOutCheck == "no1") {
-          Globals.setAttendanceId("null");
-          errorDialog(
-            context,
-            "Check-In first and then try again!!",
-          );
-        } else if (timeOutCheck == "no2") {
-          Globals.setAttendanceId("null");
-          errorDialog(
-            context,
-            "You have already Check-Out!!\nCheck-In first and then try again!!",
-          );
-        } else if (timeOutCheck == "timeError") {
-          Globals.setAttendanceId("null");
-          errorDialog(
-            context,
-            "Time-Out Undetected.\nPlease Contact Admin.",
-          );
-        }
+      } else {
+        errorDialog(
+          context,
+          "Location not Recorded.\nCheck your permissions and then tey again!!",
+        );
       }
     });
   }
