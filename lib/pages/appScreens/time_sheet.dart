@@ -6,6 +6,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:efs_new/Database/models/attendance_model.dart';
 import 'package:efs_new/Database/operations/attendance_operations.dart';
 import 'package:efs_new/widgets/dialog_widget.dart';
+import 'package:efs_new/widgets/text_field.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -14,7 +15,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'maps.dart';
 
-var format = DateFormat("HH:mm");
+final employeeId = TextEditingController();
 
 class TimeSheet extends StatefulWidget {
   const TimeSheet({Key key}) : super(key: key);
@@ -29,6 +30,7 @@ class _TimeSheetState extends State<TimeSheet> {
 
   String syncStatus = "false";
   bool dataSync = false;
+  DateTime selectedDate;
 
   Future<void> checkRemainingDays() async {
     SharedPreferences datetime = await SharedPreferences.getInstance();
@@ -138,6 +140,19 @@ class _TimeSheetState extends State<TimeSheet> {
     }
   }
 
+  Future datePicker(BuildContext context) async {
+    final DateTime picked = await showDatePicker(
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime(2015, 8),
+        lastDate: DateTime(2101));
+    if (picked != null && picked != selectedDate)
+      setState(() {
+        selectedDate = picked;
+        // print(DateFormat('yyyy-MM-dd').format(picked));
+      });
+  }
+
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
@@ -180,26 +195,71 @@ class _TimeSheetState extends State<TimeSheet> {
             height: height * .86,
             child: Column(
               children: [
-                // Padding(
-                //   padding:
-                //       EdgeInsets.only(top: height * .016, bottom: height * .01),
-                //   child: Row(
-                //     mainAxisAlignment: MainAxisAlignment.center,
-                //     children: [
-                //       Material(
-                //         color: Color(0xff022b5e),
-                //         borderRadius: BorderRadius.circular(10.0),
-                //         child: InkWell(
-                //           onTap: () {
-                //             syncData();
-                //           },
-                //           splashColor: Colors.white,
-                //           child: syncButton(context),
-                //         ),
-                //       ),
-                //     ],
-                //   ),
-                // ),
+                Padding(
+                  padding:
+                      EdgeInsets.only(top: height * .016, bottom: height * .01),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        children: [
+                          Container(
+                            width: width * .68,
+                            height: height * .07,
+                            child: textField(context, employeeId,
+                                "Enter Employee Id", false),
+                          ),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          Container(
+                            width: width * .12,
+                            height: height * .07,
+                            child: Center(
+                              child: InkWell(
+                                onTap: () {
+                                  datePicker(context);
+                                },
+                                splashColor: Color(0xff022b5e),
+                                child: Icon(
+                                  Icons.date_range_rounded,
+                                  size: width * .1,
+                                  color: Color(0xff022b5e),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          Material(
+                            color: Color(0xff022b5e),
+                            borderRadius: BorderRadius.circular(width * .02),
+                            child: Container(
+                              width: width * .12,
+                              height: height * .07,
+                              child: Center(
+                                child: InkWell(
+                                  onTap: () {
+                                    // datePicker(context);
+                                  },
+                                  splashColor: Colors.white,
+                                  child: Icon(
+                                    Icons.search_rounded,
+                                    color: Colors.white,
+                                    size: width * .08,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
                 FutureBuilder(
                   future: attendancesDataByOrder,
                   builder: (context, snapshot) {
@@ -281,7 +341,11 @@ Widget cardContainer(
       .substring(0, DateTime.now().toString().length - 10);
 
   var one = DateTime.parse(completeDate);
+  print("1" + one.toString());
+  print("2" + differenceTime);
+
   var pTime = one.difference(DateTime.parse(differenceTime)).toString();
+  print(pTime);
 
   bool timeDifference = false;
 
@@ -468,7 +532,7 @@ Widget cardContainer(
                                 fontSize:
                                     MediaQuery.of(context).size.width * .034,
                               ),
-                              maxLines: 2,
+                              maxLines: timeDifference == false ? 2 : 3,
                             ),
                           ],
                         ),

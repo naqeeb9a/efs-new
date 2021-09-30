@@ -1,10 +1,14 @@
 import 'package:efs_new/pages/appScreens/home_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 void main() {
   runApp(
     MyApp(),
   );
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    statusBarColor: Color(0xff022b5e),
+  ));
 }
 
 class MyApp extends StatelessWidget {
