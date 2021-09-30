@@ -25,6 +25,7 @@ class TeamList extends StatefulWidget {
 class _TeamListState extends State<TeamList> {
   Future<List> employeeData, teamData;
   String syncStatus;
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -138,6 +139,9 @@ class _TeamListState extends State<TeamList> {
       successDialogOnly(context, "Data already Synced!!");
       getUpdatedEmployee();
     }
+    setState(() {
+      isLoading = false;
+    });
   }
 
   @override
@@ -165,18 +169,23 @@ class _TeamListState extends State<TeamList> {
               elevation: 4.0,
               centerTitle: true,
               actions: <Widget>[
-                Padding(
-                  padding: EdgeInsets.only(right: 16.0),
-                  child: InkWell(
-                    onTap: () {
-                      syncAllEmployees();
-                    },
-                    splashColor: Color(0xff022b5e),
-                    child: Icon(
-                      Icons.sync,
-                    ),
-                  ),
-                ),
+                isLoading == false
+                    ? Padding(
+                        padding: EdgeInsets.only(right: 16.0),
+                        child: InkWell(
+                          onTap: () {
+                            setState(() {
+                              isLoading = true;
+                            });
+                            syncAllEmployees();
+                          },
+                          splashColor: Color(0xff022b5e),
+                          child: Icon(
+                            Icons.sync,
+                          ),
+                        ),
+                      )
+                    : CircularProgressIndicator(),
               ],
             ),
             body: SingleChildScrollView(

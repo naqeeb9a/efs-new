@@ -29,7 +29,7 @@ class _TimeSheetState extends State<TimeSheet> {
   Future<List> attendancesData, attendancesDataByOrder;
 
   String syncStatus = "false";
-  bool dataSync = false;
+  bool dataSync = false, isLoading = false;
   DateTime selectedDate;
 
   Future<void> checkRemainingDays() async {
@@ -140,6 +140,9 @@ class _TimeSheetState extends State<TimeSheet> {
     } else if (syncStatus == "already") {
       successDialog(context, "Data already Synced!!");
     }
+    setState(() {
+      isLoading = false;
+    });
   }
 
   Future datePicker(BuildContext context) async {
@@ -175,18 +178,23 @@ class _TimeSheetState extends State<TimeSheet> {
         elevation: 4.0,
         centerTitle: true,
         actions: <Widget>[
-          Padding(
-            padding: EdgeInsets.only(right: 16.0),
-            child: InkWell(
-              onTap: () {
-                syncButton(context);
-              },
-              splashColor: Color(0xff022b5e),
-              child: Icon(
-                Icons.sync,
-              ),
-            ),
-          ),
+          isLoading == false
+              ? Padding(
+                  padding: EdgeInsets.only(right: 16.0),
+                  child: InkWell(
+                    onTap: () {
+                      setState(() {
+                        isLoading = true;
+                      });
+                      syncData();
+                    },
+                    splashColor: Color(0xff022b5e),
+                    child: Icon(
+                      Icons.sync,
+                    ),
+                  ),
+                )
+              : CircularProgressIndicator(),
         ],
       ),
       body: SingleChildScrollView(
@@ -257,6 +265,11 @@ class _TimeSheetState extends State<TimeSheet> {
                                         );
                                       });
                                     } else {
+                                      setState(() {
+                                        attendancesDataByOrder =
+                                            attendanceOperations
+                                                .getAttendanceByOrder();
+                                      });
                                       errorDialog(context,
                                           "Please enter Employee Id & select Date!!");
                                     }
@@ -321,23 +334,6 @@ class _TimeSheetState extends State<TimeSheet> {
   }
 }
 
-Widget syncButton(BuildContext context) {
-  return Container(
-    width: MediaQuery.of(context).size.width * .7,
-    height: MediaQuery.of(context).size.height * .07,
-    child: Center(
-      child: Text(
-        "Sync All Data",
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-          color: Colors.white,
-          fontSize: MediaQuery.of(context).size.width * .05,
-        ),
-      ),
-    ),
-  );
-}
-
 Widget cardContainer(
   BuildContext context,
   String employeeId,
@@ -351,19 +347,21 @@ Widget cardContainer(
   differenceTime,
 ) {
   Uint8List bytes = Base64Codec().decode(image);
-
-  var completeDate = DateTime.now()
-      .toString()
-      .substring(0, DateTime.now().toString().length - 10);
-
-  var one = DateTime.parse(completeDate);
-
-  var pTime = one.difference(DateTime.parse(differenceTime)).toString();
-
   bool timeDifference = false;
 
-  if (timeOut == "" && int.parse(pTime.substring(0, pTime.length - 13)) >= 20) {
-    timeDifference = true;
+  if (differenceTime.toString() != "null") {
+    var completeDate = DateTime.now()
+        .toString()
+        .substring(0, DateTime.now().toString().length - 10);
+
+    var one = DateTime.parse(completeDate);
+
+    var pTime = one.difference(DateTime.parse(differenceTime)).toString();
+
+    if (timeOut == "" &&
+        int.parse(pTime.substring(0, pTime.length - 13)) >= 20) {
+      timeDifference = true;
+    }
   }
 
   return Container(
