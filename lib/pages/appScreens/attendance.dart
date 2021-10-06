@@ -266,7 +266,7 @@ class _AttendanceState extends State<Attendance> {
       var now = new DateTime.now();
       var formatter = new DateFormat('yyyy-MM-dd');
       String difference =
-          now.toString().substring(0, now.toString().length - 10);
+      now.toString();
       String date = formatter.format(now);
       String completeDate = DateFormat.yMEd().add_jms().format(DateTime.now());
       if (latitude != null && longitude != null) {
