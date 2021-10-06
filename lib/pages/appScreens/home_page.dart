@@ -9,6 +9,7 @@ import 'package:efs_new/pages/appScreens/time_sheet.dart';
 import 'package:efs_new/widgets/globals.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -118,6 +119,37 @@ class _HomePageState extends State<HomePage> {
           } else if (attendanceDBData[i]["syncStatus"].toString() == "1") {
             syncStatus = "already";
           }
+        }
+        if (syncStatus == "true") {
+          Fluttertoast.showToast(
+            msg: "Sync Data Completed!!",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Color(0xff022b5e),
+            textColor: Colors.white,
+            fontSize: 16.0,
+          );
+        } else if (syncStatus == "error") {
+          Fluttertoast.showToast(
+            msg: "Error!!\nCheck your Internet or Try Again",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Color(0xff022b5e),
+            textColor: Colors.white,
+            fontSize: 16.0,
+          );
+        } else if (syncStatus == "already") {
+          Fluttertoast.showToast(
+            msg: "Data already Synced!!",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Color(0xff022b5e),
+            textColor: Colors.white,
+            fontSize: 16.0,
+          );
         }
       }
     } on SocketException catch (_) {}
