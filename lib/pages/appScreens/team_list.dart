@@ -300,6 +300,9 @@ Widget cardContainer(
     status,
     isSync,
     imageData) {
+  if (image.toString().length % 4 > 0) {
+    image = "";
+  }
   Uint8List bytes = Base64Codec().decode(image);
   return Container(
     width: MediaQuery.of(context).size.width * .94,

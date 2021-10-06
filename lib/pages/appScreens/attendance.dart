@@ -265,7 +265,7 @@ class _AttendanceState extends State<Attendance> {
     return attendanceOperations.searchAttendance(id).then((result) {
       var now = new DateTime.now();
       var formatter = new DateFormat('yyyy-MM-dd');
-      String differenceTime =
+      String difference =
           now.toString().substring(0, now.toString().length - 10);
       String date = formatter.format(now);
       String completeDate = DateFormat.yMEd().add_jms().format(DateTime.now());
@@ -287,8 +287,8 @@ class _AttendanceState extends State<Attendance> {
               longitudeOut: "",
               attendanceImage: Globals.attendanceImage,
               syncStatus: "",
-              updateTime: completeDate,
-              differenceTime: differenceTime,
+              updateTime: completeDate.toString(),
+              differenceTime: difference.toString(),
             );
             attendanceOperations.createAttendance(attendanceData);
             successDialogOnly(context, "Check-In Attendance Marked!!");
@@ -317,8 +317,8 @@ class _AttendanceState extends State<Attendance> {
                   longitudeOut: "",
                   attendanceImage: Globals.attendanceImage,
                   syncStatus: "0",
-                  updateTime: completeDate,
-                  differenceTime: differenceTime,
+                  updateTime: completeDate.toString(),
+                  differenceTime: difference.toString(),
                 );
                 timeInCheck = "ok";
               } else if (result.length > 0 &&
@@ -339,8 +339,8 @@ class _AttendanceState extends State<Attendance> {
                   longitudeOut: "",
                   attendanceImage: Globals.attendanceImage,
                   syncStatus: "0",
-                  updateTime: completeDate,
-                  differenceTime: differenceTime,
+                  updateTime: completeDate.toString(),
+                  differenceTime: difference.toString(),
                 );
                 timeInCheck = "ok";
               } else if (result.length > 0 &&
@@ -361,8 +361,8 @@ class _AttendanceState extends State<Attendance> {
                   longitudeOut: "",
                   attendanceImage: Globals.attendanceImage,
                   syncStatus: "0",
-                  updateTime: completeDate,
-                  differenceTime: differenceTime,
+                  updateTime: completeDate.toString(),
+                  differenceTime: difference.toString(),
                 );
                 timeInCheck = "ok";
               } else if (result.length > 0 &&

@@ -35,7 +35,7 @@ class DBHelper {
                     employeeName STRING NOT NULL,
                     department STRING NOT NULL,
                     designation STRING NOT NULL,
-                    image STRING,
+                    image MEDIUMTEXT,
                     teamId STRING NOT NULL,
                     status STRING,
                     isTeamLead STRING,
@@ -43,7 +43,7 @@ class DBHelper {
                     password STRING,
                     teamName STRING NOT NULL,
                     isSync STRING NULL,
-                    imageData STRING NULL    
+                    imageData MEDIUMTEXT NULL    
           )
 ''');
 
@@ -74,7 +74,7 @@ class DBHelper {
                 latitudeIn STRING NULL,
                 longitudeOut STRING NULL,
                 latitudeOut STRING NULL,
-                attendanceImage STRING NULL,
+                attendanceImage MEDIUMTEXT NULL,
                 syncStatus STRING NULL,
                 updateTime STRING NULL,
                 differenceTime STRING NULL

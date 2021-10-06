@@ -350,11 +350,9 @@ Widget cardContainer(
   bool timeDifference = false;
 
   if (differenceTime.toString() != "null") {
-    var completeDate = DateTime.now()
-        .toString()
-        .substring(0, DateTime.now().toString().length - 10);
-
-    var one = DateTime.parse(completeDate);
+    var completeDate = DateTime.now();
+    print(completeDate);
+    var one = completeDate;
 
     var pTime = one.difference(DateTime.parse(differenceTime)).toString();
 
