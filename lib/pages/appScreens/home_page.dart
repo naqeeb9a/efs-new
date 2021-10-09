@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:efs_new/Database/models/attendance_model.dart';
 import 'package:efs_new/Database/operations/attendance_operations.dart';
-import 'package:efs_new/pages/appScreens/change_password.dart';
 import 'package:efs_new/pages/appScreens/team_list.dart';
 import 'package:efs_new/pages/appScreens/time_sheet.dart';
 import 'package:efs_new/widgets/globals.dart';
@@ -11,9 +10,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
+import 'package:quds_popup_menu/quds_popup_menu.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'attendance.dart';
+import 'change_password.dart';
 import 'device_id.dart';
 
 class HomePage extends StatefulWidget {
@@ -176,161 +177,108 @@ class _HomePageState extends State<HomePage> {
                   width: width * 1,
                   height: height * .96,
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          IconButton(
-                            onPressed: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) => ChangePassword(
-                                    name: "Change Password",
-                                  ),
-                                ),
-                              );
-                            },
-                            icon: Icon(
-                              Icons.vpn_key_rounded,
-                              size: MediaQuery.of(context).size.width * .07,
-                              color: Color(0xffb1b1b1),
+                          Padding(
+                            padding: EdgeInsets.only(
+                              right: width * .03,
+                              top: height * .02,
                             ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image.asset(
-                            "assets/logo.jpeg",
-                            scale: 1.4,
-                          ),
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "Dashboard",
-                            style: TextStyle(
-                              fontSize: width * .06,
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
+                            child: QudsPopupButton(
+                              items: [
+                                QudsPopupMenuItem(
+                                    leading: Icon(
+                                      Icons.password_rounded,
+                                      color: Color(0xff022b5e),
+                                    ),
+                                    title: Text(
+                                      'Change Password',
+                                      style: TextStyle(
+                                        color: Color(0xff022b5e),
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: width * .042,
+                                      ),
+                                      maxLines: 1,
+                                    ),
+                                    onPressed: () {
+                                      Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                          builder: (context) => ChangePassword(
+                                            name: "Change Password",
+                                          ),
+                                        ),
+                                      );
+                                    }),
+                                QudsPopupMenuDivider(),
+                                QudsPopupMenuItem(
+                                    leading: Icon(
+                                      Icons.logout,
+                                      color: Color(0xff022b5e),
+                                    ),
+                                    title: Text(
+                                      'Log Out',
+                                      style: TextStyle(
+                                        color: Color(0xff022b5e),
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: width * .042,
+                                      ),
+                                      maxLines: 1,
+                                    ),
+                                    onPressed: () async {
+                                      setState(() {
+                                        _loading = true;
+                                      });
+
+                                      await pref.remove("token");
+                                      await teamid.remove("teamid");
+                                      await teamname.remove("teamname");
+
+                                      Navigator.of(context).pushAndRemoveUntil(
+                                          MaterialPageRoute(
+                                              builder: (BuildContext context) =>
+                                                  DeviceId()),
+                                          (Route<dynamic> route) => false);
+                                    }),
+                              ],
+                              child: Icon(
+                                Icons.more_vert_rounded,
+                                size: width * .08,
+                                color: Color(0xffb1b1b1),
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          buttonContainer(
-                            context,
-                            "Team List",
-                            Icons.group_rounded,
-                            TeamList(),
-                            0xff022b5e,
-                          ),
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          buttonContainer(
-                            context,
-                            "Mark Attendance",
-                            Icons.markunread_mailbox_outlined,
-                            Attendance(),
-                            0xffc0d736,
-                          ),
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          buttonContainer(
-                            context,
-                            "Time Sheet",
-                            Icons.event_note_outlined,
-                            TimeSheet(),
-                            0xffb1b1b1,
                           ),
                         ],
                       ),
                       Padding(
-                        padding: EdgeInsets.only(
-                            right: MediaQuery.of(context).size.width * .1),
+                        padding: EdgeInsets.symmetric(
+                          vertical: width * .1,
+                        ),
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Material(
-                              color: Colors.black,
-                              borderRadius: BorderRadius.circular(10.0),
-                              child: InkWell(
-                                onTap: () async {
-                                  setState(() {
-                                    _loading = true;
-                                  });
-
-                                  await pref.remove("token");
-                                  await teamid.remove("teamid");
-                                  await teamname.remove("teamname");
-
-                                  Navigator.of(context).pushAndRemoveUntil(
-                                      MaterialPageRoute(
-                                          builder: (BuildContext context) =>
-                                              DeviceId()),
-                                      (Route<dynamic> route) => false);
-                                },
-                                splashColor: Colors.white,
-                                child: Container(
-                                  width: MediaQuery.of(context).size.width * .4,
-                                  height:
-                                      MediaQuery.of(context).size.height * .084,
-                                  child: Row(
-                                    children: [
-                                      Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Padding(
-                                            padding: EdgeInsets.symmetric(
-                                              horizontal: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  .04,
-                                            ),
-                                            child: Icon(
-                                              Icons.logout,
-                                              size: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  .08,
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            "Logout",
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.white,
-                                              fontSize: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  .05,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
+                            Image.asset(
+                              "assets/logo.jpeg",
+                              scale: 1,
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                          vertical: width * .06,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Dashboard",
+                              style: TextStyle(
+                                fontSize: width * .06,
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
                           ],
@@ -338,7 +286,60 @@ class _HomePageState extends State<HomePage> {
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(
-                            vertical: MediaQuery.of(context).size.height * .01),
+                          vertical: width * .1,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            buttonContainer(
+                              context,
+                              "Team List",
+                              Icons.group_rounded,
+                              TeamList(),
+                              0xff022b5e,
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                          vertical: width * .01,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            buttonContainer(
+                              context,
+                              "Mark Attendance",
+                              Icons.markunread_mailbox_outlined,
+                              Attendance(),
+                              0xffc0d736,
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                          vertical: width * .1,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            buttonContainer(
+                              context,
+                              "Time Sheet",
+                              Icons.event_note_outlined,
+                              TimeSheet(),
+                              0xffb1b1b1,
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(
+                          top: height * .14,
+                          bottom: height * .01,
+                        ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [

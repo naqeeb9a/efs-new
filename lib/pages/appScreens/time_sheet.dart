@@ -11,6 +11,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'package:quds_popup_menu/quds_popup_menu.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'maps.dart';
@@ -178,9 +179,216 @@ class _TimeSheetState extends State<TimeSheet> {
         elevation: 4.0,
         centerTitle: true,
         actions: <Widget>[
+          Padding(
+            padding: EdgeInsets.only(right: width * .03),
+            child: QudsPopupButton(
+              child: RotatedBox(
+                quarterTurns: 1,
+                child: Icon(
+                  Icons.tune_rounded,
+                  size: width * .08,
+                ),
+              ),
+              items: [
+                QudsPopupMenuItem(
+                  leading: Icon(
+                    Icons.perm_identity_rounded,
+                    color: Color(0xff022b5e),
+                  ),
+                  title: textField(
+                    context,
+                    employeeId,
+                    "Enter Employee Id",
+                    false,
+                  ),
+                  popOnTap: false,
+                  onPressed: () {},
+                ),
+                QudsPopupMenuDivider(),
+                QudsPopupMenuItem(
+                  title: Material(
+                    color: Color(0xff022b5e),
+                    borderRadius: BorderRadius.circular(width * .02),
+                    child: Center(
+                      child: InkWell(
+                        onTap: () {
+                          datePicker(context);
+                        },
+                        splashColor: Colors.white,
+                        child: Container(
+                          width: width * .72,
+                          height: height * .07,
+                          child: Center(
+                            child: RichText(
+                              text: TextSpan(
+                                style: Theme.of(context).textTheme.bodyText2,
+                                children: [
+                                  WidgetSpan(
+                                    child: Icon(
+                                      Icons.date_range_rounded,
+                                      color: Colors.white,
+                                      size: width * .06,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: "     Select Date",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: width * .05,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                QudsPopupMenuDivider(),
+                QudsPopupMenuItem(
+                  title: Padding(
+                    padding: EdgeInsets.only(bottom: height * .01),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Column(
+                          children: [
+                            Material(
+                              color: Color(0xff022b5e),
+                              borderRadius: BorderRadius.circular(width * .02),
+                              child: Center(
+                                child: InkWell(
+                                  onTap: () {
+                                    if (employeeId.text.toString().isNotEmpty &&
+                                        selectedDate != null) {
+                                      setState(() {
+                                        attendancesDataByOrder =
+                                            attendanceOperations
+                                                .getSpecificAttendance(
+                                          employeeId.text.toString(),
+                                          DateFormat('yyyy-MM-dd')
+                                              .format(selectedDate)
+                                              .toString(),
+                                        );
+                                      });
+                                    } else if (employeeId.text
+                                        .toString()
+                                        .isEmpty) {
+                                      errorDialog(context,
+                                          "Please enter Employee Id!!");
+                                    } else if (selectedDate == null) {
+                                      errorDialog(
+                                          context, "Please select Date!!");
+                                    } else if (employeeId.text
+                                            .toString()
+                                            .isEmpty &&
+                                        selectedDate.toString().isEmpty) {
+                                      errorDialog(context,
+                                          "Please enter Employee Id & select Date!!");
+                                    }
+                                  },
+                                  splashColor: Colors.white,
+                                  child: Container(
+                                    width: width * .36,
+                                    height: height * .06,
+                                    child: Center(
+                                      child: RichText(
+                                        text: TextSpan(
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyText2,
+                                          children: [
+                                            WidgetSpan(
+                                              child: Icon(
+                                                Icons.search_rounded,
+                                                color: Colors.white,
+                                                size: width * .06,
+                                              ),
+                                            ),
+                                            TextSpan(
+                                              text: " Search",
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: width * .05,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Column(
+                          children: [
+                            Material(
+                              color: Color(0xff022b5e),
+                              borderRadius: BorderRadius.circular(width * .02),
+                              child: Center(
+                                child: InkWell(
+                                  onTap: () {
+                                    employeeId.clear();
+                                    selectedDate = null;
+                                    setState(() {
+                                      attendancesDataByOrder =
+                                          attendanceOperations
+                                              .getAttendanceByOrder();
+                                    });
+                                  },
+                                  splashColor: Colors.white,
+                                  child: Container(
+                                    width: width * .36,
+                                    height: height * .06,
+                                    child: Center(
+                                      child: RichText(
+                                        text: TextSpan(
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyText2,
+                                          children: [
+                                            WidgetSpan(
+                                              child: Icon(
+                                                Icons.clear,
+                                                color: Colors.white,
+                                                size: width * .06,
+                                              ),
+                                            ),
+                                            TextSpan(
+                                              text: " Clear",
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: width * .05,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  popOnTap: false,
+                  onPressed: () {
+                    datePicker(context);
+                  },
+                ),
+              ],
+            ),
+          ),
           isLoading == false
               ? Padding(
-                  padding: EdgeInsets.only(right: 16.0),
+                  padding: EdgeInsets.only(right: width * .04),
                   child: InkWell(
                     onTap: () {
                       setState(() {
@@ -204,125 +412,129 @@ class _TimeSheetState extends State<TimeSheet> {
             height: height * .86,
             child: Column(
               children: [
-                Padding(
-                  padding:
-                      EdgeInsets.only(top: height * .016, bottom: height * .01),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        children: [
-                          Container(
-                            width: width * .68,
-                            height: height * .07,
-                            child: textField(context, employeeId,
-                                "Enter Employee Id", false),
-                          ),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          Container(
-                            width: width * .12,
-                            height: height * .07,
-                            child: Center(
-                              child: InkWell(
-                                onTap: () {
-                                  datePicker(context);
-                                },
-                                splashColor: Color(0xff022b5e),
-                                child: Icon(
-                                  Icons.date_range_rounded,
-                                  size: width * .1,
-                                  color: Color(0xff022b5e),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          Material(
-                            color: Color(0xff022b5e),
-                            borderRadius: BorderRadius.circular(width * .02),
-                            child: Container(
-                              width: width * .12,
-                              height: height * .07,
-                              child: Center(
-                                child: InkWell(
-                                  onTap: () {
-                                    if (employeeId.text.toString().isNotEmpty &&
-                                        selectedDate.toString().isNotEmpty) {
-                                      setState(() {
-                                        attendancesDataByOrder =
-                                            attendanceOperations
-                                                .getSpecificAttendance(
-                                          employeeId.text.toString(),
-                                          DateFormat('yyyy-MM-dd')
-                                              .format(selectedDate)
-                                              .toString(),
-                                        );
-                                      });
-                                    } else {
-                                      setState(() {
-                                        attendancesDataByOrder =
-                                            attendanceOperations
-                                                .getAttendanceByOrder();
-                                      });
-                                      errorDialog(context,
-                                          "Please enter Employee Id & select Date!!");
-                                    }
-                                  },
-                                  splashColor: Colors.white,
-                                  child: Icon(
-                                    Icons.search_rounded,
-                                    color: Colors.white,
-                                    size: width * .08,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
+                // Padding(
+                //   padding:
+                //       EdgeInsets.only(top: height * .016, bottom: height * .01),
+                //   child: Row(
+                //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //     children: [
+                //       Column(
+                //         children: [
+                //           Container(
+                //             width: width * .68,
+                //             height: height * .06,
+                //             child: textField(context, employeeId,
+                //                 "Enter Employee Id", false),
+                //           ),
+                //         ],
+                //       ),
+                //       Column(
+                //         children: [
+                //           Container(
+                //             width: width * .12,
+                //             height: height * .07,
+                //             child: Center(
+                //               child: InkWell(
+                //                 onTap: () {
+                //                   datePicker(context);
+                //                 },
+                //                 splashColor: Color(0xff022b5e),
+                //                 child: Icon(
+                //                   Icons.date_range_rounded,
+                //                   size: width * .1,
+                //                   color: Color(0xff022b5e),
+                //                 ),
+                //               ),
+                //             ),
+                //           ),
+                //         ],
+                //       ),
+                //       Column(
+                //         children: [
+                //           Material(
+                //             color: Color(0xff022b5e),
+                //             borderRadius: BorderRadius.circular(width * .02),
+                //             child: Container(
+                //               width: width * .12,
+                //               height: height * .07,
+                //               child: Center(
+                //                 child: InkWell(
+                //                   onTap: () {
+                //                     if (employeeId.text.toString().isNotEmpty &&
+                //                         selectedDate.toString().isNotEmpty) {
+                //                       setState(() {
+                //                         attendancesDataByOrder =
+                //                             attendanceOperations
+                //                                 .getSpecificAttendance(
+                //                           employeeId.text.toString(),
+                //                           DateFormat('yyyy-MM-dd')
+                //                               .format(selectedDate)
+                //                               .toString(),
+                //                         );
+                //                       });
+                //                     } else {
+                //                       setState(() {
+                //                         attendancesDataByOrder =
+                //                             attendanceOperations
+                //                                 .getAttendanceByOrder();
+                //                       });
+                //                       errorDialog(context,
+                //                           "Please enter Employee Id & select Date!!");
+                //                     }
+                //                   },
+                //                   splashColor: Colors.white,
+                //                   child: Icon(
+                //                     Icons.search_rounded,
+                //                     color: Colors.white,
+                //                     size: width * .08,
+                //                   ),
+                //                 ),
+                //               ),
+                //             ),
+                //           ),
+                //         ],
+                //       ),
+                //     ],
+                //   ),
+                // ),
                 FutureBuilder(
                   future: attendancesDataByOrder,
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
-                      return SizedBox(
-                        width: width * .94,
-                        height: height * .76,
-                        child: ListView.builder(
-                            itemCount: (snapshot.data as List).length,
-                            itemBuilder: (context, i) {
-                              return cardContainer(
-                                context,
-                                (snapshot.data as List)[i]['employeeId']
-                                    .toString(),
-                                (snapshot.data as List)[i]['timeIn'].toString(),
-                                (snapshot.data as List)[i]['timeOut']
-                                    .toString(),
-                                (snapshot.data as List)[i]['attendanceImage']
-                                    .toString(),
-                                (snapshot.data as List)[i]['longitudeIn']
-                                    .toString(),
-                                (snapshot.data as List)[i]['latitudeIn']
-                                    .toString(),
-                                (snapshot.data as List)[i]['longitudeOut']
-                                    .toString(),
-                                (snapshot.data as List)[i]['latitudeOut']
-                                    .toString(),
-                                (snapshot.data as List)[i]['differenceTime']
-                                    .toString(),
-                              );
-                            }),
+                      return Expanded(
+                        child: Container(
+                          width: width * .94,
+                          child: ListView.builder(
+                              itemCount: (snapshot.data as List).length,
+                              itemBuilder: (context, i) {
+                                return cardContainer(
+                                  context,
+                                  (snapshot.data as List)[i]['employeeId']
+                                      .toString(),
+                                  (snapshot.data as List)[i]['timeIn']
+                                      .toString(),
+                                  (snapshot.data as List)[i]['timeOut']
+                                      .toString(),
+                                  (snapshot.data as List)[i]['attendanceImage']
+                                      .toString(),
+                                  (snapshot.data as List)[i]['longitudeIn']
+                                      .toString(),
+                                  (snapshot.data as List)[i]['latitudeIn']
+                                      .toString(),
+                                  (snapshot.data as List)[i]['longitudeOut']
+                                      .toString(),
+                                  (snapshot.data as List)[i]['latitudeOut']
+                                      .toString(),
+                                  (snapshot.data as List)[i]['differenceTime']
+                                      .toString(),
+                                );
+                              }),
+                        ),
                       );
                     }
-                    return CircularProgressIndicator();
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
                   },
                 ),
               ],

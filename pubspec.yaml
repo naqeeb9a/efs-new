@@ -43,6 +43,8 @@ dependencies:
   google_maps_flutter: ^2.0.6
   fluttertoast: ^8.0.8
   get: ^4.3.8
+  quds_popup_menu: ^0.0.1+1
+  dropdown_search: ^1.0.3
 
 dev_dependencies:
   flutter_test:

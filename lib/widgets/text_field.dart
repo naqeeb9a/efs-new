@@ -6,7 +6,9 @@ Widget textField(BuildContext context, TextEditingController controller,
     width: MediaQuery.of(context).size.width * 1,
     decoration: BoxDecoration(
       color: Colors.white60,
-      borderRadius: BorderRadius.circular(9),
+      borderRadius: BorderRadius.circular(
+        MediaQuery.of(context).size.width * .01,
+      ),
     ),
     child: TextFormField(
       initialValue: null,
@@ -38,11 +40,15 @@ Widget textField(BuildContext context, TextEditingController controller,
         ),
         focusedBorder: OutlineInputBorder(
           borderSide: BorderSide(color: Colors.black, width: 1.0),
-          borderRadius: BorderRadius.circular(9.0),
+          borderRadius: BorderRadius.circular(
+            MediaQuery.of(context).size.width * .01,
+          ),
         ),
         enabledBorder: OutlineInputBorder(
           borderSide: BorderSide(color: Colors.grey.shade700, width: 1.0),
-          borderRadius: BorderRadius.circular(9.0),
+          borderRadius: BorderRadius.circular(
+            MediaQuery.of(context).size.width * .01,
+          ),
         ),
         border: InputBorder.none,
         labelText: labelText,

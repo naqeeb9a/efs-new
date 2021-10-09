@@ -220,58 +220,53 @@ class _DeviceIdState extends State<DeviceId> {
           height: height * .8,
           child: Form(
             key: _formKey,
-            child: GestureDetector(
-              onTap: () {
-                FocusScope.of(context).requestFocus(new FocusNode());
-              },
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(
-                      top: MediaQuery.of(context).size.height * .01,
-                      bottom: MediaQuery.of(context).size.height * .04,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        AutoSizeText(
-                          "Enter your Device Id",
-                          style: TextStyle(
-                            color: Colors.grey[800],
-                            fontSize: width * .05,
-                          ),
-                          maxLines: 1,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(
+                    top: MediaQuery.of(context).size.height * .01,
+                    bottom: MediaQuery.of(context).size.height * .04,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      AutoSizeText(
+                        "Enter your Device Id",
+                        style: TextStyle(
+                          color: Colors.grey[800],
+                          fontSize: width * .05,
                         ),
-                      ],
-                    ),
+                        maxLines: 1,
+                      ),
+                    ],
                   ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                      vertical: MediaQuery.of(context).size.height * .02,
-                    ),
-                    child: Row(
-                      children: [
-                        Flexible(
-                          child: field.textField(
-                              context, deviceId, "Device Id", false),
-                        ),
-                      ],
-                    ),
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                    vertical: MediaQuery.of(context).size.height * .02,
                   ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                      vertical: MediaQuery.of(context).size.height * .02,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        continueButton(context),
-                      ],
-                    ),
+                  child: Row(
+                    children: [
+                      Flexible(
+                        child: field.textField(
+                            context, deviceId, "Device Id", false),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                    vertical: MediaQuery.of(context).size.height * .02,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      continueButton(context),
+                    ],
+                  ),
+                ),
+              ],
             ),
           ),
         ),
