@@ -412,91 +412,6 @@ class _TimeSheetState extends State<TimeSheet> {
             height: height * .86,
             child: Column(
               children: [
-                // Padding(
-                //   padding:
-                //       EdgeInsets.only(top: height * .016, bottom: height * .01),
-                //   child: Row(
-                //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //     children: [
-                //       Column(
-                //         children: [
-                //           Container(
-                //             width: width * .68,
-                //             height: height * .06,
-                //             child: textField(context, employeeId,
-                //                 "Enter Employee Id", false),
-                //           ),
-                //         ],
-                //       ),
-                //       Column(
-                //         children: [
-                //           Container(
-                //             width: width * .12,
-                //             height: height * .07,
-                //             child: Center(
-                //               child: InkWell(
-                //                 onTap: () {
-                //                   datePicker(context);
-                //                 },
-                //                 splashColor: Color(0xff022b5e),
-                //                 child: Icon(
-                //                   Icons.date_range_rounded,
-                //                   size: width * .1,
-                //                   color: Color(0xff022b5e),
-                //                 ),
-                //               ),
-                //             ),
-                //           ),
-                //         ],
-                //       ),
-                //       Column(
-                //         children: [
-                //           Material(
-                //             color: Color(0xff022b5e),
-                //             borderRadius: BorderRadius.circular(width * .02),
-                //             child: Container(
-                //               width: width * .12,
-                //               height: height * .07,
-                //               child: Center(
-                //                 child: InkWell(
-                //                   onTap: () {
-                //                     if (employeeId.text.toString().isNotEmpty &&
-                //                         selectedDate.toString().isNotEmpty) {
-                //                       setState(() {
-                //                         attendancesDataByOrder =
-                //                             attendanceOperations
-                //                                 .getSpecificAttendance(
-                //                           employeeId.text.toString(),
-                //                           DateFormat('yyyy-MM-dd')
-                //                               .format(selectedDate)
-                //                               .toString(),
-                //                         );
-                //                       });
-                //                     } else {
-                //                       setState(() {
-                //                         attendancesDataByOrder =
-                //                             attendanceOperations
-                //                                 .getAttendanceByOrder();
-                //                       });
-                //                       errorDialog(context,
-                //                           "Please enter Employee Id & select Date!!");
-                //                     }
-                //                   },
-                //                   splashColor: Colors.white,
-                //                   child: Icon(
-                //                     Icons.search_rounded,
-                //                     color: Colors.white,
-                //                     size: width * .08,
-                //                   ),
-                //                 ),
-                //               ),
-                //             ),
-                //           ),
-                //         ],
-                //       ),
-                //     ],
-                //   ),
-                // ),
                 FutureBuilder(
                   future: attendancesDataByOrder,
                   builder: (context, snapshot) {
@@ -563,7 +478,6 @@ Widget cardContainer(
 
   if (differenceTime.toString() != "null") {
     var completeDate = DateTime.now();
-    print(completeDate);
     var one = completeDate;
 
     var pTime = one.difference(DateTime.parse(differenceTime)).toString();
