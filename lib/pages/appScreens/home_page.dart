@@ -10,9 +10,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
+import 'package:quds_popup_menu/quds_popup_menu.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:quds_popup_menu/quds_popup_menu.dart';
 import 'attendance.dart';
 import 'change_password.dart';
 import 'device_id.dart';
@@ -30,7 +30,7 @@ class _HomePageState extends State<HomePage> {
   SharedPreferences deviceid;
   SharedPreferences teamid;
   SharedPreferences teamname;
-  String version = "2.1.0";
+  String version = "2.1.1";
 
   var _loading = true;
   String syncStatus = "false";

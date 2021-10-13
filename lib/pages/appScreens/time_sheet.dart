@@ -416,7 +416,7 @@ class _TimeSheetState extends State<TimeSheet> {
                   future: attendancesDataByOrder,
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
-                      print(snapshot.data);
+                      print((snapshot.data as List)[0]);
                       return Expanded(
                         child: Container(
                           width: width * .94,
@@ -441,8 +441,7 @@ class _TimeSheetState extends State<TimeSheet> {
                                       .toString(),
                                   (snapshot.data as List)[i]['latitudeOut']
                                       .toString(),
-                                  (snapshot.data as List)[i]['differenceTime']
-                                      .toString(),
+                                  (snapshot.data as List)[i]['date'].toString(),
                                 );
                               }),
                         ),

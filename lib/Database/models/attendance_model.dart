@@ -10,8 +10,6 @@ class AttendanceData {
   String longitudeOut;
   String latitudeOut;
   String syncStatus;
-  String updateTime;
-  String differenceTime;
   String attendanceImage;
 
   AttendanceData({
@@ -26,8 +24,6 @@ class AttendanceData {
     this.longitudeOut,
     this.latitudeOut,
     this.syncStatus,
-    this.updateTime,
-    this.differenceTime,
     this.attendanceImage,
   });
 
@@ -43,8 +39,6 @@ class AttendanceData {
     this.longitudeOut = map['longitudeOut'] as String;
     this.latitudeOut = map['latitudeOut'] as String;
     this.syncStatus = map['syncStatus'] as String;
-    this.updateTime = map['updateTime'] as String;
-    this.differenceTime = map['differenceTime'] as String;
     this.attendanceImage = map['attendanceImage'] as String;
   }
 
@@ -60,8 +54,6 @@ class AttendanceData {
       'longitudeOut': longitudeOut,
       'latitudeOut': latitudeOut,
       'syncStatus': syncStatus,
-      'updateTime': updateTime,
-      'differenceTime': differenceTime,
       'attendanceImage': attendanceImage,
     };
 

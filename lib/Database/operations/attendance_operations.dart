@@ -36,14 +36,13 @@ class AttendanceOperations {
       '$tableName',
       where: "employeeId=? and date=?",
       whereArgs: [employeeId, date],
-      orderBy: "updateTime DESC",
     );
 
     List attendance = [];
 
     if (maps.length > 0) {
       for (int i = 0; i < maps.length; i++) {
-        attendance.add(maps[i]);
+        attendance.insert(0, maps[i]);
       }
     }
     return attendance;
@@ -53,14 +52,13 @@ class AttendanceOperations {
     final db = await dbProvider.database;
     List<Map<String, dynamic>> maps = await db.query(
       tableName,
-      orderBy: "updateTime DESC",
     );
 
     List attendance = [];
 
     if (maps.length > 0) {
       for (int i = 0; i < maps.length; i++) {
-        attendance.add(maps[i]);
+        attendance.insert(0, maps[i]);
       }
     }
     return attendance;

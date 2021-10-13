@@ -264,9 +264,7 @@ class _AttendanceState extends State<Attendance> {
     dynamic attendanceData2;
     return attendanceOperations.searchAttendance(id).then((result) {
       var now = new DateTime.now();
-      var formatter = new DateFormat('yyyy-MM-dd');
-      String difference = now.toString();
-      String date = formatter.format(now);
+      String date = now.toString();
       String completeDate = DateFormat.yMEd().add_jms().format(DateTime.now());
       if (latitude != null && longitude != null) {
         if (id == "null") {
@@ -284,10 +282,8 @@ class _AttendanceState extends State<Attendance> {
               longitudeIn: longitude.toString(),
               latitudeOut: "",
               longitudeOut: "",
+              syncStatus: "0",
               attendanceImage: Globals.attendanceImage,
-              syncStatus: "",
-              updateTime: completeDate.toString(),
-              differenceTime: difference.toString(),
             );
             attendanceOperations.createAttendance(attendanceData);
             successDialogOnly(context, "Check-In Attendance Marked!!");
@@ -314,10 +310,8 @@ class _AttendanceState extends State<Attendance> {
                   longitudeIn: longitude.toString(),
                   latitudeOut: "",
                   longitudeOut: "",
-                  attendanceImage: Globals.attendanceImage,
                   syncStatus: "0",
-                  updateTime: completeDate.toString(),
-                  differenceTime: difference.toString(),
+                  attendanceImage: Globals.attendanceImage,
                 );
                 timeInCheck = "ok";
               } else if (result.length > 0 &&
@@ -336,10 +330,8 @@ class _AttendanceState extends State<Attendance> {
                   longitudeIn: longitude.toString(),
                   latitudeOut: "",
                   longitudeOut: "",
-                  attendanceImage: Globals.attendanceImage,
                   syncStatus: "0",
-                  updateTime: completeDate.toString(),
-                  differenceTime: difference.toString(),
+                  attendanceImage: Globals.attendanceImage,
                 );
                 timeInCheck = "ok";
               } else if (result.length > 0 &&
@@ -358,10 +350,8 @@ class _AttendanceState extends State<Attendance> {
                   longitudeIn: longitude.toString(),
                   latitudeOut: "",
                   longitudeOut: "",
-                  attendanceImage: Globals.attendanceImage,
                   syncStatus: "0",
-                  updateTime: completeDate.toString(),
-                  differenceTime: difference.toString(),
+                  attendanceImage: Globals.attendanceImage,
                 );
                 timeInCheck = "ok";
               } else if (result.length > 0 &&
@@ -418,9 +408,10 @@ class _AttendanceState extends State<Attendance> {
 
             var one = DateTime.parse(completeDate2);
             var pTime = one
-                .difference(
-                    DateTime.parse(result[i]['differenceTime'].toString()))
+                .difference(DateTime.parse(result[i]['date'].toString()))
                 .toString();
+
+            print("\n\n\n\n time " + pTime.substring(0, pTime.length - 13));
 
             if (result[i]['timeOut'].toString() == "" &&
                 int.parse(pTime.substring(0, pTime.length - 13)) <= 20) {
@@ -432,17 +423,15 @@ class _AttendanceState extends State<Attendance> {
                   id: 0,
                   employeeId: id,
                   teamId: Globals.teamId,
-                  date: date,
+                  date: result[i]['date'].toString(),
                   timeIn: result[i]['timeIn'],
                   timeOut: completeDate,
                   latitudeIn: result[i]['latitudeIn'].toString(),
                   longitudeIn: result[i]['longitudeIn'].toString(),
                   latitudeOut: latitude.toString(),
                   longitudeOut: longitude.toString(),
-                  attendanceImage: Globals.attendanceImage,
                   syncStatus: "0",
-                  updateTime: completeDate,
-                  differenceTime: result[i]['differenceTime'].toString(),
+                  attendanceImage: Globals.attendanceImage,
                 );
                 timeOutCheck = "ok";
                 empid = result[i]['id'].toString();
