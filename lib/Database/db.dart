@@ -74,10 +74,10 @@ class DBHelper {
                 latitudeIn STRING NULL,
                 longitudeOut STRING NULL,
                 latitudeOut STRING NULL,
-                attendanceImage MEDIUMTEXT NULL,
                 syncStatus STRING NULL,
                 updateTime STRING NULL,
-                differenceTime STRING NULL
+                differenceTime STRING NULL,
+                attendanceImage MEDIUMTEXT NULL
           )
     ''');
   }
