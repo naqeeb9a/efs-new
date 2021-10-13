@@ -137,7 +137,7 @@ class _LoginState extends State<Login> {
                     ),
                     Padding(
                       padding: EdgeInsets.only(
-                        top: height * .14,
+                        top: height * .1,
                         bottom: height * .01,
                       ),
                       child: Row(

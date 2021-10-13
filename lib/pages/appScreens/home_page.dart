@@ -10,9 +10,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
-import 'package:quds_popup_menu/quds_popup_menu.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:quds_popup_menu/quds_popup_menu.dart';
 import 'attendance.dart';
 import 'change_password.dart';
 import 'device_id.dart';
@@ -254,21 +254,21 @@ class _HomePageState extends State<HomePage> {
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(
-                          vertical: width * .1,
+                          vertical: height * .02,
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Image.asset(
                               "assets/logo.jpeg",
-                              scale: 1,
+                              scale: 1.2,
                             ),
                           ],
                         ),
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(
-                          vertical: width * .06,
+                          vertical: height * .04,
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -286,7 +286,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(
-                          vertical: width * .1,
+                          vertical: height * .03,
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -303,7 +303,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(
-                          vertical: width * .01,
+                          vertical: height * .03,
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -320,7 +320,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(
-                          vertical: width * .1,
+                          vertical: height * .03,
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -337,7 +337,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                       Padding(
                         padding: EdgeInsets.only(
-                          top: height * .14,
+                          top: height * .15,
                           bottom: height * .01,
                         ),
                         child: Row(

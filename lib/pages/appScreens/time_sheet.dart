@@ -216,7 +216,7 @@ class _TimeSheetState extends State<TimeSheet> {
                         },
                         splashColor: Colors.white,
                         child: Container(
-                          width: width * .72,
+                          width: width * .7,
                           height: height * .07,
                           child: Center(
                             child: RichText(
@@ -251,7 +251,7 @@ class _TimeSheetState extends State<TimeSheet> {
                   title: Padding(
                     padding: EdgeInsets.only(bottom: height * .01),
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Column(
                           children: [
@@ -291,7 +291,7 @@ class _TimeSheetState extends State<TimeSheet> {
                                   },
                                   splashColor: Colors.white,
                                   child: Container(
-                                    width: width * .36,
+                                    width: width * .34,
                                     height: height * .06,
                                     child: Center(
                                       child: RichText(
@@ -342,7 +342,7 @@ class _TimeSheetState extends State<TimeSheet> {
                                   },
                                   splashColor: Colors.white,
                                   child: Container(
-                                    width: width * .36,
+                                    width: width * .34,
                                     height: height * .06,
                                     child: Center(
                                       child: RichText(
