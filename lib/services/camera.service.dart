@@ -32,7 +32,7 @@ class CameraService {
     this._cameraDescription = cameraDescription;
     this._cameraController = CameraController(
       this._cameraDescription,
-      ResolutionPreset.medium,
+      ResolutionPreset.high,
       enableAudio: false,
     );
 
