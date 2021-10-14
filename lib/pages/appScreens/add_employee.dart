@@ -356,7 +356,6 @@ class _AddEmployeeState extends State<AddEmployee> {
                                 setState(() {
                                   department = value;
                                 });
-                                print(value);
                               },
                             ),
                           ),

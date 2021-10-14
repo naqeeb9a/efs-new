@@ -411,8 +411,6 @@ class _AttendanceState extends State<Attendance> {
                 .difference(DateTime.parse(result[i]['date'].toString()))
                 .toString();
 
-            print("\n\n\n\n time " + pTime.substring(0, pTime.length - 13));
-
             if (result[i]['timeOut'].toString() == "" &&
                 int.parse(pTime.substring(0, pTime.length - 13)) <= 20) {
               if (result.length > 0 &&

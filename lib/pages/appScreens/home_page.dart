@@ -111,7 +111,7 @@ class _HomePageState extends State<HomePage> {
                     attendanceDBData[i]["attendanceImage"].toString(),
                 syncStatus: "1",
               );
-              attendanceOperations.updateAttendance(
+              await attendanceOperations.updateAttendance(
                   attendanceDBData[i]['id'], attendanceData);
               syncStatus = "true";
             } else {

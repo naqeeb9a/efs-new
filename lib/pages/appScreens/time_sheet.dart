@@ -121,7 +121,7 @@ class _TimeSheetState extends State<TimeSheet> {
             attendanceImage: attendanceDBData[i]["attendanceImage"].toString(),
             syncStatus: "1",
           );
-          attendanceOperations.updateAttendance(
+          await attendanceOperations.updateAttendance(
               attendanceDBData[i]['id'], attendanceData);
           syncStatus = "true";
         } else {
@@ -416,7 +416,6 @@ class _TimeSheetState extends State<TimeSheet> {
                   future: attendancesDataByOrder,
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
-                      print((snapshot.data as List)[0]);
                       return Expanded(
                         child: Container(
                           width: width * .94,
