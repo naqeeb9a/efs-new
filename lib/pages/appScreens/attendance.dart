@@ -296,9 +296,9 @@ class _AttendanceState extends State<Attendance> {
             for (int i = 0; i < result.length; i++) {
               if (result.length > 0 &&
                   result[i]['employeeId'].toString() == id.toString() &&
-                  result[i]['date'].toString() == date.toString() &&
                   result[i]['timeIn'].toString() != "" &&
                   result[i]['timeOut'].toString() != "") {
+                print("0");
                 attendanceData2 = AttendanceData(
                   id: 0,
                   employeeId: id,
@@ -316,49 +316,9 @@ class _AttendanceState extends State<Attendance> {
                 timeInCheck = "ok";
               } else if (result.length > 0 &&
                   result[i]['employeeId'].toString() == id.toString() &&
-                  result[i]['date'].toString() != date.toString() &&
-                  result[i]['timeIn'].toString() != "" &&
-                  result[i]['timeOut'].toString() != "") {
-                attendanceData2 = AttendanceData(
-                  id: 0,
-                  employeeId: id,
-                  teamId: Globals.teamId,
-                  date: date,
-                  timeIn: completeDate,
-                  timeOut: "",
-                  latitudeIn: latitude.toString(),
-                  longitudeIn: longitude.toString(),
-                  latitudeOut: "",
-                  longitudeOut: "",
-                  syncStatus: "0",
-                  attendanceImage: Globals.attendanceImage,
-                );
-                timeInCheck = "ok";
-              } else if (result.length > 0 &&
-                  result[i]['employeeId'].toString() == id.toString() &&
-                  result[i]['date'].toString() != date.toString() &&
                   result[i]['timeIn'].toString() != "" &&
                   result[i]['timeOut'].toString() == "") {
-                attendanceData2 = AttendanceData(
-                  id: 0,
-                  employeeId: id,
-                  teamId: Globals.teamId,
-                  date: date,
-                  timeIn: completeDate,
-                  timeOut: "",
-                  latitudeIn: latitude.toString(),
-                  longitudeIn: longitude.toString(),
-                  latitudeOut: "",
-                  longitudeOut: "",
-                  syncStatus: "0",
-                  attendanceImage: Globals.attendanceImage,
-                );
-                timeInCheck = "ok";
-              } else if (result.length > 0 &&
-                  result[i]['employeeId'].toString() == id.toString() &&
-                  result[i]['date'].toString() == date.toString() &&
-                  result[i]['timeIn'].toString() != "" &&
-                  result[i]['timeOut'].toString() == "") {
+                print("1");
                 timeInCheck = "no";
               }
             }
@@ -435,13 +395,11 @@ class _AttendanceState extends State<Attendance> {
                 empid = result[i]['id'].toString();
               } else if (result.length > 0 &&
                   result[i]['employeeId'].toString() == id.toString() &&
-                  result[i]['date'].toString() == date.toString() &&
                   result[i]['timeIn'].toString() == "" &&
                   result[i]['timeOut'].toString() == "") {
                 timeOutCheck = "no1";
               } else if (result.length > 0 &&
                   result[i]['employeeId'].toString() == id.toString() &&
-                  result[i]['date'].toString() == date.toString() &&
                   result[i]['timeIn'].toString() != "" &&
                   result[i]['timeOut'].toString() != "") {
                 timeOutCheck = "no2";
