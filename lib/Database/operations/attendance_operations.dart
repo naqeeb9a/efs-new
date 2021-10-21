@@ -72,7 +72,7 @@ class AttendanceOperations {
 
     if (maps.length > 0) {
       for (int i = 0; i < maps.length; i++) {
-        attendance.add(maps[i]);
+        attendance.insert(0, maps[i]);
       }
     }
     if (attendance.isEmpty) {}

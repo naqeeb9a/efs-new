@@ -260,7 +260,6 @@ class _AttendanceState extends State<Attendance> {
   }
 
   Future timeInAttendance(String id) {
-    String timeInCheck = "";
     dynamic attendanceData2;
     return attendanceOperations.searchAttendance(id).then((result) {
       var now = new DateTime.now();
@@ -293,36 +292,32 @@ class _AttendanceState extends State<Attendance> {
               Navigator.of(context).popUntil((_) => count++ >= 2);
             });
           } else {
-            for (int i = 0; i < result.length; i++) {
-              if (result.length > 0 &&
-                  result[i]['employeeId'].toString() == id.toString() &&
-                  result[i]['timeIn'].toString() != "" &&
-                  result[i]['timeOut'].toString() != "") {
-                print("0");
-                attendanceData2 = AttendanceData(
-                  id: 0,
-                  employeeId: id,
-                  teamId: Globals.teamId,
-                  date: date,
-                  timeIn: completeDate,
-                  timeOut: "",
-                  latitudeIn: latitude.toString(),
-                  longitudeIn: longitude.toString(),
-                  latitudeOut: "",
-                  longitudeOut: "",
-                  syncStatus: "0",
-                  attendanceImage: Globals.attendanceImage,
-                );
-                timeInCheck = "ok";
-              } else if (result.length > 0 &&
-                  result[i]['employeeId'].toString() == id.toString() &&
-                  result[i]['timeIn'].toString() != "" &&
-                  result[i]['timeOut'].toString() == "") {
-                print("1");
-                timeInCheck = "no";
-              }
-            }
-            if (timeInCheck == "ok") {
+            var completeDate2 = DateTime.now()
+                .toString()
+                .substring(0, DateTime.now().toString().length - 10);
+
+            var one = DateTime.parse(completeDate2);
+            var pTime = one
+                .difference(DateTime.parse(result[0]['date'].toString()))
+                .toString();
+            if (result.length > 0 &&
+                result[0]['employeeId'].toString() == id.toString() &&
+                result[0]['timeIn'].toString() != "" &&
+                result[0]['timeOut'].toString() != "") {
+              attendanceData2 = AttendanceData(
+                id: 0,
+                employeeId: id,
+                teamId: Globals.teamId,
+                date: date,
+                timeIn: completeDate,
+                timeOut: "",
+                latitudeIn: latitude.toString(),
+                longitudeIn: longitude.toString(),
+                latitudeOut: "",
+                longitudeOut: "",
+                syncStatus: "0",
+                attendanceImage: Globals.attendanceImage,
+              );
               attendanceOperations.createAttendance(attendanceData2);
               successDialogOnly(context, "Check-In Attendance Marked!!");
               Globals.setAttendanceId("null");
@@ -330,11 +325,46 @@ class _AttendanceState extends State<Attendance> {
                 int count = 0;
                 Navigator.of(context).popUntil((_) => count++ >= 2);
               });
-            } else if (timeInCheck == "no") {
+            } else if (result.length > 0 &&
+                int.parse(pTime.substring(0, pTime.length - 13)) >= 20 &&
+                result[0]['employeeId'].toString() == id.toString() &&
+                result[0]['timeIn'].toString() != "" &&
+                result[0]['timeOut'].toString() == "") {
+              attendanceData2 = AttendanceData(
+                id: 0,
+                employeeId: id,
+                teamId: Globals.teamId,
+                date: date,
+                timeIn: completeDate,
+                timeOut: "",
+                latitudeIn: latitude.toString(),
+                longitudeIn: longitude.toString(),
+                latitudeOut: "",
+                longitudeOut: "",
+                syncStatus: "0",
+                attendanceImage: Globals.attendanceImage,
+              );
+              attendanceOperations.createAttendance(attendanceData2);
+              successDialogOnly(context, "Check-In Attendance Marked!!");
+              Globals.setAttendanceId("null");
+              Future.delayed(Duration(milliseconds: 1000), () {
+                int count = 0;
+                Navigator.of(context).popUntil((_) => count++ >= 2);
+              });
+            } else if (result.length > 0 &&
+                result[0]['employeeId'].toString() == id.toString() &&
+                result[0]['timeIn'].toString() != "" &&
+                result[0]['timeOut'].toString() == "") {
               Globals.setAttendanceId("null");
               errorDialog(
                 context,
                 "You have already Check-In!!\nCheck-Out first and then try again!!",
+              );
+            } else {
+              Globals.setAttendanceId("null");
+              errorDialog(
+                context,
+                "Error\n\nSomething went Wrong!!",
               );
             }
           }
@@ -349,88 +379,60 @@ class _AttendanceState extends State<Attendance> {
   }
 
   Future timeOutAttendance(String id) {
-    String timeOutCheck = "";
     dynamic attendanceData2;
-    String empid = "";
     return attendanceOperations.searchAttendance(id).then((result) {
-      var now = new DateTime.now();
-      var formatter = new DateFormat('yyyy-MM-dd');
-      String date = formatter.format(now);
       String completeDate = DateFormat.yMEd().add_jms().format(DateTime.now());
       if (latitude != null && longitude != null) {
         if (id == "null") {
           errorDialog(context, "First Take Picture!!!");
         } else {
-          for (int i = 0; i < result.length; i++) {
-            var completeDate2 = DateTime.now()
-                .toString()
-                .substring(0, DateTime.now().toString().length - 10);
+          var completeDate2 = DateTime.now()
+              .toString()
+              .substring(0, DateTime.now().toString().length - 10);
 
-            var one = DateTime.parse(completeDate2);
-            var pTime = one
-                .difference(DateTime.parse(result[i]['date'].toString()))
-                .toString();
+          var one = DateTime.parse(completeDate2);
+          var pTime = one
+              .difference(DateTime.parse(result[0]['date'].toString()))
+              .toString();
 
-            if (result[i]['timeOut'].toString() == "" &&
-                int.parse(pTime.substring(0, pTime.length - 13)) <= 20) {
-              if (result.length > 0 &&
-                  result[i]['employeeId'].toString() == id.toString() &&
-                  result[i]['timeIn'].toString() != "" &&
-                  result[i]['timeOut'].toString() == "") {
-                attendanceData2 = AttendanceData(
-                  id: 0,
-                  employeeId: id,
-                  teamId: Globals.teamId,
-                  date: result[i]['date'].toString(),
-                  timeIn: result[i]['timeIn'],
-                  timeOut: completeDate,
-                  latitudeIn: result[i]['latitudeIn'].toString(),
-                  longitudeIn: result[i]['longitudeIn'].toString(),
-                  latitudeOut: latitude.toString(),
-                  longitudeOut: longitude.toString(),
-                  syncStatus: "0",
-                  attendanceImage: Globals.attendanceImage,
-                );
-                timeOutCheck = "ok";
-                empid = result[i]['id'].toString();
-              } else if (result.length > 0 &&
-                  result[i]['employeeId'].toString() == id.toString() &&
-                  result[i]['timeIn'].toString() == "" &&
-                  result[i]['timeOut'].toString() == "") {
-                timeOutCheck = "no1";
-              } else if (result.length > 0 &&
-                  result[i]['employeeId'].toString() == id.toString() &&
-                  result[i]['timeIn'].toString() != "" &&
-                  result[i]['timeOut'].toString() != "") {
-                timeOutCheck = "no2";
-              }
-            } else {
-              timeOutCheck = "timeError";
+          if (int.parse(pTime.substring(0, pTime.length - 13)) <= 20) {
+            if (result.length > 0 &&
+                result[0]['employeeId'].toString() == id.toString() &&
+                result[0]['timeIn'].toString() != "" &&
+                result[0]['timeOut'].toString() == "") {
+              attendanceData2 = AttendanceData(
+                id: 0,
+                employeeId: id,
+                teamId: Globals.teamId,
+                date: result[0]['date'].toString(),
+                timeIn: result[0]['timeIn'],
+                timeOut: completeDate,
+                latitudeIn: result[0]['latitudeIn'].toString(),
+                longitudeIn: result[0]['longitudeIn'].toString(),
+                latitudeOut: latitude.toString(),
+                longitudeOut: longitude.toString(),
+                syncStatus: "0",
+                attendanceImage: Globals.attendanceImage,
+              );
+              attendanceOperations.updateAttendance(
+                  int.parse(result[0]['id'].toString()), attendanceData2);
+              successDialogOnly(context, "Check-Out Attendance Marked!!");
+              Globals.setAttendanceId("null");
+              Future.delayed(Duration(milliseconds: 1000), () {
+                int count = 0;
+                Navigator.of(context).popUntil((_) => count++ >= 2);
+              });
+            } else if (result.length > 0 &&
+                result[0]['employeeId'].toString() == id.toString() &&
+                result[0]['timeIn'].toString() != "" &&
+                result[0]['timeOut'].toString() != "") {
+              Globals.setAttendanceId("null");
+              errorDialog(
+                context,
+                "You have already Check-Out!!\nCheck-In first and then try again!!",
+              );
             }
-          }
-
-          if (timeOutCheck == "ok") {
-            attendanceOperations.updateAttendance(
-                int.parse(empid), attendanceData2);
-            successDialogOnly(context, "Check-Out Attendance Marked!!");
-            Globals.setAttendanceId("null");
-            Future.delayed(Duration(milliseconds: 1000), () {
-              int count = 0;
-              Navigator.of(context).popUntil((_) => count++ >= 2);
-            });
-          } else if (timeOutCheck == "no1") {
-            Globals.setAttendanceId("null");
-            errorDialog(
-              context,
-              "Check-In first and then try again!!",
-            );
-          } else if (timeOutCheck == "no2") {
-            Globals.setAttendanceId("null");
-            errorDialog(
-              context,
-              "You have already Check-Out!!\nCheck-In first and then try again!!",
-            );
-          } else if (timeOutCheck == "timeError") {
+          } else {
             Globals.setAttendanceId("null");
             errorDialog(
               context,
