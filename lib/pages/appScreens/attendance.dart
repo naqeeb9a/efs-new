@@ -89,173 +89,175 @@ class _AttendanceState extends State<Attendance> {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
-    return Scaffold(
-      backgroundColor: Color(0xfff2f2f2),
-      appBar: AppBar(
-        title: Text(
-          "Mark Attendance",
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: width * .054,
-          ),
-        ),
-        iconTheme: IconThemeData(
-          color: Color(0xff022b5e),
-        ),
+    return SafeArea(
+      child: Scaffold(
         backgroundColor: Color(0xfff2f2f2),
-        elevation: 4.0,
-        centerTitle: true,
-      ),
-      body: loading == true
-          ? Scaffold(
-              body: Center(
-                child: CircularProgressIndicator(),
-              ),
-            )
-          : Center(
-              child: SingleChildScrollView(
-                child: Container(
-                  width: width * .9,
-                  height: height * .7,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          SizedBox(
-                            width: width * .86,
-                            child: AutoSizeText(
-                              "Open camera button below, Click Picture and then press Time In or Time Out Button.",
-                              style: TextStyle(
-                                color: Color(0xff022b5e),
-                                fontSize: 24.0,
-                              ),
-                              maxLines: 2,
-                            ),
-                          )
-                        ],
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(vertical: height * .06),
-                        child: Row(
+        appBar: AppBar(
+          title: Text(
+            "Mark Attendance",
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: width * .054,
+            ),
+          ),
+          iconTheme: IconThemeData(
+            color: Color(0xff022b5e),
+          ),
+          backgroundColor: Color(0xfff2f2f2),
+          elevation: 4.0,
+          centerTitle: true,
+        ),
+        body: loading == true
+            ? Scaffold(
+                body: Center(
+                  child: CircularProgressIndicator(),
+                ),
+              )
+            : Center(
+                child: SingleChildScrollView(
+                  child: Container(
+                    width: width * .9,
+                    height: height * .7,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Material(
-                              color: Colors.black,
-                              borderRadius: BorderRadius.circular(10.0),
-                              child: InkWell(
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (BuildContext context) =>
-                                          AttendanceCamera(
-                                        cameraDescription: cameraDescription,
+                            SizedBox(
+                              width: width * .86,
+                              child: AutoSizeText(
+                                "Open camera button below, Click Picture and then press Time In or Time Out Button.",
+                                style: TextStyle(
+                                  color: Color(0xff022b5e),
+                                  fontSize: 24.0,
+                                ),
+                                maxLines: 2,
+                              ),
+                            )
+                          ],
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(vertical: height * .06),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Material(
+                                color: Colors.black,
+                                borderRadius: BorderRadius.circular(10.0),
+                                child: InkWell(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                            AttendanceCamera(
+                                          cameraDescription: cameraDescription,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  splashColor: Colors.white,
+                                  child: cameraButton(context),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(vertical: height * .02),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SizedBox(
+                                width: width * .86,
+                                child: AutoSizeText(
+                                  locationLoading == false
+                                      ? "Latitude : is getting..."
+                                      : "Latitude : $latitude",
+                                  style: TextStyle(
+                                    color: Color(0xff022b5e),
+                                    fontSize: 18.0,
+                                  ),
+                                  maxLines: 1,
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(vertical: height * .02),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SizedBox(
+                                width: width * .86,
+                                child: AutoSizeText(
+                                  locationLoading == false
+                                      ? "Longitude : is getting..."
+                                      : "Longitude : $longitude",
+                                  style: TextStyle(
+                                    color: Color(0xff022b5e),
+                                    fontSize: 18.0,
+                                  ),
+                                  maxLines: 1,
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(vertical: height * .04),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                children: [
+                                  Material(
+                                    color: Color(0xff66bb6a),
+                                    borderRadius: BorderRadius.circular(8.0),
+                                    child: InkWell(
+                                      onTap: () {
+                                        timeInAttendance(Globals.attendanceId);
+                                      },
+                                      splashColor: Colors.white,
+                                      child: bottomButtons(
+                                        context,
+                                        "Time In",
+                                        0xff66bb6a,
                                       ),
                                     ),
-                                  );
-                                },
-                                splashColor: Colors.white,
-                                child: cameraButton(context),
+                                  ),
+                                ],
                               ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(vertical: height * .02),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SizedBox(
-                              width: width * .86,
-                              child: AutoSizeText(
-                                locationLoading == false
-                                    ? "Latitude : is getting..."
-                                    : "Latitude : $latitude",
-                                style: TextStyle(
-                                  color: Color(0xff022b5e),
-                                  fontSize: 18.0,
-                                ),
-                                maxLines: 1,
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(vertical: height * .02),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SizedBox(
-                              width: width * .86,
-                              child: AutoSizeText(
-                                locationLoading == false
-                                    ? "Longitude : is getting..."
-                                    : "Longitude : $longitude",
-                                style: TextStyle(
-                                  color: Color(0xff022b5e),
-                                  fontSize: 18.0,
-                                ),
-                                maxLines: 1,
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(vertical: height * .04),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              children: [
-                                Material(
-                                  color: Color(0xff66bb6a),
-                                  borderRadius: BorderRadius.circular(8.0),
-                                  child: InkWell(
-                                    onTap: () {
-                                      timeInAttendance(Globals.attendanceId);
-                                    },
-                                    splashColor: Colors.white,
-                                    child: bottomButtons(
-                                      context,
-                                      "Time In",
-                                      0xff66bb6a,
+                              Column(
+                                children: [
+                                  Material(
+                                    color: Color(0xff022b5e),
+                                    borderRadius: BorderRadius.circular(8.0),
+                                    child: InkWell(
+                                      onTap: () {
+                                        timeOutAttendance(Globals.attendanceId);
+                                      },
+                                      splashColor: Colors.white,
+                                      child: bottomButtons(
+                                        context,
+                                        "Time Out",
+                                        0xff022b5e,
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                Material(
-                                  color: Color(0xff022b5e),
-                                  borderRadius: BorderRadius.circular(8.0),
-                                  child: InkWell(
-                                    onTap: () {
-                                      timeOutAttendance(Globals.attendanceId);
-                                    },
-                                    splashColor: Colors.white,
-                                    child: bottomButtons(
-                                      context,
-                                      "Time Out",
-                                      0xff022b5e,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
+      ),
     );
   }
 
@@ -357,7 +359,7 @@ class _AttendanceState extends State<Attendance> {
                 result[0]['timeOut'].toString() == "") {
               Globals.setAttendanceId("null");
               errorDialog(
-                context,
+                context,""
                 "You have already Check-In!!\nCheck-Out first and then try again!!",
               );
             } else {

@@ -6,7 +6,6 @@ import 'package:efs_new/Database/operations/attendance_operations.dart';
 import 'package:efs_new/pages/appScreens/team_list.dart';
 import 'package:efs_new/pages/appScreens/time_sheet.dart';
 import 'package:efs_new/widgets/globals.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
@@ -30,7 +29,7 @@ class _HomePageState extends State<HomePage> {
   SharedPreferences deviceid;
   SharedPreferences teamid;
   SharedPreferences teamname;
-  String version = "2.1.2";
+  String version = "2.2.1";
 
   var _loading = true;
   String syncStatus = "false";
@@ -74,10 +73,12 @@ class _HomePageState extends State<HomePage> {
         syncStatus = "false";
         var attendanceDBData = await attendanceOperations.getAttendance();
         for (int i = 0; i < attendanceDBData.length; i++) {
-          if (attendanceDBData[i]["syncStatus"].toString() == "0") {
+          if (attendanceDBData[i]["syncStatus"].toString() == "0" &&
+              attendanceDBData[i]["timeIn"].toString() != "" &&
+              attendanceDBData[i]["timeOut"].toString() != "") {
             var response = await http.post(
                 Uri.parse(
-                    "https://attendanceapp.genxmtech.com/api/saveEmployeeAttendance"),
+                    "https://attend.efsme.com:4380/api/saveEmployeeAttendance"),
                 body: {
                   "employee_id": attendanceDBData[i]["employeeId"].toString(),
                   "team_id": attendanceDBData[i]["teamId"].toString(),
@@ -89,8 +90,7 @@ class _HomePageState extends State<HomePage> {
                   "longitude_out":
                       attendanceDBData[i]["longitudeOut"].toString(),
                   "latitude_out": attendanceDBData[i]["latitudeOut"].toString(),
-                  "attendance_image":
-                      attendanceDBData[i]["attendanceImage"].toString(),
+                  "attendance_image": "",
                   "sync_status": attendanceDBData[i]["syncStatus"].toString(),
                   "updated_at": "",
                   "created_at": ""
@@ -119,6 +119,63 @@ class _HomePageState extends State<HomePage> {
             }
           } else if (attendanceDBData[i]["syncStatus"].toString() == "1") {
             syncStatus = "already";
+          } else {
+            var completeDate = DateTime.now();
+            var one = completeDate;
+
+            var pTime = one
+                .difference(
+                    DateTime.parse(attendanceDBData[i]["date"].toString()))
+                .toString();
+
+            if (attendanceDBData[i]["syncStatus"].toString() == "0" &&
+                attendanceDBData[i]["timeIn"].toString() != "" &&
+                attendanceDBData[i]["timeOut"].toString() == "" &&
+                int.parse(pTime.substring(0, pTime.length - 13)) >= 20) {
+              var response = await http.post(
+                  Uri.parse(
+                      "https://attend.efsme.com:4380/api/saveEmployeeAttendance"),
+                  body: {
+                    "employee_id": attendanceDBData[i]["employeeId"].toString(),
+                    "team_id": attendanceDBData[i]["teamId"].toString(),
+                    "date": attendanceDBData[i]["date"],
+                    "time_out": attendanceDBData[i]["timeOut"].toString(),
+                    "time_in": attendanceDBData[i]["timeIn"].toString(),
+                    "longitude_in":
+                        attendanceDBData[i]["longitudeIn"].toString(),
+                    "latitude_in": attendanceDBData[i]["latitudeIn"].toString(),
+                    "longitude_out":
+                        attendanceDBData[i]["longitudeOut"].toString(),
+                    "latitude_out":
+                        attendanceDBData[i]["latitudeOut"].toString(),
+                    "attendance_image": "",
+                    "sync_status": attendanceDBData[i]["syncStatus"].toString(),
+                    "updated_at": "",
+                    "created_at": ""
+                  });
+              if (response.statusCode == 200) {
+                final attendanceData = AttendanceData(
+                  id: 0,
+                  employeeId: attendanceDBData[i]["employeeId"].toString(),
+                  teamId: attendanceDBData[i]["teamId"].toString(),
+                  date: attendanceDBData[i]["date"],
+                  timeIn: attendanceDBData[i]["timeIn"].toString(),
+                  timeOut: attendanceDBData[i]["timeOut"].toString(),
+                  latitudeIn: attendanceDBData[i]["latitudeIn"].toString(),
+                  longitudeIn: attendanceDBData[i]["longitudeIn"].toString(),
+                  latitudeOut: attendanceDBData[i]["latitudeOut"].toString(),
+                  longitudeOut: attendanceDBData[i]["longitudeOut"].toString(),
+                  attendanceImage:
+                      attendanceDBData[i]["attendanceImage"].toString(),
+                  syncStatus: "1",
+                );
+                await attendanceOperations.updateAttendance(
+                    attendanceDBData[i]['id'], attendanceData);
+                syncStatus = "true";
+              } else {
+                syncStatus = "error";
+              }
+            }
           }
         }
         if (syncStatus == "true") {
@@ -161,18 +218,20 @@ class _HomePageState extends State<HomePage> {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
     return _loading == true
-        ? Scaffold(
-            body: Center(
-              child: CircularProgressIndicator(
-                color: Color(0xff022b5e),
-                strokeWidth: 4,
+        ? SafeArea(
+            child: Scaffold(
+              body: Center(
+                child: CircularProgressIndicator(
+                  color: Color(0xff022b5e),
+                  strokeWidth: 4,
+                ),
               ),
             ),
           )
-        : Scaffold(
-            backgroundColor: Colors.white,
-            body: SafeArea(
-              child: Center(
+        : SafeArea(
+            child: Scaffold(
+              backgroundColor: Colors.white,
+              body: Center(
                 child: Container(
                   width: width * 1,
                   height: height * .96,

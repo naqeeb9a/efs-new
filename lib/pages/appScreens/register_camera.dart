@@ -15,7 +15,6 @@ import 'package:efs_new/widgets/FacePainter.dart';
 import 'package:efs_new/widgets/camera_header.dart';
 import 'package:efs_new/widgets/dialog_widget.dart';
 import 'package:efs_new/widgets/globals.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_ml_vision/google_ml_vision.dart';
@@ -188,72 +187,75 @@ class RegisterCameraState extends State<RegisterCamera> {
     final double mirror = math.pi;
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
-    return Scaffold(
-        body: Stack(
-          children: [
-            FutureBuilder<void>(
-              future: _initializeControllerFuture,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.done) {
-                  if (pictureTaked) {
-                    Uint8List bytes = Base64Codec().decode(imagePath);
-                    return Container(
-                      width: width,
-                      height: height,
-                      child: Transform(
-                          alignment: Alignment.center,
-                          child: FittedBox(
-                            fit: BoxFit.cover,
-                            child: Image.memory(bytes),
-                          ),
-                          transform: Matrix4.rotationY(mirror)),
-                    );
-                  } else {
-                    return Transform.scale(
-                      scale: 1.0,
-                      child: AspectRatio(
-                        aspectRatio: MediaQuery.of(context).size.aspectRatio,
-                        child: OverflowBox(
-                          alignment: Alignment.center,
-                          child: FittedBox(
-                            fit: BoxFit.fitHeight,
-                            child: Container(
-                              width: width,
-                              height: width *
-                                  _cameraService
-                                      .cameraController.value.aspectRatio,
-                              child: Stack(
-                                fit: StackFit.expand,
-                                children: <Widget>[
-                                  CameraPreview(
-                                      _cameraService.cameraController),
-                                  CustomPaint(
-                                    painter: FacePainter(
-                                        face: faceDetected,
-                                        imageSize: imageSize),
-                                  ),
-                                ],
+    return SafeArea(
+      child: Scaffold(
+          body: Stack(
+            children: [
+              FutureBuilder<void>(
+                future: _initializeControllerFuture,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    if (pictureTaked) {
+                      Uint8List bytes = Base64Codec().decode(imagePath);
+                      return Container(
+                        width: width,
+                        height: height,
+                        child: Transform(
+                            alignment: Alignment.center,
+                            child: FittedBox(
+                              fit: BoxFit.cover,
+                              child: Image.memory(bytes),
+                            ),
+                            transform: Matrix4.rotationY(mirror)),
+                      );
+                    } else {
+                      return Transform.scale(
+                        scale: 1.0,
+                        child: AspectRatio(
+                          aspectRatio: MediaQuery.of(context).size.aspectRatio,
+                          child: OverflowBox(
+                            alignment: Alignment.center,
+                            child: FittedBox(
+                              fit: BoxFit.fitHeight,
+                              child: Container(
+                                width: width,
+                                height: width *
+                                    _cameraService
+                                        .cameraController.value.aspectRatio,
+                                child: Stack(
+                                  fit: StackFit.expand,
+                                  children: <Widget>[
+                                    CameraPreview(
+                                        _cameraService.cameraController),
+                                    CustomPaint(
+                                      painter: FacePainter(
+                                          face: faceDetected,
+                                          imageSize: imageSize),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                    );
+                      );
+                    }
+                  } else {
+                    return Center(child: CircularProgressIndicator());
                   }
-                } else {
-                  return Center(child: CircularProgressIndicator());
-                }
-              },
-            ),
-            CameraHeader(
-              "Register Face",
-              onBackPressed: _onBackPressed,
-            )
-          ],
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        floatingActionButton:
-            !_bottomSheetVisible ? captureButton() : Container());
+                },
+              ),
+              CameraHeader(
+                "Register Face",
+                onBackPressed: _onBackPressed,
+              )
+            ],
+          ),
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerFloat,
+          floatingActionButton:
+              !_bottomSheetVisible ? captureButton() : Container()),
+    );
   }
 
   Widget captureButton() {
@@ -349,7 +351,7 @@ class RegisterCameraState extends State<RegisterCamera> {
 
     employeeOperations.updateEmployee(widget.employeeId, employee);
 
-    /// resets the face stored in the face net sevice
+    /// resets the face stored in the face net service
     this._faceNetService.setPredictedData(null);
     int count = 0;
     Navigator.of(context).popUntil((_) => count++ >= 3);

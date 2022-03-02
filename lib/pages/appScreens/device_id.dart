@@ -47,13 +47,14 @@ class _DeviceIdState extends State<DeviceId> {
 
   Future<void> syncData() async {
     syncStatus = "false";
-
     var attendanceDBData = await attendanceOperations.getAttendance();
     for (int i = 0; i < attendanceDBData.length; i++) {
-      if (attendanceDBData[i]["syncStatus"].toString() == "0") {
+      if (attendanceDBData[i]["syncStatus"].toString() == "0" &&
+          attendanceDBData[i]["timeIn"].toString() != "" &&
+          attendanceDBData[i]["timeOut"].toString() != "") {
         var response = await http.post(
             Uri.parse(
-                "https://attendanceapp.genxmtech.com/api/saveEmployeeAttendance"),
+                "https://attend.efsme.com:4380/api/saveEmployeeAttendance"),
             body: {
               "employee_id": attendanceDBData[i]["employeeId"].toString(),
               "team_id": attendanceDBData[i]["teamId"].toString(),
@@ -65,7 +66,7 @@ class _DeviceIdState extends State<DeviceId> {
               "longitude_out": attendanceDBData[i]["longitudeOut"].toString(),
               "latitude_out": attendanceDBData[i]["latitudeOut"].toString(),
               "attendance_image":
-                  attendanceDBData[i]["attendanceImage"].toString(),
+                  "",
               "sync_status": attendanceDBData[i]["syncStatus"].toString(),
               "updated_at": "",
               "created_at": ""
@@ -93,6 +94,60 @@ class _DeviceIdState extends State<DeviceId> {
         }
       } else if (attendanceDBData[i]["syncStatus"].toString() == "1") {
         syncStatus = "already";
+      } else {
+        var completeDate = DateTime.now();
+        var one = completeDate;
+
+        var pTime = one
+            .difference(DateTime.parse(attendanceDBData[i]["date"].toString()))
+            .toString();
+
+        if (attendanceDBData[i]["syncStatus"].toString() == "0" &&
+            attendanceDBData[i]["timeIn"].toString() != "" &&
+            attendanceDBData[i]["timeOut"].toString() == "" &&
+            int.parse(pTime.substring(0, pTime.length - 13)) >= 20) {
+          var response = await http.post(
+              Uri.parse(
+                  "https://attend.efsme.com:4380/api/saveEmployeeAttendance"),
+              body: {
+                "employee_id": attendanceDBData[i]["employeeId"].toString(),
+                "team_id": attendanceDBData[i]["teamId"].toString(),
+                "date": attendanceDBData[i]["date"],
+                "time_out": attendanceDBData[i]["timeOut"].toString(),
+                "time_in": attendanceDBData[i]["timeIn"].toString(),
+                "longitude_in": attendanceDBData[i]["longitudeIn"].toString(),
+                "latitude_in": attendanceDBData[i]["latitudeIn"].toString(),
+                "longitude_out": attendanceDBData[i]["longitudeOut"].toString(),
+                "latitude_out": attendanceDBData[i]["latitudeOut"].toString(),
+                "attendance_image":
+                    "",
+                "sync_status": attendanceDBData[i]["syncStatus"].toString(),
+                "updated_at": "",
+                "created_at": ""
+              });
+          if (response.statusCode == 200) {
+            final attendanceData = AttendanceData(
+              id: 0,
+              employeeId: attendanceDBData[i]["employeeId"].toString(),
+              teamId: attendanceDBData[i]["teamId"].toString(),
+              date: attendanceDBData[i]["date"],
+              timeIn: attendanceDBData[i]["timeIn"].toString(),
+              timeOut: attendanceDBData[i]["timeOut"].toString(),
+              latitudeIn: attendanceDBData[i]["latitudeIn"].toString(),
+              longitudeIn: attendanceDBData[i]["longitudeIn"].toString(),
+              latitudeOut: attendanceDBData[i]["latitudeOut"].toString(),
+              longitudeOut: attendanceDBData[i]["longitudeOut"].toString(),
+              attendanceImage:
+                  attendanceDBData[i]["attendanceImage"].toString(),
+              syncStatus: "1",
+            );
+            await attendanceOperations.updateAttendance(
+                attendanceDBData[i]['id'], attendanceData);
+            syncStatus = "true";
+          } else {
+            syncStatus = "error";
+          }
+        }
       }
     }
     if (syncStatus == "true") {
@@ -102,6 +157,9 @@ class _DeviceIdState extends State<DeviceId> {
     } else if (syncStatus == "already") {
       successDialog(context, "Data already Synced!!");
     }
+    setState(() {
+      isLoading = false;
+    });
   }
 
   Future<void> syncAllEmployees() async {
@@ -110,7 +168,7 @@ class _DeviceIdState extends State<DeviceId> {
     for (int i = 0; i < allEmployeeData.length; i++) {
       if (allEmployeeData[i]["isSync"].toString() == "0") {
         var response = await http.post(
-            Uri.parse("https://attendanceapp.genxmtech.com/api/addEmployee"),
+            Uri.parse("https://attend.efsme.com:4380/api/addEmployee"),
             body: {
               "employee_id": allEmployeeData[i]["employeeId"].toString(),
               "employee_name": allEmployeeData[i]["employeeName"].toString(),
@@ -212,61 +270,63 @@ class _DeviceIdState extends State<DeviceId> {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: Center(
-        child: Container(
-          width: width * .9,
-          height: height * .8,
-          child: Form(
-            key: _formKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(
-                    top: MediaQuery.of(context).size.height * .01,
-                    bottom: MediaQuery.of(context).size.height * .04,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      AutoSizeText(
-                        "Enter your Device Id",
-                        style: TextStyle(
-                          color: Colors.grey[800],
-                          fontSize: width * .05,
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: Center(
+          child: Container(
+            width: width * .9,
+            height: height * .8,
+            child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(
+                      top: MediaQuery.of(context).size.height * .01,
+                      bottom: MediaQuery.of(context).size.height * .04,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        AutoSizeText(
+                          "Enter your Device Id",
+                          style: TextStyle(
+                            color: Colors.grey[800],
+                            fontSize: width * .05,
+                          ),
+                          maxLines: 1,
                         ),
-                        maxLines: 1,
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                    vertical: MediaQuery.of(context).size.height * .02,
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                      vertical: MediaQuery.of(context).size.height * .02,
+                    ),
+                    child: Row(
+                      children: [
+                        Flexible(
+                          child: field.textField(
+                              context, deviceId, "Device Id", false),
+                        ),
+                      ],
+                    ),
                   ),
-                  child: Row(
-                    children: [
-                      Flexible(
-                        child: field.textField(
-                            context, deviceId, "Device Id", false),
-                      ),
-                    ],
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                      vertical: MediaQuery.of(context).size.height * .02,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        continueButton(context),
+                      ],
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                    vertical: MediaQuery.of(context).size.height * .02,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      continueButton(context),
-                    ],
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

@@ -3,7 +3,6 @@ import 'package:camera/camera.dart';
 import 'package:efs_new/pages/appScreens/register_camera.dart';
 import 'package:efs_new/services/facenet.service.dart';
 import 'package:efs_new/services/ml_vision_service.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
@@ -84,206 +83,208 @@ class _RegisterFaceState extends State<RegisterFace> {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
-    return Scaffold(
-      backgroundColor: Color(0xfff2f2f2),
-      appBar: AppBar(
-        title: Text(
-          "Face Registration",
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: width * .054,
-          ),
-        ),
-        iconTheme: IconThemeData(
-          color: Color(0xff022b5e),
-        ),
+    return SafeArea(
+      child: Scaffold(
         backgroundColor: Color(0xfff2f2f2),
-        elevation: 4.0,
-        centerTitle: true,
-      ),
-      body: loading == true
-          ? Scaffold(
-              body: Center(
-                child: CircularProgressIndicator(),
-              ),
-            )
-          : SingleChildScrollView(
-              child: Center(
-                child: Container(
-                  width: width * .9,
-                  height: height * .8,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                          vertical: height * .02,
-                        ),
-                        child: Row(
-                          children: [
-                            Column(
-                              children: [
-                                SizedBox(
-                                  width: width * .36,
-                                  child: AutoSizeText(
-                                    "Employee Id: ",
-                                    style: TextStyle(
-                                      color: Color(0xff022b5e),
-                                      fontSize: width * .046,
-                                    ),
-                                    maxLines: 1,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                SizedBox(
-                                  width: width * .44,
-                                  child: AutoSizeText(
-                                    widget.employeeId,
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: width * .042,
-                                    ),
-                                    maxLines: 1,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                          vertical: height * .02,
-                        ),
-                        child: Row(
-                          children: [
-                            Column(
-                              children: [
-                                SizedBox(
-                                  width: width * .36,
-                                  child: AutoSizeText(
-                                    "Name: ",
-                                    style: TextStyle(
-                                      color: Color(0xff022b5e),
-                                      fontSize: width * .046,
-                                    ),
-                                    maxLines: 1,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                SizedBox(
-                                  width: width * .42,
-                                  child: Text(
-                                    widget.employeeName,
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: width * .046,
+        appBar: AppBar(
+          title: Text(
+            "Face Registration",
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: width * .054,
+            ),
+          ),
+          iconTheme: IconThemeData(
+            color: Color(0xff022b5e),
+          ),
+          backgroundColor: Color(0xfff2f2f2),
+          elevation: 4.0,
+          centerTitle: true,
+        ),
+        body: loading == true
+            ? Scaffold(
+                body: Center(
+                  child: CircularProgressIndicator(),
+                ),
+              )
+            : SingleChildScrollView(
+                child: Center(
+                  child: Container(
+                    width: width * .9,
+                    height: height * .8,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                            vertical: height * .02,
+                          ),
+                          child: Row(
+                            children: [
+                              Column(
+                                children: [
+                                  SizedBox(
+                                    width: width * .36,
+                                    child: AutoSizeText(
+                                      "Employee Id: ",
+                                      style: TextStyle(
+                                        color: Color(0xff022b5e),
+                                        fontSize: width * .046,
+                                      ),
+                                      maxLines: 1,
                                     ),
                                   ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                          vertical: height * .02,
-                        ),
-                        child: Row(
-                          children: [
-                            Column(
-                              children: [
-                                SizedBox(
-                                  width: width * .36,
-                                  child: AutoSizeText(
-                                    "Designation: ",
-                                    style: TextStyle(
-                                      color: Color(0xff022b5e),
-                                      fontSize: width * .046,
-                                    ),
-                                    maxLines: 1,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                SizedBox(
-                                  width: width * .44,
-                                  child: Text(
-                                    widget.designation,
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: width * .042,
+                                ],
+                              ),
+                              Column(
+                                children: [
+                                  SizedBox(
+                                    width: width * .44,
+                                    child: AutoSizeText(
+                                      widget.employeeId,
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: width * .042,
+                                      ),
+                                      maxLines: 1,
                                     ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                            vertical: height * .02,
+                          ),
+                          child: Row(
+                            children: [
+                              Column(
+                                children: [
+                                  SizedBox(
+                                    width: width * .36,
+                                    child: AutoSizeText(
+                                      "Name: ",
+                                      style: TextStyle(
+                                        color: Color(0xff022b5e),
+                                        fontSize: width * .046,
+                                      ),
+                                      maxLines: 1,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Column(
+                                children: [
+                                  SizedBox(
+                                    width: width * .42,
+                                    child: Text(
+                                      widget.employeeName,
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: width * .046,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                            vertical: height * .02,
+                          ),
+                          child: Row(
+                            children: [
+                              Column(
+                                children: [
+                                  SizedBox(
+                                    width: width * .36,
+                                    child: AutoSizeText(
+                                      "Designation: ",
+                                      style: TextStyle(
+                                        color: Color(0xff022b5e),
+                                        fontSize: width * .046,
+                                      ),
+                                      maxLines: 1,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Column(
+                                children: [
+                                  SizedBox(
+                                    width: width * .44,
+                                    child: Text(
+                                      widget.designation,
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: width * .042,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                            vertical: height * .04,
+                          ),
+                          child: AutoSizeText(
+                            "Click button down below to click image for Facial Recognition",
+                            style: TextStyle(
+                              color: Color(0xff022b5e),
+                              fontSize: width * .04,
                             ),
-                          ],
+                            textAlign: TextAlign.center,
+                            maxLines: 2,
+                          ),
                         ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                          vertical: height * .04,
-                        ),
-                        child: AutoSizeText(
-                          "Click button down below to click image for Facial Recognition",
-                          style: TextStyle(
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                            vertical: height * .02,
+                          ),
+                          child: Material(
                             color: Color(0xff022b5e),
-                            fontSize: width * .04,
-                          ),
-                          textAlign: TextAlign.center,
-                          maxLines: 2,
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                          vertical: height * .02,
-                        ),
-                        child: Material(
-                          color: Color(0xff022b5e),
-                          borderRadius: BorderRadius.circular(10.0),
-                          child: InkWell(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      RegisterCamera(
-                                    cameraDescription: cameraDescription,
-                                    employeeId: widget.employeeId,
-                                    employeeName: widget.employeeName,
-                                    designation: widget.designation,
-                                    department: widget.department,
-                                    isTeamLead: widget.isTeamLead,
-                                    username: widget.username,
-                                    password: widget.password,
-                                    image: widget.image,
-                                    status: widget.status,
-                                    isSync: widget.isSync,
-                                    imageData: widget.imageData,
+                            borderRadius: BorderRadius.circular(10.0),
+                            child: InkWell(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        RegisterCamera(
+                                      cameraDescription: cameraDescription,
+                                      employeeId: widget.employeeId,
+                                      employeeName: widget.employeeName,
+                                      designation: widget.designation,
+                                      department: widget.department,
+                                      isTeamLead: widget.isTeamLead,
+                                      username: widget.username,
+                                      password: widget.password,
+                                      image: widget.image,
+                                      status: widget.status,
+                                      isSync: widget.isSync,
+                                      imageData: widget.imageData,
+                                    ),
                                   ),
-                                ),
-                              );
-                            },
-                            splashColor: Colors.white,
-                            child: cameraButton(context),
+                                );
+                              },
+                              splashColor: Colors.white,
+                              child: cameraButton(context),
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
+      ),
     );
   }
 }

@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 class ApiData {
   fetchTeamEmployeesInfo(String deviceId) async {
     var url =
-        Uri.https('attendanceapp.genxmtech.com', 'api/getEmployees/$deviceId');
+        Uri.https('attend.efsme.com:4380', 'api/getEmployees/$deviceId');
     var response = await http.get(url);
     List<dynamic> employees = [];
     if (response.statusCode == 200) {
@@ -21,7 +21,7 @@ class ApiData {
 
   fetchTeamInfo(String deviceId) async {
     var url =
-        Uri.https('attendanceapp.genxmtech.com', 'api/getTeams/$deviceId');
+        Uri.https('attend.efsme.com:4380', 'api/getTeams/$deviceId');
     var response = await http.get(url);
     if (response.statusCode == 200) {
       var jsonResponse = convert.jsonDecode(response.body);

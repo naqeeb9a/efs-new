@@ -32,7 +32,7 @@ class _DeleteEmployeeState extends State<DeleteEmployee> {
             if (net.isNotEmpty && net[0].rawAddress.isNotEmpty) {
               var response = await http.post(
                   Uri.parse(
-                      "https://attendanceapp.genxmtech.com/api/removeEmployee"),
+                      "https://attend.efsme.com:4380/api/removeEmployee"),
                   body: {
                     "employee_id": id.toString(),
                   });
@@ -92,74 +92,76 @@ class _DeleteEmployeeState extends State<DeleteEmployee> {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
-    return Scaffold(
-      backgroundColor: Color(0xfff2f2f2),
-      appBar: AppBar(
-        title: Text(
-          "Delete Employee",
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: width * .054,
-          ),
-        ),
-        iconTheme: IconThemeData(
-          color: Color(0xff022b5e),
-        ),
+    return SafeArea(
+      child: Scaffold(
         backgroundColor: Color(0xfff2f2f2),
-        elevation: 4.0,
-        centerTitle: true,
-      ),
-      body: Center(
-        child: Container(
-          width: width * .9,
-          height: height * .8,
-          child: Form(
-            key: _formKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(
-                    top: MediaQuery.of(context).size.height * .01,
-                    bottom: MediaQuery.of(context).size.height * .04,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      AutoSizeText(
-                        "Enter Employee Id to delete",
-                        style: TextStyle(
-                          color: Colors.grey[800],
-                          fontSize: width * .05,
+        appBar: AppBar(
+          title: Text(
+            "Delete Employee",
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: width * .054,
+            ),
+          ),
+          iconTheme: IconThemeData(
+            color: Color(0xff022b5e),
+          ),
+          backgroundColor: Color(0xfff2f2f2),
+          elevation: 4.0,
+          centerTitle: true,
+        ),
+        body: Center(
+          child: Container(
+            width: width * .9,
+            height: height * .8,
+            child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(
+                      top: MediaQuery.of(context).size.height * .01,
+                      bottom: MediaQuery.of(context).size.height * .04,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        AutoSizeText(
+                          "Enter Employee Id to delete",
+                          style: TextStyle(
+                            color: Colors.grey[800],
+                            fontSize: width * .05,
+                          ),
+                          maxLines: 1,
                         ),
-                        maxLines: 1,
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                    vertical: MediaQuery.of(context).size.height * .02,
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                      vertical: MediaQuery.of(context).size.height * .02,
+                    ),
+                    child: Row(
+                      children: [
+                        Flexible(
+                          child: textField(
+                              context, employeeId, "Employee Id", false),
+                        ),
+                      ],
+                    ),
                   ),
-                  child: Row(
-                    children: [
-                      Flexible(
-                        child: textField(
-                            context, employeeId, "Employee Id", false),
-                      ),
-                    ],
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                      vertical: MediaQuery.of(context).size.height * .02,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [deleteButton(context)],
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                    vertical: MediaQuery.of(context).size.height * .02,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [deleteButton(context)],
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

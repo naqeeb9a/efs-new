@@ -6,9 +6,6 @@ void main() {
   runApp(
     MyApp(),
   );
-  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-    statusBarColor: Colors.white,
-  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -35,6 +32,9 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: primaryColor,
         visualDensity: VisualDensity.adaptivePlatformDensity,
+        appBarTheme: AppBarTheme(
+          systemOverlayStyle: SystemUiOverlayStyle.dark,
+        ),
       ),
       home: HomePage(),
     );

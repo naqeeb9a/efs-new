@@ -8,7 +8,6 @@ import 'package:efs_new/pages/API/api.dart';
 import 'package:efs_new/pages/appScreens/register_face.dart';
 import 'package:efs_new/widgets/dialog_widget.dart';
 import 'package:efs_new/widgets/globals.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -83,7 +82,7 @@ class _TeamListState extends State<TeamList> {
     for (int i = 0; i < allEmployeeData.length; i++) {
       if (allEmployeeData[i]["isSync"].toString() == "0") {
         var response = await http.post(
-            Uri.parse("https://attendanceapp.genxmtech.com/api/addEmployee"),
+            Uri.parse("https://attend.efsme.com:4380/api/addEmployee"),
             body: {
               "employee_id": allEmployeeData[i]["employeeId"].toString(),
               "employee_name": allEmployeeData[i]["employeeName"].toString(),
@@ -152,124 +151,126 @@ class _TeamListState extends State<TeamList> {
       future: employeeData,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          return Scaffold(
-            backgroundColor: Color(0xfff2f2f2),
-            appBar: AppBar(
-              title: Text(
-                Globals.teamName,
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: width * .054,
-                ),
-              ),
-              iconTheme: IconThemeData(
-                color: Color(0xff022b5e),
-              ),
+          return SafeArea(
+            child: Scaffold(
               backgroundColor: Color(0xfff2f2f2),
-              elevation: 4.0,
-              centerTitle: true,
-              actions: <Widget>[
-                isLoading == false
-                    ? Padding(
-                        padding: EdgeInsets.only(right: 16.0),
-                        child: InkWell(
-                          onTap: () {
-                            setState(() {
-                              isLoading = true;
-                            });
-                            syncAllEmployees();
-                          },
-                          splashColor: Color(0xff022b5e),
-                          child: Icon(
-                            Icons.sync,
-                          ),
-                        ),
-                      )
-                    : CircularProgressIndicator(),
-              ],
-            ),
-            body: SingleChildScrollView(
-              child: Center(
-                child: Container(
-                  width: width * .94,
-                  height: height * .88,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          SizedBox(
-                            width: width * .94,
-                            height: height * .78,
-                            child: (snapshot.data as List).length > 0
-                                ? ListView.builder(
-                                    itemCount: (snapshot.data as List).length,
-                                    itemBuilder: (context, i) {
-                                      return cardContainer(
-                                        context,
-                                        (snapshot.data as List)[i]['employeeId']
-                                            .toString(),
-                                        (snapshot.data as List)[i]
-                                                ['employeeName']
-                                            .toString(),
-                                        (snapshot.data as List)[i]
-                                                ['designation']
-                                            .toString(),
-                                        (snapshot.data as List)[i]['department']
-                                            .toString(),
-                                        (snapshot.data as List)[i]['isTeamLead']
-                                            .toString(),
-                                        (snapshot.data as List)[i]['username']
-                                            .toString(),
-                                        (snapshot.data as List)[i]['password']
-                                            .toString(),
-                                        (snapshot.data as List)[i]['image']
-                                            .toString(),
-                                        (snapshot.data as List)[i]['status']
-                                            .toString(),
-                                        (snapshot.data as List)[i]['isSync']
-                                            .toString(),
-                                        (snapshot.data as List)[i]['imageData']
-                                            .toString(),
-                                      );
-                                    },
-                                  )
-                                : Center(
-                                    child: Text("No Employees to Show!"),
-                                  ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        width: width * .94,
-                        height: height * .1,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                bottomButtons(
-                                  context,
-                                  "Add Employee",
-                                  AddEmployee(),
-                                ),
-                              ],
+              appBar: AppBar(
+                title: Text(
+                  Globals.teamName,
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: width * .054,
+                  ),
+                ),
+                iconTheme: IconThemeData(
+                  color: Color(0xff022b5e),
+                ),
+                backgroundColor: Color(0xfff2f2f2),
+                elevation: 4.0,
+                centerTitle: true,
+                actions: <Widget>[
+                  isLoading == false
+                      ? Padding(
+                          padding: EdgeInsets.only(right: 16.0),
+                          child: InkWell(
+                            onTap: () {
+                              setState(() {
+                                isLoading = true;
+                              });
+                              syncAllEmployees();
+                            },
+                            splashColor: Color(0xff022b5e),
+                            child: Icon(
+                              Icons.sync,
                             ),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                bottomButtons(
-                                  context,
-                                  "Delete Employee",
-                                  DeleteEmployee(),
-                                ),
-                              ],
+                          ),
+                        )
+                      : CircularProgressIndicator(),
+                ],
+              ),
+              body: SingleChildScrollView(
+                child: Center(
+                  child: Container(
+                    width: width * .94,
+                    height: height * .88,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            SizedBox(
+                              width: width * .94,
+                              height: height * .78,
+                              child: (snapshot.data as List).length > 0
+                                  ? ListView.builder(
+                                      itemCount: (snapshot.data as List).length,
+                                      itemBuilder: (context, i) {
+                                        return cardContainer(
+                                          context,
+                                          (snapshot.data as List)[i]['employeeId']
+                                              .toString(),
+                                          (snapshot.data as List)[i]
+                                                  ['employeeName']
+                                              .toString(),
+                                          (snapshot.data as List)[i]
+                                                  ['designation']
+                                              .toString(),
+                                          (snapshot.data as List)[i]['department']
+                                              .toString(),
+                                          (snapshot.data as List)[i]['isTeamLead']
+                                              .toString(),
+                                          (snapshot.data as List)[i]['username']
+                                              .toString(),
+                                          (snapshot.data as List)[i]['password']
+                                              .toString(),
+                                          (snapshot.data as List)[i]['image']
+                                              .toString(),
+                                          (snapshot.data as List)[i]['status']
+                                              .toString(),
+                                          (snapshot.data as List)[i]['isSync']
+                                              .toString(),
+                                          (snapshot.data as List)[i]['imageData']
+                                              .toString(),
+                                        );
+                                      },
+                                    )
+                                  : Center(
+                                      child: Text("No Employees to Show!"),
+                                    ),
                             ),
                           ],
                         ),
-                      ),
-                    ],
+                        SizedBox(
+                          width: width * .94,
+                          height: height * .1,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  bottomButtons(
+                                    context,
+                                    "Add Employee",
+                                    AddEmployee(),
+                                  ),
+                                ],
+                              ),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  bottomButtons(
+                                    context,
+                                    "Delete Employee",
+                                    DeleteEmployee(),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),

@@ -7,7 +7,6 @@ import 'package:efs_new/Database/models/attendance_model.dart';
 import 'package:efs_new/Database/operations/attendance_operations.dart';
 import 'package:efs_new/widgets/dialog_widget.dart';
 import 'package:efs_new/widgets/text_field.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
@@ -86,10 +85,12 @@ class _TimeSheetState extends State<TimeSheet> {
     });
     var attendanceDBData = await attendanceOperations.getAttendance();
     for (int i = 0; i < attendanceDBData.length; i++) {
-      if (attendanceDBData[i]["syncStatus"].toString() == "0") {
+      if (attendanceDBData[i]["syncStatus"].toString() == "0" &&
+          attendanceDBData[i]["timeIn"].toString() != "" &&
+          attendanceDBData[i]["timeOut"].toString() != "") {
         var response = await http.post(
             Uri.parse(
-                "https://attendanceapp.genxmtech.com/api/saveEmployeeAttendance"),
+                "https://attend.efsme.com:4380/api/saveEmployeeAttendance"),
             body: {
               "employee_id": attendanceDBData[i]["employeeId"].toString(),
               "team_id": attendanceDBData[i]["teamId"].toString(),
@@ -101,7 +102,7 @@ class _TimeSheetState extends State<TimeSheet> {
               "longitude_out": attendanceDBData[i]["longitudeOut"].toString(),
               "latitude_out": attendanceDBData[i]["latitudeOut"].toString(),
               "attendance_image":
-                  attendanceDBData[i]["attendanceImage"].toString(),
+                  "",
               "sync_status": attendanceDBData[i]["syncStatus"].toString(),
               "updated_at": "",
               "created_at": ""
@@ -129,6 +130,60 @@ class _TimeSheetState extends State<TimeSheet> {
         }
       } else if (attendanceDBData[i]["syncStatus"].toString() == "1") {
         syncStatus = "already";
+      } else {
+        var completeDate = DateTime.now();
+        var one = completeDate;
+
+        var pTime = one
+            .difference(DateTime.parse(attendanceDBData[i]["date"].toString()))
+            .toString();
+
+        if (attendanceDBData[i]["syncStatus"].toString() == "0" &&
+            attendanceDBData[i]["timeIn"].toString() != "" &&
+            attendanceDBData[i]["timeOut"].toString() == "" &&
+            int.parse(pTime.substring(0, pTime.length - 13)) >= 20) {
+          var response = await http.post(
+              Uri.parse(
+                  "https://attend.efsme.com:4380/api/saveEmployeeAttendance"),
+              body: {
+                "employee_id": attendanceDBData[i]["employeeId"].toString(),
+                "team_id": attendanceDBData[i]["teamId"].toString(),
+                "date": attendanceDBData[i]["date"],
+                "time_out": attendanceDBData[i]["timeOut"].toString(),
+                "time_in": attendanceDBData[i]["timeIn"].toString(),
+                "longitude_in": attendanceDBData[i]["longitudeIn"].toString(),
+                "latitude_in": attendanceDBData[i]["latitudeIn"].toString(),
+                "longitude_out": attendanceDBData[i]["longitudeOut"].toString(),
+                "latitude_out": attendanceDBData[i]["latitudeOut"].toString(),
+                "attendance_image":
+                    "",
+                "sync_status": attendanceDBData[i]["syncStatus"].toString(),
+                "updated_at": "",
+                "created_at": ""
+              });
+          if (response.statusCode == 200) {
+            final attendanceData = AttendanceData(
+              id: 0,
+              employeeId: attendanceDBData[i]["employeeId"].toString(),
+              teamId: attendanceDBData[i]["teamId"].toString(),
+              date: attendanceDBData[i]["date"],
+              timeIn: attendanceDBData[i]["timeIn"].toString(),
+              timeOut: attendanceDBData[i]["timeOut"].toString(),
+              latitudeIn: attendanceDBData[i]["latitudeIn"].toString(),
+              longitudeIn: attendanceDBData[i]["longitudeIn"].toString(),
+              latitudeOut: attendanceDBData[i]["latitudeOut"].toString(),
+              longitudeOut: attendanceDBData[i]["longitudeOut"].toString(),
+              attendanceImage:
+                  attendanceDBData[i]["attendanceImage"].toString(),
+              syncStatus: "1",
+            );
+            await attendanceOperations.updateAttendance(
+                attendanceDBData[i]['id'], attendanceData);
+            syncStatus = "true";
+          } else {
+            syncStatus = "error";
+          }
+        }
       }
     }
     if (syncStatus == "true") {
@@ -162,296 +217,305 @@ class _TimeSheetState extends State<TimeSheet> {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
-    return Scaffold(
-      backgroundColor: Color(0xfff2f2f2),
-      appBar: AppBar(
-        title: Text(
-          "Time Sheet",
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: width * .054,
-          ),
-        ),
-        iconTheme: IconThemeData(
-          color: Color(0xff022b5e),
-        ),
+    return SafeArea(
+      child: Scaffold(
         backgroundColor: Color(0xfff2f2f2),
-        elevation: 4.0,
-        centerTitle: true,
-        actions: <Widget>[
-          Padding(
-            padding: EdgeInsets.only(right: width * .03),
-            child: QudsPopupButton(
-              child: RotatedBox(
-                quarterTurns: 1,
-                child: Icon(
-                  Icons.tune_rounded,
-                  size: width * .08,
-                ),
-              ),
-              items: [
-                QudsPopupMenuItem(
-                  leading: Icon(
-                    Icons.perm_identity_rounded,
-                    color: Color(0xff022b5e),
+        appBar: AppBar(
+          title: Text(
+            "Time Sheet",
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: width * .054,
+            ),
+          ),
+          iconTheme: IconThemeData(
+            color: Color(0xff022b5e),
+          ),
+          backgroundColor: Color(0xfff2f2f2),
+          elevation: 4.0,
+          centerTitle: true,
+          actions: <Widget>[
+            Padding(
+              padding: EdgeInsets.only(right: width * .03),
+              child: QudsPopupButton(
+                child: RotatedBox(
+                  quarterTurns: 1,
+                  child: Icon(
+                    Icons.tune_rounded,
+                    size: width * .08,
                   ),
-                  title: textField(
-                    context,
-                    employeeId,
-                    "Enter Employee Id",
-                    false,
-                  ),
-                  popOnTap: false,
-                  onPressed: () {},
                 ),
-                QudsPopupMenuDivider(),
-                QudsPopupMenuItem(
-                  title: Material(
-                    color: Color(0xff022b5e),
-                    borderRadius: BorderRadius.circular(width * .02),
-                    child: Center(
-                      child: InkWell(
-                        onTap: () {
-                          datePicker(context);
-                        },
-                        splashColor: Colors.white,
-                        child: Container(
-                          width: width * .7,
-                          height: height * .07,
-                          child: Center(
-                            child: RichText(
-                              text: TextSpan(
-                                style: Theme.of(context).textTheme.bodyText2,
-                                children: [
-                                  WidgetSpan(
-                                    child: Icon(
-                                      Icons.date_range_rounded,
-                                      color: Colors.white,
-                                      size: width * .06,
+                items: [
+                  QudsPopupMenuItem(
+                    leading: Icon(
+                      Icons.perm_identity_rounded,
+                      color: Color(0xff022b5e),
+                    ),
+                    title: textField(
+                      context,
+                      employeeId,
+                      "Enter Employee Id",
+                      false,
+                    ),
+                    popOnTap: false,
+                    onPressed: () {},
+                  ),
+                  QudsPopupMenuDivider(),
+                  QudsPopupMenuItem(
+                    title: Material(
+                      color: Color(0xff022b5e),
+                      borderRadius: BorderRadius.circular(width * .02),
+                      child: Center(
+                        child: InkWell(
+                          onTap: () {
+                            datePicker(context);
+                          },
+                          splashColor: Colors.white,
+                          child: Container(
+                            width: width * .7,
+                            height: height * .07,
+                            child: Center(
+                              child: RichText(
+                                text: TextSpan(
+                                  style: Theme.of(context).textTheme.bodyText2,
+                                  children: [
+                                    WidgetSpan(
+                                      child: Icon(
+                                        Icons.date_range_rounded,
+                                        color: Colors.white,
+                                        size: width * .06,
+                                      ),
                                     ),
-                                  ),
-                                  TextSpan(
-                                    text: "     Select Date",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: width * .05,
+                                    TextSpan(
+                                      text: "     Select Date",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: width * .05,
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             ),
                           ),
                         ),
                       ),
                     ),
+                    onPressed: () {},
                   ),
-                ),
-                QudsPopupMenuDivider(),
-                QudsPopupMenuItem(
-                  title: Padding(
-                    padding: EdgeInsets.only(bottom: height * .01),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          children: [
-                            Material(
-                              color: Color(0xff022b5e),
-                              borderRadius: BorderRadius.circular(width * .02),
-                              child: Center(
-                                child: InkWell(
-                                  onTap: () {
-                                    if (employeeId.text.toString().isNotEmpty &&
-                                        selectedDate != null) {
+                  QudsPopupMenuDivider(),
+                  QudsPopupMenuItem(
+                    title: Padding(
+                      padding: EdgeInsets.only(bottom: height * .01),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            children: [
+                              Material(
+                                color: Color(0xff022b5e),
+                                borderRadius:
+                                    BorderRadius.circular(width * .02),
+                                child: Center(
+                                  child: InkWell(
+                                    onTap: () {
+                                      if (employeeId.text
+                                              .toString()
+                                              .isNotEmpty &&
+                                          selectedDate != null) {
+                                        setState(() {
+                                          attendancesDataByOrder =
+                                              attendanceOperations
+                                                  .getSpecificAttendance(
+                                            employeeId.text.toString(),
+                                            DateFormat('yyyy-MM-dd')
+                                                .format(selectedDate)
+                                                .toString(),
+                                          );
+                                        });
+                                      } else if (employeeId.text
+                                          .toString()
+                                          .isEmpty) {
+                                        errorDialog(context,
+                                            "Please enter Employee Id!!");
+                                      } else if (selectedDate == null) {
+                                        errorDialog(
+                                            context, "Please select Date!!");
+                                      } else if (employeeId.text
+                                              .toString()
+                                              .isEmpty &&
+                                          selectedDate.toString().isEmpty) {
+                                        errorDialog(context,
+                                            "Please enter Employee Id & select Date!!");
+                                      }
+                                    },
+                                    splashColor: Colors.white,
+                                    child: Container(
+                                      width: width * .34,
+                                      height: height * .06,
+                                      child: Center(
+                                        child: RichText(
+                                          text: TextSpan(
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyText2,
+                                            children: [
+                                              WidgetSpan(
+                                                child: Icon(
+                                                  Icons.search_rounded,
+                                                  color: Colors.white,
+                                                  size: width * .06,
+                                                ),
+                                              ),
+                                              TextSpan(
+                                                text: " Search",
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: width * .05,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Column(
+                            children: [
+                              Material(
+                                color: Color(0xff022b5e),
+                                borderRadius:
+                                    BorderRadius.circular(width * .02),
+                                child: Center(
+                                  child: InkWell(
+                                    onTap: () {
+                                      employeeId.clear();
+                                      selectedDate = null;
                                       setState(() {
                                         attendancesDataByOrder =
                                             attendanceOperations
-                                                .getSpecificAttendance(
-                                          employeeId.text.toString(),
-                                          DateFormat('yyyy-MM-dd')
-                                              .format(selectedDate)
-                                              .toString(),
-                                        );
+                                                .getAttendanceByOrder();
                                       });
-                                    } else if (employeeId.text
-                                        .toString()
-                                        .isEmpty) {
-                                      errorDialog(context,
-                                          "Please enter Employee Id!!");
-                                    } else if (selectedDate == null) {
-                                      errorDialog(
-                                          context, "Please select Date!!");
-                                    } else if (employeeId.text
-                                            .toString()
-                                            .isEmpty &&
-                                        selectedDate.toString().isEmpty) {
-                                      errorDialog(context,
-                                          "Please enter Employee Id & select Date!!");
-                                    }
-                                  },
-                                  splashColor: Colors.white,
-                                  child: Container(
-                                    width: width * .34,
-                                    height: height * .06,
-                                    child: Center(
-                                      child: RichText(
-                                        text: TextSpan(
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyText2,
-                                          children: [
-                                            WidgetSpan(
-                                              child: Icon(
-                                                Icons.search_rounded,
-                                                color: Colors.white,
-                                                size: width * .06,
+                                    },
+                                    splashColor: Colors.white,
+                                    child: Container(
+                                      width: width * .34,
+                                      height: height * .06,
+                                      child: Center(
+                                        child: RichText(
+                                          text: TextSpan(
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyText2,
+                                            children: [
+                                              WidgetSpan(
+                                                child: Icon(
+                                                  Icons.clear,
+                                                  color: Colors.white,
+                                                  size: width * .06,
+                                                ),
                                               ),
-                                            ),
-                                            TextSpan(
-                                              text: " Search",
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: width * .05,
+                                              TextSpan(
+                                                text: " Clear",
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: width * .05,
+                                                ),
                                               ),
-                                            ),
-                                          ],
+                                            ],
+                                          ),
                                         ),
                                       ),
                                     ),
                                   ),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                        Column(
-                          children: [
-                            Material(
-                              color: Color(0xff022b5e),
-                              borderRadius: BorderRadius.circular(width * .02),
-                              child: Center(
-                                child: InkWell(
-                                  onTap: () {
-                                    employeeId.clear();
-                                    selectedDate = null;
-                                    setState(() {
-                                      attendancesDataByOrder =
-                                          attendanceOperations
-                                              .getAttendanceByOrder();
-                                    });
-                                  },
-                                  splashColor: Colors.white,
-                                  child: Container(
-                                    width: width * .34,
-                                    height: height * .06,
-                                    child: Center(
-                                      child: RichText(
-                                        text: TextSpan(
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyText2,
-                                          children: [
-                                            WidgetSpan(
-                                              child: Icon(
-                                                Icons.clear,
-                                                color: Colors.white,
-                                                size: width * .06,
-                                              ),
-                                            ),
-                                            TextSpan(
-                                              text: " Clear",
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: width * .05,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  popOnTap: false,
-                  onPressed: () {
-                    datePicker(context);
-                  },
-                ),
-              ],
-            ),
-          ),
-          isLoading == false
-              ? Padding(
-                  padding: EdgeInsets.only(right: width * .04),
-                  child: InkWell(
-                    onTap: () {
-                      setState(() {
-                        isLoading = true;
-                      });
-                      syncData();
+                    popOnTap: false,
+                    onPressed: () {
+                      datePicker(context);
                     },
-                    splashColor: Color(0xff022b5e),
-                    child: Icon(
-                      Icons.sync,
-                    ),
                   ),
-                )
-              : CircularProgressIndicator(),
-        ],
-      ),
-      body: SingleChildScrollView(
-        child: Center(
-          child: Container(
-            width: width * .94,
-            height: height * .86,
-            child: Column(
-              children: [
-                FutureBuilder(
-                  future: attendancesDataByOrder,
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      return Expanded(
-                        child: Container(
-                          width: width * .94,
-                          child: ListView.builder(
-                              itemCount: (snapshot.data as List).length,
-                              itemBuilder: (context, i) {
-                                return cardContainer(
-                                  context,
-                                  (snapshot.data as List)[i]['employeeId']
-                                      .toString(),
-                                  (snapshot.data as List)[i]['timeIn']
-                                      .toString(),
-                                  (snapshot.data as List)[i]['timeOut']
-                                      .toString(),
-                                  (snapshot.data as List)[i]['attendanceImage']
-                                      .toString(),
-                                  (snapshot.data as List)[i]['longitudeIn']
-                                      .toString(),
-                                  (snapshot.data as List)[i]['latitudeIn']
-                                      .toString(),
-                                  (snapshot.data as List)[i]['longitudeOut']
-                                      .toString(),
-                                  (snapshot.data as List)[i]['latitudeOut']
-                                      .toString(),
-                                  (snapshot.data as List)[i]['date'].toString(),
-                                );
-                              }),
-                        ),
+                ],
+              ),
+            ),
+            isLoading == false
+                ? Padding(
+                    padding: EdgeInsets.only(right: width * .04),
+                    child: InkWell(
+                      onTap: () {
+                        setState(() {
+                          isLoading = true;
+                        });
+                        syncData();
+                      },
+                      splashColor: Color(0xff022b5e),
+                      child: Icon(
+                        Icons.sync,
+                      ),
+                    ),
+                  )
+                : CircularProgressIndicator(),
+          ],
+        ),
+        body: SingleChildScrollView(
+          child: Center(
+            child: Container(
+              width: width * .94,
+              height: height * .86,
+              child: Column(
+                children: [
+                  FutureBuilder(
+                    future: attendancesDataByOrder,
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        return Expanded(
+                          child: Container(
+                            width: width * .94,
+                            child: ListView.builder(
+                                itemCount: (snapshot.data as List).length,
+                                itemBuilder: (context, i) {
+                                  return cardContainer(
+                                    context,
+                                    (snapshot.data as List)[i]['employeeId']
+                                        .toString(),
+                                    (snapshot.data as List)[i]['timeIn']
+                                        .toString(),
+                                    (snapshot.data as List)[i]['timeOut']
+                                        .toString(),
+                                    (snapshot.data as List)[i]
+                                            ['attendanceImage']
+                                        .toString(),
+                                    (snapshot.data as List)[i]['longitudeIn']
+                                        .toString(),
+                                    (snapshot.data as List)[i]['latitudeIn']
+                                        .toString(),
+                                    (snapshot.data as List)[i]['longitudeOut']
+                                        .toString(),
+                                    (snapshot.data as List)[i]['latitudeOut']
+                                        .toString(),
+                                    (snapshot.data as List)[i]['date']
+                                        .toString(),
+                                  );
+                                }),
+                          ),
+                        );
+                      }
+                      return Center(
+                        child: CircularProgressIndicator(),
                       );
-                    }
-                    return Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  },
-                ),
-              ],
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
         ),

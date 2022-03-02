@@ -264,122 +264,126 @@ class _AddEmployeeState extends State<AddEmployee> {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
-    return Scaffold(
-      backgroundColor: Color(0xfff2f2f2),
-      appBar: AppBar(
-        title: Text(
-          "Add Employee",
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: width * .054,
-          ),
-        ),
-        iconTheme: IconThemeData(
-          color: Color(0xff022b5e),
-        ),
+    return SafeArea(
+      child: Scaffold(
         backgroundColor: Color(0xfff2f2f2),
-        elevation: 4.0,
-        centerTitle: true,
-      ),
-      body: Center(
-        child: Container(
-          width: width * .9,
-          height: height * .8,
-          child: Form(
-            key: _formKey,
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                      vertical: MediaQuery.of(context).size.height * .06,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        AutoSizeText(
-                          "Please fill all details",
-                          style: TextStyle(
-                            color: Colors.grey[800],
-                            fontSize: width * .05,
+        appBar: AppBar(
+          title: Text(
+            "Add Employee",
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: width * .054,
+            ),
+          ),
+          iconTheme: IconThemeData(
+            color: Color(0xff022b5e),
+          ),
+          backgroundColor: Color(0xfff2f2f2),
+          elevation: 4.0,
+          centerTitle: true,
+        ),
+        body: Center(
+          child: Container(
+            width: width * .9,
+            height: height * .8,
+            child: Form(
+              key: _formKey,
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                        vertical: MediaQuery.of(context).size.height * .06,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          AutoSizeText(
+                            "Please fill all details",
+                            style: TextStyle(
+                              color: Colors.grey[800],
+                              fontSize: width * .05,
+                            ),
+                            maxLines: 1,
                           ),
-                          maxLines: 1,
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                      vertical: MediaQuery.of(context).size.height * .02,
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                        vertical: MediaQuery.of(context).size.height * .02,
+                      ),
+                      child: Row(
+                        children: [
+                          Flexible(
+                            child: textField(
+                                context, employeeId, "Employee Id", false),
+                          ),
+                        ],
+                      ),
                     ),
-                    child: Row(
-                      children: [
-                        Flexible(
-                          child: textField(
-                              context, employeeId, "Employee Id", false),
-                        ),
-                      ],
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                        vertical: MediaQuery.of(context).size.height * .02,
+                      ),
+                      child: Row(
+                        children: [
+                          Flexible(
+                            child: textField(
+                                context, employeeName, "Employee Name", false),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                      vertical: MediaQuery.of(context).size.height * .02,
-                    ),
-                    child: Row(
-                      children: [
-                        Flexible(
-                          child: textField(
-                              context, employeeName, "Employee Name", false),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                      vertical: MediaQuery.of(context).size.height * .02,
-                    ),
-                    child: Row(
-                      children: [
-                        Flexible(
-                          child: Container(
-                            height: MediaQuery.of(context).size.height * .066,
-                            color: Colors.white60,
-                            child: DropdownSearch(
-                              mode: Mode.DIALOG,
-                              showSearchBox: true,
-                              showClearButton: true,
-                              items: dropdownList,
-                              label: "Department",
-                              hint: "Select Department",
-                              onChanged: (value) {
-                                setState(() {
-                                  department = value;
-                                });
-                              },
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                        vertical: MediaQuery.of(context).size.height * .02,
+                      ),
+                      child: Row(
+                        children: [
+                          Flexible(
+                            child: Container(
+                              height: MediaQuery.of(context).size.height * .066,
+                              color: Colors.white60,
+                              child: DropdownSearch(
+                                mode: Mode.DIALOG,
+                                showSearchBox: true,
+                                showClearButton: true,
+                                items: dropdownList,
+                                // ignore: deprecated_member_use
+                                label: "Department",
+                                // ignore: deprecated_member_use
+                                hint: "Select Department",
+                                onChanged: (value) {
+                                  setState(() {
+                                    department = value;
+                                  });
+                                },
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                      vertical: MediaQuery.of(context).size.height * .02,
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                        vertical: MediaQuery.of(context).size.height * .02,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          saveData(
+                            context,
+                            Globals.teamName,
+                            Globals.teamId,
+                            Globals.deviceId,
+                          )
+                        ],
+                      ),
                     ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        saveData(
-                          context,
-                          Globals.teamName,
-                          Globals.teamId,
-                          Globals.deviceId,
-                        )
-                      ],
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),

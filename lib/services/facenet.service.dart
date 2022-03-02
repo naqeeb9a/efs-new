@@ -203,7 +203,8 @@ class FaceNetService {
 
         /// search the closest result 👓
         for (int i = 0; i < result.length; i++) {
-          if (result[i]['imageData'].toString() != "") {
+          if (result[i]['imageData'].toString() != "" &&
+              result[i]['imageData'].toString() != "null") {
             currDist = _euclideanDistance(
                 jsonDecode(result[i]['imageData']), predictedData);
 
