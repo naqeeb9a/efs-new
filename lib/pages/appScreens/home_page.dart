@@ -8,6 +8,8 @@ import 'package:efs_new/pages/appScreens/time_sheet.dart';
 import 'package:efs_new/widgets/globals.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:quds_popup_menu/quds_popup_menu.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -15,6 +17,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'attendance.dart';
 import 'change_password.dart';
 import 'device_id.dart';
+
+String countryName;
 
 class HomePage extends StatefulWidget {
   const HomePage({Key key}) : super(key: key);
@@ -33,6 +37,19 @@ class _HomePageState extends State<HomePage> {
 
   var _loading = true;
   String syncStatus = "false";
+
+  getCountryName() async {
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    List<Placemark> placeMarks =
+        await placemarkFromCoordinates(position.latitude, position.longitude);
+
+    print("country name = ${placeMarks[0].country.toString()}");
+
+    setState(() {
+      countryName = placeMarks[0].country.toString();
+    });
+  }
 
   getSharedData() async {
     pref = await SharedPreferences.getInstance();
@@ -61,6 +78,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    getCountryName();
     checkLoginStatus();
     getSharedData();
     syncOnly();
@@ -93,7 +111,8 @@ class _HomePageState extends State<HomePage> {
                   "attendance_image": "",
                   "sync_status": attendanceDBData[i]["syncStatus"].toString(),
                   "updated_at": "",
-                  "created_at": ""
+                  "created_at": "",
+                  "country": countryName
                 });
             if (response.statusCode == 200) {
               final attendanceData = AttendanceData(
@@ -151,7 +170,8 @@ class _HomePageState extends State<HomePage> {
                     "attendance_image": "",
                     "sync_status": attendanceDBData[i]["syncStatus"].toString(),
                     "updated_at": "",
-                    "created_at": ""
+                    "created_at": "",
+                    "country": countryName
                   });
               if (response.statusCode == 200) {
                 final attendanceData = AttendanceData(

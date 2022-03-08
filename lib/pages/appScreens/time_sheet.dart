@@ -13,6 +13,7 @@ import 'package:intl/intl.dart';
 import 'package:quds_popup_menu/quds_popup_menu.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'home_page.dart';
 import 'maps.dart';
 
 final employeeId = TextEditingController();
@@ -88,6 +89,7 @@ class _TimeSheetState extends State<TimeSheet> {
       if (attendanceDBData[i]["syncStatus"].toString() == "0" &&
           attendanceDBData[i]["timeIn"].toString() != "" &&
           attendanceDBData[i]["timeOut"].toString() != "") {
+        print("abacbaba $countryName");
         var response = await http.post(
             Uri.parse(
                 "https://attend.efsme.com:4380/api/saveEmployeeAttendance"),
@@ -101,11 +103,11 @@ class _TimeSheetState extends State<TimeSheet> {
               "latitude_in": attendanceDBData[i]["latitudeIn"].toString(),
               "longitude_out": attendanceDBData[i]["longitudeOut"].toString(),
               "latitude_out": attendanceDBData[i]["latitudeOut"].toString(),
-              "attendance_image":
-                  "",
+              "attendance_image": "",
               "sync_status": attendanceDBData[i]["syncStatus"].toString(),
               "updated_at": "",
-              "created_at": ""
+              "created_at": "",
+              "country": countryName
             });
         if (response.statusCode == 200) {
           final attendanceData = AttendanceData(
@@ -142,6 +144,7 @@ class _TimeSheetState extends State<TimeSheet> {
             attendanceDBData[i]["timeIn"].toString() != "" &&
             attendanceDBData[i]["timeOut"].toString() == "" &&
             int.parse(pTime.substring(0, pTime.length - 13)) >= 20) {
+          print("abacbaba $countryName");
           var response = await http.post(
               Uri.parse(
                   "https://attend.efsme.com:4380/api/saveEmployeeAttendance"),
@@ -155,11 +158,11 @@ class _TimeSheetState extends State<TimeSheet> {
                 "latitude_in": attendanceDBData[i]["latitudeIn"].toString(),
                 "longitude_out": attendanceDBData[i]["longitudeOut"].toString(),
                 "latitude_out": attendanceDBData[i]["latitudeOut"].toString(),
-                "attendance_image":
-                    "",
+                "attendance_image": "",
                 "sync_status": attendanceDBData[i]["syncStatus"].toString(),
                 "updated_at": "",
-                "created_at": ""
+                "created_at": "",
+                "country": countryName
               });
           if (response.statusCode == 200) {
             final attendanceData = AttendanceData(
@@ -217,6 +220,8 @@ class _TimeSheetState extends State<TimeSheet> {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
+
+    print("abacbaba $countryName");
     return SafeArea(
       child: Scaffold(
         backgroundColor: Color(0xfff2f2f2),

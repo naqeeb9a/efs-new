@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'home_page.dart';
 import 'login.dart';
 
 final deviceId = TextEditingController();
@@ -69,7 +70,8 @@ class _DeviceIdState extends State<DeviceId> {
                   "",
               "sync_status": attendanceDBData[i]["syncStatus"].toString(),
               "updated_at": "",
-              "created_at": ""
+              "created_at": "",
+              "country": countryName
             });
         if (response.statusCode == 200) {
           final attendanceData = AttendanceData(
@@ -123,7 +125,8 @@ class _DeviceIdState extends State<DeviceId> {
                     "",
                 "sync_status": attendanceDBData[i]["syncStatus"].toString(),
                 "updated_at": "",
-                "created_at": ""
+                "created_at": "",
+                "country": countryName
               });
           if (response.statusCode == 200) {
             final attendanceData = AttendanceData(
