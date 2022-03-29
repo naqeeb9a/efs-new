@@ -44,8 +44,6 @@ class _HomePageState extends State<HomePage> {
     List<Placemark> placeMarks =
         await placemarkFromCoordinates(position.latitude, position.longitude);
 
-    print("country name = ${placeMarks[0].country.toString()}");
-
     setState(() {
       countryName = placeMarks[0].country.toString();
     });
