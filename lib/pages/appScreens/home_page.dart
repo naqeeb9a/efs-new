@@ -33,7 +33,7 @@ class _HomePageState extends State<HomePage> {
   SharedPreferences deviceid;
   SharedPreferences teamid;
   SharedPreferences teamname;
-  String version = "2.2.1";
+  String version = "2.2.2";
 
   var _loading = true;
   String syncStatus = "false";
